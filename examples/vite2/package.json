@@ -2,43 +2,45 @@
   "name": "@example/vite2",
   "version": "0.0.0",
   "description": "website demo for react-dev-inspector using vite2",
+  "repository": "zthxxx/react-dev-inspector/examples/vite2",
+  "homepage": "https://react-dev-inspector.zthxxx.me/vite2",
+  "private": true,
+  "author":"zthxxx <zthxxx.me@gmail.com>",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "bugs": {
+    "url": "https://github.com/zthxxx/react-dev-inspector/issues"
+  },
   "scripts": {
     "clean": "rimraf dist",
     "dev": "vite",
     "build": "npm run clean && vite build --base=/vite2/",
     "serve": "vite preview"
   },
-  "repository": "zthxxx/react-dev-inspector/examples/vite2",
-  "private": true,
-  "author": "zthxxx",
-  "homepage": "https://react-dev-inspector.zthxxx.me/vite2",
-  "license": "MIT",
-  "publishConfig": {
-    "registry": false
-  },
-  "bugs": {
-    "url": "https://github.com/zthxxx/react-dev-inspector/issues"
-  },
   "dependencies": {
     "@emotion/css": "11.1.3",
     "@emotion/react": "11.4.1",
     "@emotion/styled": "11.3.0",
-    "react-dev-inspector": "file:../..",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
     "react-github-corner": "2.5.0"
   },
   "devDependencies": {
-    "@babel/core": "7.15.5",
     "@emotion/babel-plugin": "^11.9.2",
-    "@types/node": "14.17.17",
-    "@types/react": "17.0.22",
-    "@types/react-dom": "17.0.9",
+    "@react-dev-inspector/babel-plugin": "workspace:*",
+    "@react-dev-inspector/vite": "workspace:*",
+    "@types/node": "16.18.7",
+    "@types/react": "18.0.26",
+    "@types/react-dom": "18.0.9",
     "@vitejs/plugin-react": "1.3.1",
+    "@zthxxx/tsconfig": "1.0.2",
+    "react-dev-inspector": "workspace:*",
     "npm-run-all": "4.1.5",
-    "react": "17.0.2",
-    "react-dom": "17.0.2",
     "rimraf": "3.0.2",
-    "typescript": "4.4.3",
-    "vite": "2.9.5"
+    "typescript": "4.9.4",
+    "vite": "2.9.15"
   },
   "browserslist": {
     "production": [

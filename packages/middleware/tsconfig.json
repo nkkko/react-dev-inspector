@@ -1,0 +1,15 @@
+{
+  "extends": "@zthxxx/tsconfig/tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "es",
+    "baseUrl": ".",
+
+    "types": [
+      "node",
+    ],
+  },
+  "include": [
+    "src",
+  ],
+}

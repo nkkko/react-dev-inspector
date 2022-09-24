@@ -1,0 +1,22 @@
+/**
+ * NOTE: this file is copied to '@zthxxx/tsconfig/build.cjs.json'
+ */
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "lib",
+    "target": "ES2019",
+    "module": "CommonJS",
+    "noEmit": false,
+    "sourceMap": false,
+    "declarationMap": false,
+  },
+  "exclude": [
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.stories.tsx",
+    "**/*.mock.ts",
+    "**/tests",
+    "**/mocks",
+  ],
+}

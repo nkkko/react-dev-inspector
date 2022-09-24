@@ -1,20 +1,18 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { inspectorServer } from 'react-dev-inspector/plugins/vite'
-import { onlineDemoBuildPlugin } from './onlineDemoBuildPlugin'
+import { inspectorServer } from '@react-dev-inspector/vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   clearScreen: false,
   server: {
+    host: true,
     open: true,
   },
-  resolve: {
-    preserveSymlinks: true,
-  },
   plugins: [
+    inspectorServer(),
+
     react({
-      jsxRuntime: 'classic',
       babel: {
         plugins: [
           [
@@ -26,16 +24,13 @@ export default defineConfig({
               labelFormat: '[local]',
             },
           ],
+
+          /**
+           * react-dev-inspector example configuration is as follows
+           */
+          '@react-dev-inspector/babel-plugin',
         ],
       },
     }),
-    // this `onlineDemoBuildPlugin` only for prod build with online demo site
-    onlineDemoBuildPlugin(),
-
-    /**
-     * react-dev-inspector example configuration is as follows
-     * only need setup an inspector middleware for dev
-     */
-    inspectorServer(),
   ],
 })

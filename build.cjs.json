@@ -1,7 +1,0 @@
-{
-  "extends": "./build.esm.json",
-  "compilerOptions": {
-    "outDir": "lib",
-    "module": "commonjs"
-  }
-}

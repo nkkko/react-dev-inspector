@@ -1,8 +1,9 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import Layout from './layouts'
+import { render } from 'react-dom'
+import { HomePage } from './HomePage'
 
-ReactDOM.render(
-  <Layout />,
+render(
+  <HomePage
+    name={'vite2'}
+  />,
   document.getElementById('root'),
 )

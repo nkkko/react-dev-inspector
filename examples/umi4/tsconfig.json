@@ -1,0 +1,26 @@
+{
+  "extends": "@zthxxx/tsconfig/tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "baseUrl": ".",
+
+    "paths": {
+      "@/*": [
+        "src/*"
+      ],
+      "@@/*": [
+        "src/.umi/*"
+      ],
+      "umi/typings": [
+        "src/.umi/typings"
+      ]
+    },
+  },
+  "include": [
+    "src",
+  ],
+  // https://www.typescriptlang.org/docs/handbook/project-references.html
+  "references": [
+    { "path": "../../packages/inspector" },
+  ],
+}

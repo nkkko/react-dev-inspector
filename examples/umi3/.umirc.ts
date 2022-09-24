@@ -3,12 +3,14 @@ import { defineConfig } from 'umi'
 
 
 export default defineConfig({
-  title: false,
   hash: true,
-  history: {
-    type: 'browser',
-  },
   publicPath: '/umi3/',
+  routes: [
+    {
+      path: '/',
+      component: 'index.tsx',
+    },
+  ],
   ignoreMomentLocale: true,
   targets: {
     chrome: 80,
@@ -25,10 +27,10 @@ export default defineConfig({
     ],
   ],
 
-  /**
-   * react-dev-inspector example configuration is as follows
-   */
   plugins: [
-    'react-dev-inspector/plugins/umi/react-inspector',
+    /**
+     * react-dev-inspector example configuration is as follows
+     */
+    '@react-dev-inspector/umi3',
   ],
 })
