@@ -150,5 +150,5 @@ export const Inspector: FC<PropsWithChildren<InspectorProps>> = (props) => {
     }
   }, [hotkey])
 
-  return (<>{children}</>)
+  return (<>{children ?? null}</>)
 }

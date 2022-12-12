@@ -9,6 +9,17 @@ const {
 } = require('customize-cra')
 
 
+const removeWebpackPlugin = (pluginName) => (config) => {
+  const pluginIndex = config.plugins.findIndex((plugin) => plugin.constructor.name === pluginName)
+
+  if (pluginIndex > -1) {
+    config.plugins.splice(pluginIndex, 1)
+  }
+
+  return config
+}
+
+
 /**
  * origin config:
  *   https://github.com/facebook/create-react-app/blob/v5.0.1/packages/react-scripts/config/webpack.config.js
@@ -19,6 +30,7 @@ const {
 module.exports = {
   webpack: override(
     disableEsLint(),
+    removeWebpackPlugin('ForkTsCheckerWebpackPlugin'),
     addBabelPlugin([
       // https://github.com/emotion-js/emotion/tree/main/packages/babel-plugin#options
       '@emotion/babel-plugin',

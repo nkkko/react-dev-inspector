@@ -7,6 +7,9 @@ import InspectorBabelPlugin, { type InspectorPluginOptions } from '..'
 
 // working directory is package root dir
 const fixturesDir = 'src/tests/fixtures'
+/**
+ * can be update or regenerate by `pnpm gen:test-outputs`
+ */
 const outputsDir = 'src/tests/outputs'
 
 const cwd = process.cwd()

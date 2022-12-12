@@ -11,6 +11,9 @@
   },
   "files": [],
   "scripts": {
+    "build:packages": "pnpm --filter './packages/**' build",
+    "build:examples": "pnpm --filter './examples/**' build",
+    "build:site": "./scripts/build-site.sh"
   },
   "devDependencies": {
   },

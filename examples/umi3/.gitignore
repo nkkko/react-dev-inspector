@@ -28,3 +28,5 @@ build
 .env.local
 .umirc.local.ts
 config/config.local.ts
+
+/umi3

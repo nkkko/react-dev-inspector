@@ -11,6 +11,7 @@
   },
   "include": [
     "src",
+    "vite.config.ts",
   ],
   // https://www.typescriptlang.org/docs/handbook/project-references.html
   "references": [

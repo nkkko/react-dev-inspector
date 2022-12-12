@@ -71,7 +71,7 @@ export const Layout = () => {
             // you can change the url protocol if you are using in Web IDE
             window.open(`vscode://file/${absolutePath}:${lineNumber}:${columnNumber}`)
           }}
-        >
+        />
       )}
     </>
   )
@@ -109,7 +109,7 @@ export const Layout = () => {
           keys={['control', 'shift', 'command', 'c']}
           onHoverElement={(inspect: InspectParams) => {}}
           onClickElement={(inspect: InspectParams) => {}}
-        >
+        />
       )}
     </>
   )

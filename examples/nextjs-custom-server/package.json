@@ -5,7 +5,7 @@
   "repository": "zthxxx/react-dev-inspector/examples/nextjs-custom-server",
   "homepage": "https://react-dev-inspector.zthxxx.me/nextjs-custom-server",
   "private": true,
-  "author":"zthxxx <zthxxx.me@gmail.com>",
+  "author": "zthxxx <zthxxx.me@gmail.com>",
   "license": "MIT",
   "publishConfig": {
     "access": "restricted"
@@ -17,7 +17,7 @@
     "clean": "rimraf .next dist",
     "dev": "node server.js",
     "build": "NODE_ENV=production npm-run-all clean build:*",
-    "build:next": "next export -o dist"
+    "build:next": "next build && next export -o dist"
   },
   "dependencies": {
     "@emotion/css": "11.1.3",
@@ -39,7 +39,7 @@
     "npm-run-all": "4.1.5",
     "react-dev-inspector": "workspace:*",
     "rimraf": "3.0.2",
-    "typescript": "4.9.4"
+    "typescript": "5.1.6"
   },
   "browserslist": {
     "production": [

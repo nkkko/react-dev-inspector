@@ -21,6 +21,7 @@ export default function inspectorPlugin(api: IApi) {
     enableBy: api.EnableBy.register,
   })
 
+  // // https://umijs.org/docs/api/plugin-api#addbeforebabelplugins
   api.addBeforeBabelPlugins(() => [
     [
       require.resolve('@react-dev-inspector/babel-plugin'),
@@ -34,5 +35,6 @@ export default function inspectorPlugin(api: IApi) {
     ],
   ])
 
+  // https://umijs.org/docs/api/plugin-api#addbeforemiddlewares
   api.addBeforeMiddlewares(createLaunchEditorMiddleware)
 }

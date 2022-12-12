@@ -1,13 +1,15 @@
 // https://umijs.org/config/
 import { defineConfig } from 'umi'
 
+const isDev = process.env.NODE_ENV === 'development'
+const publicPath = isDev ? '/' : '/umi3/'
 
 export default defineConfig({
   hash: true,
-  publicPath: '/umi3/',
+  publicPath,
   routes: [
     {
-      path: '/',
+      path: publicPath,
       component: 'index.tsx',
     },
   ],
@@ -31,6 +33,6 @@ export default defineConfig({
     /**
      * react-dev-inspector example configuration is as follows
      */
-    '@react-dev-inspector/umi3',
+    '@react-dev-inspector/umi3-plugin',
   ],
 })

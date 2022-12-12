@@ -43,6 +43,6 @@ export default function inspectorPlugin(api: IApi) {
    */
   api.addBeforeMiddlewares
     ? api.addBeforeMiddlewares(createMiddleware)
-    // typo of umi legacy api
+    // typo of umi3 legacy api
     : api.addBeforeMiddewares(createMiddleware)
 }
