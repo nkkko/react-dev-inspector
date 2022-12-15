@@ -10,7 +10,7 @@ runs:
       # https://github.com/actions/setup-node
       uses: actions/setup-node@v2
       with:
-        node-version: 14.x
+        node-version: 18.x
         registry-url: https://registry.npmjs.org
 
     - name: Environment variables
@@ -21,8 +21,8 @@ runs:
     - name: Install
       shell: bash
       run: |
-        npm i -g npm@7
-        npm ci
+        npm i -g pnpm@8
+        pnpm ci
 
     - name: ESLint
       shell: bash

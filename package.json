@@ -4,20 +4,32 @@
   "description": "vectorial shape and whiteboard",
   "private": true,
   "license": "MIT",
-  "author":"zthxxx <zthxxx.me@gmail.com>",
+  "author": "zthxxx <zthxxx.me@gmail.com>",
   "repository": "zthxxx/react-dev-inspector",
   "engines": {
     "node": ">=16.0.0"
   },
   "files": [],
   "scripts": {
+    "prepare": "husky install",
+    "test": "pnpm --recursive test",
+    "lint": "eslint --format codeframe --ext .ts,.tsx packages examples",
     "build:packages": "pnpm --filter './packages/**' build",
     "build:examples": "pnpm --filter './examples/**' build",
     "build:site": "./scripts/build-site.sh"
   },
-  "devDependencies": {
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --format codeframe"
+    ]
   },
-  "renovate": {
-    "enabled": false
+  "devDependencies": {
+    "@antfu/eslint-config": "0.39.7",
+    "@antfu/eslint-config-react": "0.39.7",
+    "eslint": "8.44.0",
+    "eslint-formatter-codeframe": "7.32.1",
+    "husky": "^8.0.0",
+    "lint-staged": "13.2.3",
+    "tsx": "3.12.7"
   }
 }

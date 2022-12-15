@@ -15,7 +15,7 @@ pnpm i
 ```bash
 # example for update version of dependency package `typescript` in all monorepo package
 pnpm update -rDL typescript
-# equal to
+# it's equal to
 pnpm update --recursive --dev --latest typescript
 ```
 
@@ -38,8 +38,9 @@ pnpm build:packages
 ## Unit Testing
 
 ```bash
+pnpm test
+# it's equal to
 pnpm test -r
-# equal to
 pnpm run -r test
 pnpm run --recursive test
 ```
