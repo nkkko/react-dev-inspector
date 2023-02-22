@@ -26,7 +26,7 @@
   },
   "homepage": "https://github.com/zthxxx/react-dev-inspector",
   "files": [
-    "../../README.md",
+    "README.md",
     "src",
     "es",
     "lib"

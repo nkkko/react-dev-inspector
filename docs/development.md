@@ -69,3 +69,16 @@ pnpm dev
 ```bash
 pnpm build:examples && pnpm build:site
 ```
+
+# Publish
+
+```bash
+# for check
+pnpm publish -r --report-summary --tag v2-beta --dry-run
+
+# to publish
+pnpm publish -r --report-summary --tag v2-beta
+
+# to check log
+cat pnpm-publish-summary.json
+```

@@ -33,15 +33,17 @@ jobs:
 
       - name: Build package
         run: |
-          npm run build
+          pnpm build:packages
 
       - name: Build site
         run: |
-          npm run build:site
+          pnpm build:examples
+          pnpm build:site
 
       - name: Deploy site
         if: ${{ github.ref == 'refs/heads/master' }}
+        # https://github.com/peaceiris/actions-gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./site
+          publish_dir: ./.site

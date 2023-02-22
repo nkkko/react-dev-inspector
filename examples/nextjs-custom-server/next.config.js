@@ -9,6 +9,9 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   assetPrefix: isDev ? '/' : '/nextjs-custom-server',
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 }
 
 module.exports = nextConfig

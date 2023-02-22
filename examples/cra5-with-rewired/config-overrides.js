@@ -4,7 +4,6 @@ const {
 const {
   override,
   overrideDevServer,
-  disableEsLint,
   addBabelPlugin,
 } = require('customize-cra')
 
@@ -29,7 +28,6 @@ const removeWebpackPlugin = (pluginName) => (config) => {
  */
 module.exports = {
   webpack: override(
-    disableEsLint(),
     removeWebpackPlugin('ForkTsCheckerWebpackPlugin'),
     addBabelPlugin([
       // https://github.com/emotion-js/emotion/tree/main/packages/babel-plugin#options

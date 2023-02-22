@@ -8,7 +8,7 @@ runs:
   steps:
     - name: Setup node
       # https://github.com/actions/setup-node
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: 18.x
         registry-url: https://registry.npmjs.org
@@ -22,14 +22,14 @@ runs:
       shell: bash
       run: |
         npm i -g pnpm@8
-        pnpm ci
+        pnpm i --frozen-lockfile
 
     - name: ESLint
       shell: bash
       run: |
-        npm run lint
+        pnpm lint
 
     - name: Unit test
       shell: bash
       run: |
-        npm test
+        pnpm test
