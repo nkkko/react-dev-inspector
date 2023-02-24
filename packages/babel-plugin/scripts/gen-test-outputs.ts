@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'node:path'
 import globby from 'globby'
 import fs from 'fs-extra'
 import { transform } from '../src'

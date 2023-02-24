@@ -2,19 +2,21 @@
  * mirror from https://github.com/facebook/react/blob/v16.13.1/packages/react-devtools-shared/src/backend/views/utils.js
  */
 
-import {
+import type {
   Rect,
   BoxSizing,
+} from './utils/overlay'
+import {
   getElementDimensions,
   getNestedBoundingClientRect,
 } from './utils/overlay'
 
 
 interface Box {
-  top: number,
-  left: number,
-  width: number,
-  height: number,
+  top: number;
+  left: number;
+  width: number;
+  height: number;
 }
 
 // Note that the Overlay components are not affected by the active Theme,
@@ -214,7 +216,7 @@ export default class Overlay {
     this.removeCallback()
   }
 
-  setRemoveCallback(callback: Function) {
+  setRemoveCallback(callback: () => void) {
     this.removeCallback = callback.bind(this)
   }
 
@@ -261,7 +263,6 @@ export default class Overlay {
     })
 
     if (!name) {
-      // eslint-disable-next-line no-param-reassign
       name = elements[0].nodeName.toLowerCase()
 
       const node = elements[0]
@@ -277,7 +278,6 @@ export default class Overlay {
         }
 
         if (ownerName) {
-          // eslint-disable-next-line no-param-reassign
           name += ` (in ${ownerName})`
         }
       }

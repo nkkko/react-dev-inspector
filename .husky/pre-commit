@@ -3,4 +3,4 @@
 # run by git
 . "$(dirname -- "$0")/_/husky.sh"
 
-npx lint-staged
+TIMING=1 npx lint-staged

@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'node:path'
 import { transformSync } from '@babel/core'
 import type { TransformOptions } from '@babel/core'
 import globby from 'globby'

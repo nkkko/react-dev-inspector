@@ -1,6 +1,7 @@
-import path from 'path'
+import path from 'node:path'
 import type { NextHandleFunction, IncomingMessage } from 'connect'
 import type { RequestHandler } from 'express'
+
 /**
  * https://github.com/facebook/create-react-app/blob/v5.0.1/packages/react-dev-utils/launchEditorEndpoint.js
  * used in https://github.com/facebook/create-react-app/blob/v5.0.1/packages/react-dev-utils/errorOverlayMiddleware.js#L14

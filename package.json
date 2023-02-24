@@ -11,14 +11,14 @@
     "prepare": "husky install",
     "test": "pnpm --recursive test",
     "lint": "TIMING=1 eslint --format codeframe --ext .ts,.tsx packages examples",
-    "purge": "pnpm -r clean && rm -rf .site node_modules examples/*/node_modules packages/*/node_modules",
+    "purge": "pnpm -r clean && echo 'removing node_modules ...' && rm -rf .site node_modules {examples,packages}/*/node_modules",
     "build:packages": "pnpm --filter './packages/**' build",
     "build:examples": "pnpm --filter './examples/**' build",
     "build:site": "./scripts/build-site.sh"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "TIMING=1 eslint --format codeframe"
+      "eslint --format codeframe"
     ]
   },
   "devDependencies": {

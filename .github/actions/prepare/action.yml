@@ -10,7 +10,9 @@ runs:
       # https://github.com/actions/setup-node
       uses: actions/setup-node@v3
       with:
-        node-version: 18.x
+        # use node 16 due to avoid umi3(webpack4) building error:
+        # `Error: error:0308010C:digital envelope routines::unsupported`
+        node-version: 16.x
         registry-url: https://registry.npmjs.org
 
     - name: Environment variables
@@ -22,6 +24,8 @@ runs:
       shell: bash
       run: |
         npm i -g pnpm@8
+        npm --version
+        pnpm --version
         pnpm i --frozen-lockfile
 
     - name: ESLint

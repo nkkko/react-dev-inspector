@@ -18,7 +18,7 @@ export const isForwardRef = (fiber?: Fiber): boolean =>
 
 
 type FiberHTMLElement = HTMLElement & {
-  [fiberKey: string]: Fiber | undefined,
+  [fiberKey: string]: Fiber | undefined;
 }
 
 /**

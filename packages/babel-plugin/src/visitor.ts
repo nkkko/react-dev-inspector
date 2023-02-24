@@ -1,4 +1,4 @@
-import { relative } from 'path'
+import { relative } from 'node:path'
 import type { PluginPass } from '@babel/core'
 import type {
   JSXAttribute,
@@ -18,8 +18,8 @@ import type { Visitor } from '@babel/traverse'
 
 
 export const createVisitor = ({ cwd = process.cwd(), excludes }: {
-  cwd?: string,
-  excludes?: (string | RegExp)[],
+  cwd?: string;
+  excludes?: (string | RegExp)[];
 }): Visitor<PluginPass> => {
   const isExclude = excludes?.length
     ? memo((filePath: string): boolean => pathMatch(filePath, excludes))
@@ -84,8 +84,8 @@ const doJSXPathName: NodeHandler<JSXOpeningElement['name']> = (name) => {
 }
 
 export const doJSXOpeningElement: NodeHandler<
-  JSXOpeningElement,
-  { relativePath: string }
+JSXOpeningElement,
+{ relativePath: string }
 > = (node, option) => {
   const { stop } = doJSXPathName(node.name)
   if (stop) return { stop }
@@ -128,17 +128,17 @@ type NodeHandler<Node extends NodeType = any, Option = void> =
     /**
      * stop processing flag
      */
-    stop?: boolean,
+    stop?: boolean;
 
     /**
      * throw error
      */
-    error?: any,
+    error?: any;
 
     /**
      * node after processing
      */
-    result?: Node,
+    result?: Node;
   }
 
 const doJSXIdentifierName: NodeHandler<JSXIdentifier> = (name) => {
@@ -157,7 +157,6 @@ const doJSXNamespacedNameName: NodeHandler<JSXNamespacedName> = (name) => {
   const { stop } = doJSXIdentifierName(name.name)
   return { stop }
 }
-
 
 
 const isNil = (value: unknown): value is null | undefined => value === null || value === undefined

@@ -1,4 +1,5 @@
 import type { Fiber, Source } from 'react-reconciler'
+
 /**
  * https://github.com/facebook/create-react-app/blob/v5.0.1/packages/react-dev-utils/launchEditorEndpoint.js
  * used in https://github.com/facebook/create-react-app/blob/v5.0.1/packages/react-dev-utils/errorOverlayMiddleware.js#L14
@@ -16,18 +17,18 @@ import {
 
 
 export interface CodeInfo {
-  lineNumber: string,
-  columnNumber: string,
+  lineNumber: string;
+  columnNumber: string;
   /**
    * code source file relative path to dev-server cwd(current working directory)
    * need use with `react-dev-inspector/plugins/babel`
    */
-  relativePath?: string,
+  relativePath?: string;
   /**
    * code source file absolute path
    * just need use with `@babel/plugin-transform-react-jsx-source` which auto set by most framework
    */
-  absolutePath?: string,
+  absolutePath?: string;
 }
 
 /**
@@ -37,9 +38,9 @@ export interface CodeInfo {
  * this props will be record in fiber
  */
 export interface CodeDataAttribute {
-  'data-inspector-line': string,
-  'data-inspector-column': string,
-  'data-inspector-relative-path': string,
+  'data-inspector-line': string;
+  'data-inspector-column': string;
+  'data-inspector-relative-path': string;
 }
 
 /**
@@ -251,9 +252,9 @@ export const getNamedFiber = (baseFiber?: Fiber): Fiber | undefined => {
 }
 
 export const getElementInspect = (element: HTMLElement): {
-  fiber?: Fiber,
-  name?: string,
-  title: string,
+  fiber?: Fiber;
+  name?: string;
+  title: string;
 } => {
   const fiber = getElementFiberUpward(element)
   const referenceFiber = getReferenceFiber(fiber)

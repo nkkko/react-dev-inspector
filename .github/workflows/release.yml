@@ -26,7 +26,7 @@ jobs:
       - name: Prepare for building
         uses: ./.github/actions/prepare
 
-      - name: Build
+      - name: Build Packages
         run: |
           pnpm build:packages
 
@@ -51,4 +51,5 @@ jobs:
 
           echo ''
           echo 'Show pnpm-publish-summary.json'
+          echo ''
           cat pnpm-publish-summary.json

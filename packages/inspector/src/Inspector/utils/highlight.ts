@@ -15,11 +15,10 @@ export type StopFunction = () => void
 
 export function setupHighlighter(
   handlers: {
-    onPointerOver?: (element: HTMLElement) => void,
-    onClick?: (element: HTMLElement) => void,
+    onPointerOver?: (element: HTMLElement) => void;
+    onClick?: (element: HTMLElement) => void;
   },
 ): StopFunction {
-
   function startInspectingNative() {
     registerListenersOnWindow(window)
   }
@@ -39,7 +38,7 @@ export function setupHighlighter(
 
   function stopInspectingNative() {
     removeListenersOnWindow(window)
-    iframesListeningTo.forEach(function(frame) {
+    iframesListeningTo.forEach((frame) => {
       try {
         removeListenersOnWindow(frame.contentWindow)
       } catch (error) {

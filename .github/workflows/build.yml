@@ -31,7 +31,7 @@ jobs:
       - name: Prepare for building
         uses: ./.github/actions/prepare
 
-      - name: Build package
+      - name: Build packages
         run: |
           pnpm build:packages
 

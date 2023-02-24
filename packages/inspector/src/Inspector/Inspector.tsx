@@ -5,26 +5,26 @@ import {
   type PropsWithChildren,
 } from 'react'
 import type { Fiber } from 'react-reconciler'
-import hotkeys, { KeyHandler } from 'hotkeys-js'
+import hotkeys, { type KeyHandler } from 'hotkeys-js'
 import { setupHighlighter } from './utils/highlight'
 import {
   getElementCodeInfo,
   gotoEditor,
   getElementInspect,
-  CodeInfo,
+  type CodeInfo,
 } from './utils/inspect'
 import Overlay from './Overlay'
 
 
 export interface InspectParams {
   /** hover / click event target dom element */
-  element: HTMLElement,
+  element: HTMLElement;
   /** nearest named react component fiber for dom element */
-  fiber?: Fiber,
+  fiber?: Fiber;
   /** source file line / column / path info for react component */
-  codeInfo?: CodeInfo,
+  codeInfo?: CodeInfo;
   /** react component name for dom element */
-  name?: string,
+  name?: string;
 }
 
 export type ElementHandler = (params: InspectParams) => void
@@ -37,13 +37,13 @@ export interface InspectorProps {
    *
    * supported keys see: https://github.com/jaywcjlove/hotkeys#supported-keys
    */
-  keys?: string[],
-  onHoverElement?: ElementHandler,
-  onClickElement?: ElementHandler,
+  keys?: string[];
+  onHoverElement?: ElementHandler;
+  onClickElement?: ElementHandler;
   /**
    * whether disable click react component to open IDE for view component code
    */
-  disableLaunchEditor?: boolean,
+  disableLaunchEditor?: boolean;
 }
 
 export const Inspector: FC<PropsWithChildren<InspectorProps>> = (props) => {
@@ -136,7 +136,6 @@ export const Inspector: FC<PropsWithChildren<InspectorProps>> = (props) => {
         overlayRef.current
           ? stopInspect()
           : startInspect()
-
       } else if (handler.key === 'esc' && overlayRef.current) {
         stopInspect()
       }

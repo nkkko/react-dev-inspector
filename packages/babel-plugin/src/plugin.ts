@@ -3,9 +3,9 @@ import { createVisitor } from './visitor'
 
 export interface InspectorPluginOptions {
   /** override process.cwd() */
-  cwd?: string,
+  cwd?: string;
   /** patterns to exclude matched files */
-  excludes?: (string | RegExp)[],
+  excludes?: (string | RegExp)[];
 }
 
 export function InspectorBabelPlugin(babel: unknown, options?: InspectorPluginOptions): PluginObj {

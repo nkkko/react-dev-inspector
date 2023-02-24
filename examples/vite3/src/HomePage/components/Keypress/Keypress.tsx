@@ -2,7 +2,7 @@ import { type FC, type PropsWithChildren, Component } from 'react'
 import * as S from './styles'
 
 
-export const Keypress:  FC<PropsWithChildren> = ({ children }) => {
+export const Keypress: FC<PropsWithChildren> = ({ children }) => {
   return (
     <kbd
       className={S.keyTone}

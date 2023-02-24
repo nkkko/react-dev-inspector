@@ -2,11 +2,26 @@ process.env.ESLINT_TSCONFIG = 'tsconfig.json'
 
 module.exports = {
   root: true,
+
+  /**
+   * Base on @antfu/eslint-config@0.39.7
+   * https://github.com/antfu/eslint-config/blob/v0.39.7
+   */
   extends: [
     '@antfu',
     '@antfu/react',
   ],
+
   rules: {
+    /**
+     * ===================================
+     * ************   Basic   ************
+     * ===================================
+     */
+
+    // https://eslint.org/docs/latest/rules/no-console
+    // https://github.com/antfu/eslint-config/blob/v0.39.7/packages/eslint-config-basic/index.js#L241
+    'no-console': ['error', { allow: ['warn', 'error', 'debug'] }],
     // https://eslint.org/docs/latest/rules/sort-imports
     // https://github.com/antfu/eslint-config/blob/v0.39.7/packages/eslint-config-basic/index.js#L380
     'sort-imports': [
@@ -48,7 +63,6 @@ module.exports = {
      *     : null
      * ```
      */
-
     'multiline-ternary': [
       'error',
       'always-multiline',
@@ -59,6 +73,24 @@ module.exports = {
       'before',
     ],
 
+
+    /**
+     * ===================================
+     * **********  Typescript   **********
+     * ===================================
+     */
+
+    // https://eslint.org/docs/latest/rules/quotes#options
+    // https://github.com/antfu/eslint-config/blob/v0.39.7/packages/eslint-config-ts/index.js#L131
+    '@typescript-eslint/quotes': [
+      'error',
+      'single',
+      {
+        avoidEscape: true,
+        allowTemplateLiterals: true,
+      },
+    ],
+    // https://typescript-eslint.io/rules/no-inferrable-types
     '@typescript-eslint/no-inferrable-types': 'off',
     // https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/docs/rules/member-delimiter-style.md
     '@typescript-eslint/member-delimiter-style': [
@@ -68,6 +100,17 @@ module.exports = {
           delimiter: 'semi',
           requireLast: true,
         },
+      },
+    ],
+
+    // https://typescript-eslint.io/rules/consistent-type-imports
+    // https://github.com/antfu/eslint-config/blob/v0.39.7/packages/eslint-config-ts/index.js#L71
+    '@typescript-eslint/consistent-type-imports': [
+      'error',
+      {
+        prefer: 'type-imports',
+        disallowTypeAnnotations: true,
+        fixStyle: 'inline-type-imports',
       },
     ],
     // https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/docs/rules/no-use-before-define.md
@@ -127,6 +170,13 @@ module.exports = {
     // https://github.com/antfu/eslint-config/blob/v0.39.7/packages/eslint-config-ts/index.js#L123
     '@typescript-eslint/brace-style': ['error', '1tbs', { allowSingleLine: true }],
 
+
+    /**
+     * ===================================
+     * ************   React   ************
+     * ===================================
+     */
+
     // https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/jsx-tag-spacing.md
     'react/jsx-tag-spacing': [
       'error',
@@ -141,10 +191,18 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'off',
     // https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/display-name.md
     'react/display-name': 'off',
+    // https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/prop-types.md
+    'react/prop-types': 'off',
     // https://eslint.org/docs/latest/rules/jsx-quotes
     // https://github.com/antfu/eslint-config/blob/v0.39.7/packages/eslint-config-react/index.js#L13
     'jsx-quotes': ['error', 'prefer-single'],
 
+
+    /**
+     * ===================================
+     * ************   Antfu   ************
+     * ===================================
+     */
     // https://github.com/antfu/eslint-config/blob/v0.39.7/packages/eslint-config-basic/index.js#L396
     'antfu/if-newline': 'off',
     // https://github.com/antfu/eslint-config/blob/v0.39.7/packages/eslint-config-basic/index.js#L398

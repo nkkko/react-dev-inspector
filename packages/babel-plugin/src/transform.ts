@@ -1,11 +1,11 @@
-import path from 'path'
+import path from 'node:path'
 import {
   parse,
   type ParserPlugin,
   type ParserOptions,
 } from '@babel/parser'
 import generate from '@babel/generator'
-import traverse  from '@babel/traverse'
+import traverse from '@babel/traverse'
 import type {
   Node,
   JSXOpeningElement,
@@ -18,9 +18,9 @@ import {
 
 export interface TransformOptions {
   /** patterns to exclude matched files */
-  excludes?: (string | RegExp)[],
-  babelPlugins?: ParserPlugin[],
-  babelOptions?: ParserOptions,
+  excludes?: (string | RegExp)[];
+  babelPlugins?: ParserPlugin[];
+  babelOptions?: ParserOptions;
 }
 
 /**
