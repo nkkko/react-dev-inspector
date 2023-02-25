@@ -1,9 +1,13 @@
-import { render } from 'react-dom'
+import React from 'react'
+import { createRoot } from 'react-dom/client'
 import { HomePage } from './HomePage'
 
-render(
-  <HomePage
-    name={'cra5-with-rewired'}
-  />,
-  document.getElementById('root'),
-)
+createRoot(document.getElementById('root') as HTMLDivElement)
+  .render(
+    <React.StrictMode>
+      <HomePage
+        name={'cra5-with-rewired'}
+        titleBadge={'create-react-app 5'}
+      />
+    </React.StrictMode>,
+  )

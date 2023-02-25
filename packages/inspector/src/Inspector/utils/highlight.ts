@@ -41,7 +41,8 @@ export function setupHighlighter(
     iframesListeningTo.forEach((frame) => {
       try {
         removeListenersOnWindow(frame.contentWindow)
-      } catch (error) {
+      }
+      catch (error) {
         // This can error when the iframe is on a cross-origin.
       }
     })
@@ -94,7 +95,8 @@ export function setupHighlighter(
           registerListenersOnWindow(window)
           iframesListeningTo.add(iframe)
         }
-      } catch (error) {
+      }
+      catch (error) {
         // This can error when the iframe is on a cross-origin.
       }
     }

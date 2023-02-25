@@ -136,7 +136,8 @@ export const Inspector: FC<PropsWithChildren<InspectorProps>> = (props) => {
         overlayRef.current
           ? stopInspect()
           : startInspect()
-      } else if (handler.key === 'esc' && overlayRef.current) {
+      }
+      else if (handler.key === 'esc' && overlayRef.current) {
         stopInspect()
       }
     }

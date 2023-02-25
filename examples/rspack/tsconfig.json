@@ -1,0 +1,21 @@
+{
+  "extends": "@zthxxx/tsconfig/tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "es",
+    "baseUrl": ".",
+
+    "types": [
+      "node",
+    ],
+  },
+  "include": [
+    "src",
+    "rspack.config.ts",
+  ],
+  // https://www.typescriptlang.org/docs/handbook/project-references.html
+  "references": [
+    { "path": "../../packages/middleware" },
+    { "path": "../../packages/inspector" },
+  ],
+}

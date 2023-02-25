@@ -62,7 +62,8 @@ export const pathMatch = (filePath: string, matches?: (string | RegExp)[]): bool
   return matches.some((match) => {
     if (typeof match === 'string') {
       return filePath.includes(match)
-    } else if (match instanceof RegExp) {
+    }
+    else if (match instanceof RegExp) {
       return match.test(filePath)
     }
     // default is do not filter when match is illegal, so return true

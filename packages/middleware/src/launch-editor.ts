@@ -52,7 +52,8 @@ export const launchEditorMiddleware: NextHandleFunction = (req: IncomingMessage 
     }
 
     reactLaunchEditorMiddleware(req, res, next)
-  } else {
+  }
+  else {
     next()
   }
 }

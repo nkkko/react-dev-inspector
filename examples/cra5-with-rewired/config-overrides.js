@@ -27,6 +27,21 @@ const removeWebpackPlugin = (pluginName) => (config) => {
  * customize-cra api code: https://github.com/arackaf/customize-cra
  */
 module.exports = {
+  /**
+   * react-dev-inspector server config for webpack-dev-server
+   */
+  devServer: overrideDevServer(
+    serverConfig => {
+      // https://webpack.js.org/configuration/dev-server/#devserversetupmiddlewares
+      serverConfig.setupMiddlewares = (middlewares) => {
+        middlewares.unshift(launchEditorMiddleware)
+        return middlewares
+      }
+
+      return serverConfig
+    },
+  ),
+
   webpack: override(
     removeWebpackPlugin('ForkTsCheckerWebpackPlugin'),
     addBabelPlugin([
@@ -45,18 +60,5 @@ module.exports = {
       // https://github.com/zthxxx/react-dev-inspector#inspector-babel-plugin-options
       '@react-dev-inspector/babel-plugin',
     ]),
-  ),
-
-  /** react-dev-inspector - dev server config */
-  devServer: overrideDevServer(
-    serverConfig => {
-      // https://webpack.js.org/configuration/dev-server/#devserversetupmiddlewares
-      serverConfig.setupMiddlewares = (middlewares) => {
-        middlewares.unshift(launchEditorMiddleware)
-        return middlewares
-      }
-
-      return serverConfig
-    },
   ),
 }

@@ -1,7 +1,7 @@
 /**
  * https://nextjs.org/docs/advanced-features/custom-server
  */
-const { createServer } = require('http')
+const { createServer } = require('node:http')
 const next = require('next')
 const {
   queryParserMiddleware,
@@ -21,7 +21,7 @@ app.prepare().then(() => {
      */
     const middlewares = [
       /**
-       * react-dev-inspector configuration two middlewares for nextjs
+       * react-dev-inspector server config for nextjs (two middlewares)
        */
       queryParserMiddleware,
       launchEditorMiddleware,
@@ -38,9 +38,8 @@ app.prepare().then(() => {
     )
 
     middlewarePipeline()
-
   }).listen(port, (err) => {
     if (err) throw err
-    console.log(`> Ready on http://${hostname}:${port}`)
+    console.debug(`> Ready on http://${hostname}:${port}`)
   })
 })

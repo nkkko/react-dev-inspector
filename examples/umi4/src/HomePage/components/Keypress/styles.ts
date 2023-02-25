@@ -9,6 +9,7 @@ export const keyTone = css`
   padding: 0.5rem 0.8rem;
   font: 12px SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
   font-size: 1.2rem;
+  font-weight: 600;
   height: 1.2rem;
   line-height: 1.2rem;
   color: #444d56;
@@ -23,15 +24,15 @@ export const Keys = styled.div`
   display: inline-block;
   padding: 0 0.5rem;
   opacity:1;
-  animation: flickerAnimation 1.6s ease-in-out infinite;
-  
+  animation: flickerAnimation 2s ease-in-out infinite;
+
   & > .${keyTone} {
     margin: auto 0.8rem;
   }
-  
+
   @keyframes flickerAnimation {
     0%   { opacity: 1; }
-    50%  { opacity: .4; }
+    50%  { opacity: .6; }
     100% { opacity: 1; }
   }
 `

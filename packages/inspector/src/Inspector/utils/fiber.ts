@@ -86,7 +86,8 @@ export const getFiberName = (fiber?: Fiber): string | undefined => {
 
   if (typeof displayName === 'string') {
     return displayName
-  } else if (typeof name === 'string') {
+  }
+  else if (typeof name === 'string') {
     return name
   }
 

@@ -320,16 +320,20 @@ function findTipPos(dims: Box, bounds: Box, tipSize: { width: number; height: nu
   if (dims.top + dims.height + tipHeight <= bounds.top + bounds.height) {
     if (dims.top + dims.height < bounds.top + 0) {
       top = bounds.top + margin
-    } else {
+    }
+    else {
       top = dims.top + dims.height + margin
     }
-  } else if (dims.top - tipHeight <= bounds.top + bounds.height) {
+  }
+  else if (dims.top - tipHeight <= bounds.top + bounds.height) {
     if (dims.top - tipHeight - margin < bounds.top + margin) {
       top = bounds.top + margin
-    } else {
+    }
+    else {
       top = dims.top - tipHeight - margin
     }
-  } else {
+  }
+  else {
     top = bounds.top + bounds.height - tipHeight - margin
   }
 

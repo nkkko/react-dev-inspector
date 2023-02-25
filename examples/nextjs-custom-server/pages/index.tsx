@@ -18,6 +18,7 @@ export default function Layout() {
 
       <HomePage
         name={'nextjs-custom-server'}
+        titleBadge={'nextjs 13'}
       />
     </>
   )

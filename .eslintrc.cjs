@@ -119,6 +119,9 @@ module.exports = {
     '@typescript-eslint/no-floating-promises': 'off',
     // https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/docs/rules/no-misused-promises.md
     '@typescript-eslint/no-misused-promises': 'off',
+    // https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/docs/rules/no-extra-parens.md
+    // https://github.com/antfu/eslint-config/blob/v0.39.7/packages/eslint-config-ts/index.js#L150
+    '@typescript-eslint/no-extra-parens': 'off',
     // https://github.com/antfu/eslint-config/blob/v0.39.7/packages/eslint-config-ts/index.js#L78
     // https://eslint.org/docs/latest/rules/indent#options
     '@typescript-eslint/indent': ['error', 2, {
@@ -166,9 +169,6 @@ module.exports = {
     // https://typescript-eslint.io/rules/restrict-template-expressions/
     // https://github.com/antfu/eslint-config/blob/v0.39.7/packages/eslint-config-ts/index.js#L50
     '@typescript-eslint/restrict-template-expressions': 'off',
-    // https://eslint.org/docs/latest/rules/brace-style#options
-    // https://github.com/antfu/eslint-config/blob/v0.39.7/packages/eslint-config-ts/index.js#L123
-    '@typescript-eslint/brace-style': ['error', '1tbs', { allowSingleLine: true }],
 
 
     /**

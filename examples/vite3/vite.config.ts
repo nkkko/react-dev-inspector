@@ -2,6 +2,8 @@ import { defineConfig, type PluginOption } from 'vite'
 import react from '@vitejs/plugin-react'
 import { inspectorServer } from '@react-dev-inspector/vite-plugin'
 
+const isProd = process.env.NODE_ENV === 'production'
+
 // https://vitejs.dev/config/
 export default defineConfig({
   clearScreen: false,
@@ -10,6 +12,9 @@ export default defineConfig({
     open: true,
   },
   plugins: [
+    /**
+     * react-dev-inspector server config for vite
+     */
     inspectorServer() as PluginOption,
 
     react({
@@ -26,9 +31,10 @@ export default defineConfig({
           ],
 
           /**
-           * react-dev-inspector example configuration is as follows
+           * NOTE: the following `@react-dev-inspector/babel-plugin` is optional,
+           *       only use for online demo
            */
-          '@react-dev-inspector/babel-plugin',
+          ...(isProd ? ['@react-dev-inspector/babel-plugin'] : []),
         ],
       },
     }),

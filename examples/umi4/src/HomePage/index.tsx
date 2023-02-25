@@ -4,31 +4,34 @@ import type { InspectParams } from 'react-dev-inspector'
 import { Title } from './components/Title'
 import { Slogan } from './components/Slogan'
 import { KeyPad, Keypress } from './components/Keypress'
+import { TitleBadge } from './components/Badge'
 import * as S from './styles'
 
 
 const projectRepo = 'https://github.com/zthxxx/react-dev-inspector'
 const isDev = process.env.NODE_ENV === 'development'
 
-export const HomePage = ({ name }: {
+export const HomePage = ({ name, titleBadge }: {
   /** example name, as same as package dirname */
   name: string;
+  titleBadge?: string;
 }) => {
   return (
     <Inspector
       disableLaunchEditor={!isDev}
       onClickElement={(inspect: InspectParams) => {
-        console.debug(inspect)
-        if (isDev || !inspect.codeInfo?.relativePath) return
+        console.debug('[InspectParams]', inspect)
+        if (isDev || !inspect.codeInfo) return
+        const { relativePath, absolutePath, lineNumber } = inspect.codeInfo
 
-        const {
-          relativePath,
-          lineNumber,
-        } = inspect.codeInfo
-
-        window.open(
-          `${projectRepo}/blob/master/examples/${name}/${relativePath}#L${lineNumber}`,
-        )
+        if (relativePath) {
+          const onlineFilePath = `examples/${name}/${relativePath}`
+          window.open(`${projectRepo}/blob/master/${onlineFilePath}#L${lineNumber}`)
+        }
+        else if (absolutePath) {
+          const onlineFilePath = absolutePath.replace(/^.*?\/examples\//, 'examples/')
+          window.open(`${projectRepo}/blob/master/${onlineFilePath}#L${lineNumber}`)
+        }
       }}
     >
       <Global styles={S.globalCss} />
@@ -41,6 +44,7 @@ export const HomePage = ({ name }: {
 
         <Title>
           <span>React Dev Inspector</span>
+          <TitleBadge>{titleBadge}</TitleBadge>
         </Title>
 
         <Slogan>
