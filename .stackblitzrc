@@ -1,0 +1,7 @@
+{
+  "installDependencies": true,
+  "startCommand": "pnpm build:packages && cd examples/vite4 && pnpm dev",
+  "env": {
+    "NODE_ENV": "development"
+  }
+}

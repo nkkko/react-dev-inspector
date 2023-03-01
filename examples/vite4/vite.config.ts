@@ -2,7 +2,6 @@ import { defineConfig, type PluginOption } from 'vite'
 import react from '@vitejs/plugin-react'
 import { inspectorServer } from '@react-dev-inspector/vite-plugin'
 
-const isProd = process.env.NODE_ENV === 'production'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -32,9 +31,10 @@ export default defineConfig({
 
           /**
            * NOTE: the following `@react-dev-inspector/babel-plugin` is optional,
-           *       only use for online demo
+           *       only use for online demo site,
+           *       you can remove it from your local development config.
            */
-          ...(isProd ? ['@react-dev-inspector/babel-plugin'] : []),
+          '@react-dev-inspector/babel-plugin',
         ],
       },
     }),

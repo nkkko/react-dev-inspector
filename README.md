@@ -13,11 +13,14 @@ This package allows users to jump to local IDE code directly from browser React 
 
 ### Preview
 
-online demo: https://react-dev-inspector.zthxxx.me
+Online demo site: https://react-dev-inspector.zthxxx.me
 
 > press hotkey (`ctrl⌃ + shift⇧ + commmand⌘ + c`), then click the HTML element you wish to inspect.
 
-screen record gif (8M size):
+[![](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/zthxxx/react-dev-inspector/tree/dev/?file=examples/vite4/package.json)
+
+
+Screen record gif (8M size):
 
 [![inspector-gif](https://github.com/zthxxx/react-dev-inspector/raw/master/docs/images/inspect.gif)](https://react-dev-inspector.zthxxx.me/images/inspect.gif)
 
@@ -36,10 +39,12 @@ npm i -D react-dev-inspector
 ### for VSCode only, but simple without any other configuration
 
 Works with almost all react frameworks such as
-  [Vite](https://github.com/vitejs/vite/tree/main/packages/plugin-react),
+  [Vite](https://github.com/vitejs/vite),
   [Next.js](https://nextjs.org/),
+  [Rspack](https://www.rspack.dev/),
   [Create React App](https://create-react-app.dev/),
-  [Umi3](https://umijs.org/),
+  [Umi4](https://umijs.org/),
+  [Umi3](https://v3.umijs.org/),
   [Ice.js](https://ice.work/),
 
 or any other which use [@babel/plugin-transform-react-jsx-source](https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-react-jsx-source) in builtin.
@@ -120,17 +125,17 @@ export const Layout = () => {
 
 ### 2. Set up Inspector Config
 
-You should add:
+You need to add:
 
-- an inspector **babel plugin**, to inject source code location info
-  - `react-dev-inspector/plugins/babel`
-- an server **api middleware**, to open local IDE
+- [required] an server **editor launch middleware**, to open local IDE
   - `import { launchEditorMiddleware } from 'react-dev-inspector/plugins/webpack'`
+- [optional] an inspector **babel plugin**, to inject source code location info
+  - `react-dev-inspector/plugins/babel`
 
 to your current project development config.
 
-Such as add **babel plugin** into your `.babelrc` or webpack `babel-loader` config,
-add **api middleware** into your `webpack-dev-server` config or other server setup.
+Such as add **editor launch middleware** into your `webpack-dev-server` / `vite server` config or other server setup,
+add **babel plugin** into your `.babelrc` or webpack `babel-loader` config.
 
 <br />
 

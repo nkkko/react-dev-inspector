@@ -37,7 +37,8 @@ export default defineConfig({
 
           /**
            * NOTE: the following `@react-dev-inspector/babel-plugin` is optional,
-           *       only use for online demo
+           *       only use for online demo site,
+           *       you can remove it from your local development config.
            */
           ...(isProd ? ['@react-dev-inspector/babel-plugin'] : []),
         ],
