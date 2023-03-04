@@ -4,8 +4,19 @@
     "rootDir": "src",
     "outDir": "es",
     "baseUrl": ".",
+    "paths": {
+      "@react-dev-inspector/vite-plugin": ["../vite-plugin/src"],
+      "@react-dev-inspector/middleware": ["../middleware/src"],
+    },
   },
   "include": [
     "src",
+    "src/.stories",
+    ".storybook",
+  ],
+  // https://www.typescriptlang.org/docs/handbook/project-references.html
+  "references": [
+    { "path": "../vite-plugin" },
+    { "path": "../middleware" },
   ],
 }

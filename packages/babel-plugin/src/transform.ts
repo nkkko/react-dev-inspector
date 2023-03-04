@@ -29,7 +29,12 @@ export interface TransformOptions {
  * @type webpack.loader.Loader
  * ref: https://astexplorer.net  +  @babel/parser
  */
-export const transform = ({ rootPath = process.cwd(), filePath, sourceCode, options }: {
+export const transform = ({
+  rootPath = process.cwd(),
+  filePath,
+  sourceCode,
+  options,
+}: {
   /**
    * path for project root path
    * @default process.cwd()

@@ -189,6 +189,9 @@ export const getElementCodeInfo = (element: HTMLElement): CodeInfo | undefined =
   return getCodeInfoFromFiber(referenceFiber)
 }
 
+/**
+ * fetch server api to open the code editor
+ */
 export const gotoEditor = (source?: CodeInfo) => {
   if (!source) return
 
@@ -214,7 +217,7 @@ export const gotoEditor = (source?: CodeInfo) => {
   }
 
   /**
-   * api in '@react-dev-inspector/plugin-webpack/middlewares' launchEditorMiddleware
+   * api path in '@react-dev-inspector/middlewares' launchEditorMiddleware
    */
   const apiRoute = isRelative
     ? `${launchEditorEndpoint}/relative`

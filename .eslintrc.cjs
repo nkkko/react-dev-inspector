@@ -12,6 +12,11 @@ module.exports = {
     '@antfu/react',
   ],
 
+  ignorePatterns: [
+    '!.storybook',
+    '!.stories',
+  ],
+
   rules: {
     /**
      * ===================================
@@ -43,6 +48,41 @@ module.exports = {
         maxBOF: 1,
       },
     ],
+
+    // https://eslint.org/docs/latest/rules/object-curly-newline
+    'object-curly-newline': [
+      'error',
+      {
+        ObjectExpression: {
+          minProperties: 4,
+          multiline: true,
+          consistent: true,
+        },
+        ObjectPattern: {
+          minProperties: 4,
+          multiline: true,
+          consistent: true,
+        },
+        ImportDeclaration: {
+          minProperties: 4,
+          multiline: true,
+          consistent: true,
+        },
+        ExportDeclaration: {
+          minProperties: 4,
+          multiline: true,
+          consistent: true,
+        },
+      },
+    ],
+    // https://eslint.org/docs/latest/rules/object-property-newline
+    // https://github.com/antfu/eslint-config/blob/v0.39.7/packages/eslint-config-basic/standard.js#L196
+    'object-property-newline': ['error', { allowAllPropertiesOnSameLine: false }],
+    // https://eslint.org/docs/latest/rules/array-bracket-newline
+    'array-bracket-newline': ['error', 'consistent'],
+    // https://eslint.org/docs/latest/rules/array-element-newline
+    'array-element-newline': ['error', 'consistent'],
+
     // https://eslint.org/docs/latest/rules/curly#multi-line
     // https://github.com/antfu/eslint-config/blob/v0.39.7/packages/eslint-config-basic/index.js#L221
     'curly': ['error', 'multi-line', 'consistent'],
@@ -127,48 +167,58 @@ module.exports = {
     '@typescript-eslint/no-extra-parens': 'off',
     // https://github.com/antfu/eslint-config/blob/v0.39.7/packages/eslint-config-ts/index.js#L78
     // https://eslint.org/docs/latest/rules/indent#options
-    '@typescript-eslint/indent': ['error', 2, {
-      SwitchCase: 1,
-      VariableDeclarator: 1,
-      outerIIFEBody: 1,
-      MemberExpression: 1,
-      FunctionDeclaration: { parameters: 1, body: 1 },
-      FunctionExpression: { parameters: 1, body: 1 },
-      CallExpression: { arguments: 1 },
-      ArrayExpression: 1,
-      ObjectExpression: 1,
-      ImportDeclaration: 1,
-      flatTernaryExpressions: false,
-      offsetTernaryExpressions: false,
-      ignoreComments: false,
-      ignoredNodes: [
-        // 'TSTypeParameterInstantiation',
-        // 'TSIntersectionType',
-        // 'TSUnionType',
-        // 'ConditionalExpression',
-        // 'TemplateLiteral *',
-        // 'JSXElement',
-        // 'JSXElement > *',
-        // 'JSXAttribute',
-        // 'JSXIdentifier',
-        // 'JSXNamespacedName',
-        // 'JSXMemberExpression',
-        // 'JSXSpreadAttribute',
-        // 'JSXExpressionContainer',
-        // 'JSXOpeningElement',
-        // 'JSXClosingElement',
-        // 'JSXFragment',
-        // 'JSXOpeningFragment',
-        // 'JSXClosingFragment',
-        // 'JSXText',
-        // 'JSXEmptyExpression',
-        // 'JSXSpreadChild',
-        // 'TSTypeParameterInstantiation',
-        // 'FunctionExpression > .params[decorators.length > 0]',
-        // 'FunctionExpression > .params > :matches(Decorator, :not(:first-child))',
-        // 'ClassBody.body > PropertyDefinition[decorators.length > 0] > .key',
-      ],
-    }],
+    '@typescript-eslint/indent': [
+      'error',
+      2,
+      {
+        SwitchCase: 1,
+        VariableDeclarator: 1,
+        outerIIFEBody: 1,
+        MemberExpression: 1,
+        FunctionDeclaration: {
+          parameters: 1,
+          body: 1,
+        },
+        FunctionExpression: {
+          parameters: 1,
+          body: 1,
+        },
+        CallExpression: { arguments: 1 },
+        ArrayExpression: 1,
+        ObjectExpression: 1,
+        ImportDeclaration: 1,
+        flatTernaryExpressions: false,
+        offsetTernaryExpressions: false,
+        ignoreComments: false,
+        ignoredNodes: [
+          'TSTypeParameterInstantiation',
+          'TSIntersectionType',
+          'TSUnionType',
+          // 'ConditionalExpression',
+          // 'TemplateLiteral *',
+          // 'JSXElement',
+          // 'JSXElement > *',
+          // 'JSXAttribute',
+          // 'JSXIdentifier',
+          // 'JSXNamespacedName',
+          // 'JSXMemberExpression',
+          // 'JSXSpreadAttribute',
+          // 'JSXExpressionContainer',
+          // 'JSXOpeningElement',
+          // 'JSXClosingElement',
+          // 'JSXFragment',
+          // 'JSXOpeningFragment',
+          // 'JSXClosingFragment',
+          // 'JSXText',
+          // 'JSXEmptyExpression',
+          // 'JSXSpreadChild',
+          // 'TSTypeParameterInstantiation',
+          // 'FunctionExpression > .params[decorators.length > 0]',
+          // 'FunctionExpression > .params > :matches(Decorator, :not(:first-child))',
+          // 'ClassBody.body > PropertyDefinition[decorators.length > 0] > .key',
+        ],
+      },
+    ],
     // https://typescript-eslint.io/rules/restrict-template-expressions/
     // https://github.com/antfu/eslint-config/blob/v0.39.7/packages/eslint-config-ts/index.js#L50
     '@typescript-eslint/restrict-template-expressions': 'off',
@@ -203,6 +253,12 @@ module.exports = {
         prop: 'parens-new-line',
       },
     ],
+    // https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/self-closing-comp.md
+    'react/self-closing-comp': 'error',
+    // https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/jsx-closing-tag-location.md
+    'react/jsx-closing-tag-location': 'error',
+    // https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/jsx-closing-bracket-location.md
+    'react/jsx-closing-bracket-location': 'error',
     // https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/jsx-boolean-value.md
     'react/jsx-boolean-value': 'off',
     // https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/jsx-curly-brace-presence.md

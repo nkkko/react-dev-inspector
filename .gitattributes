@@ -1,0 +1,7 @@
+# Don't allow people to merge changes to these generated files, only re-generate them
+pnpm-lock.yaml               merge=binary
+shrinkwrap.yaml              merge=binary
+npm-shrinkwrap.json          merge=binary
+yarn.lock                    merge=binary
+
+*.json                       linguist-language=JSON-with-Comments

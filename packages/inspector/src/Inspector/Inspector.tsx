@@ -1,21 +1,30 @@
 import {
+  useState,
+  useLayoutEffect,
   useEffect,
   useRef,
   type FC,
   type PropsWithChildren,
 } from 'react'
 import type { Fiber } from 'react-reconciler'
-import hotkeys, { type KeyHandler } from 'hotkeys-js'
-import { setupHighlighter } from './utils/highlight'
+import hotkeys from 'hotkeys-js'
 import {
+  setupHighlighter,
   getElementCodeInfo,
   gotoEditor,
   getElementInspect,
   type CodeInfo,
-} from './utils/inspect'
-import Overlay from './Overlay'
+} from './utils'
+import {
+  useEffectEvent,
+  useMousePosition,
+} from './hooks'
+import { Overlay } from './Overlay'
 
 
+/**
+ * the inspect meta info that is sent to the callback when an element is hovered over or clicked.
+ */
 export interface InspectParams {
   /** hover / click event target dom element */
   element: HTMLElement;
@@ -27,21 +36,54 @@ export interface InspectParams {
   name?: string;
 }
 
-export type ElementHandler = (params: InspectParams) => void
 
-export const defaultHotKeys = ['control', 'shift', 'command', 'c']
+const defaultHotkeys = ['control', 'shift', 'command', 'c']
 
 export interface InspectorProps {
   /**
-   * inspector toggle hotkeys
+   * Inspector Component toggle hotkeys,
    *
    * supported keys see: https://github.com/jaywcjlove/hotkeys#supported-keys
+   *
+   * @default - ['control', 'shift', 'command', 'c']
+   *
+   * Setting keys={null} explicitly means that NO hotkeys will trigger it.
    */
-  keys?: string[];
-  onHoverElement?: ElementHandler;
-  onClickElement?: ElementHandler;
+  keys?: string[] | null;
+
+  /** callback when hover on a element */
+  onHoverElement?: (params: InspectParams) => void;
+
   /**
-   * whether disable click react component to open IDE for view component code
+   * callback when left-click on a element.
+   *
+   * @returns if return `true`, will disable launch to local IDE,
+   *   same as set `disableLaunchEditor={true}`.
+   */
+  onClickElement?: (params: InspectParams) => void | boolean;
+
+  /**
+   * if set `active`, the Inspector will be a Controlled React Component,
+   *   you need to control the `true`/`false` state to active the Inspector.
+   *
+   * if not set `active`, this only a Uncontrolled component that
+   *   will activate/deactivate by hotkeys.
+   */
+  active?: boolean;
+
+  /**
+   * trigger by `active` state change, includes:
+   * - hotkeys toggle, before activate/deactivate Inspector
+   * - Escape / Click, before deactivate Inspector
+   *
+   * will NOT trigger by `active` prop change.
+   */
+  onActiveChange?: (active: boolean) => void;
+
+  /**
+   * whether to disable default behavior: "launch to local IDE when click on component".
+   *
+   * same as set a `onClickElement` callback that return `true`, like `onClickElement={() => true}`.
    */
   disableLaunchEditor?: boolean;
 }
@@ -51,25 +93,55 @@ export const Inspector: FC<PropsWithChildren<InspectorProps>> = (props) => {
     keys,
     onHoverElement,
     onClickElement,
+    active: controlledActive,
+    onActiveChange,
     disableLaunchEditor,
     children,
   } = props
 
+  const [isActive, setActive] = useState<boolean>(controlledActive ?? false)
+
+  // sync state as controlled component
+  useLayoutEffect(() => {
+    if (controlledActive !== undefined) {
+      setActive(controlledActive)
+    }
+  }, [controlledActive])
+
+  useEffect(() => {
+    isActive
+      ? startInspect()
+      : stopInspect()
+  }, [isActive])
+
   // hotkeys-js params need string
-  const hotkey = (keys ?? defaultHotKeys).join('+')
+  const hotkey: string | null = keys === null
+    ? null
+    : (keys ?? defaultHotkeys).join('+')
 
   /** inspector tooltip overlay */
   const overlayRef = useRef<Overlay>()
-  const mousePointRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 })
+  const mouseRef = useMousePosition()
 
-  const recordMousePoint = ({ clientX, clientY }: MouseEvent) => {
-    mousePointRef.current.x = clientX
-    mousePointRef.current.y = clientY
-  }
+  const activate = useEffectEvent(() => {
+    onActiveChange?.(true)
+    if (controlledActive === undefined) {
+      setActive(true)
+    }
+  })
 
-  const startInspect = () => {
+  const deactivate = useEffectEvent(() => {
+    onActiveChange?.(false)
+    if (controlledActive === undefined) {
+      setActive(false)
+    }
+  })
+
+  const startInspect = useEffectEvent(() => {
     const overlay = new Overlay()
     overlayRef.current = overlay
+
+    hotkeys(`esc`, deactivate)
 
     const stopCallback = setupHighlighter({
       onPointerOver: handleHoverElement,
@@ -79,17 +151,19 @@ export const Inspector: FC<PropsWithChildren<InspectorProps>> = (props) => {
     overlay.setRemoveCallback(stopCallback)
 
     // inspect element immediately at mouse point
-    const initPoint = mousePointRef.current
+    const initPoint = mouseRef.current
     const initElement = document.elementFromPoint(initPoint.x, initPoint.y)
     if (initElement) handleHoverElement(initElement as HTMLElement)
-  }
+  })
 
-  const stopInspect = () => {
+  const stopInspect = useEffectEvent(() => {
     overlayRef.current?.remove()
     overlayRef.current = undefined
-  }
 
-  const handleHoverElement = (element: HTMLElement) => {
+    hotkeys.unbind(`esc`, deactivate)
+  })
+
+  const handleHoverElement = useEffectEvent((element: HTMLElement) => {
     const overlay = overlayRef.current
 
     const codeInfo = getElementCodeInfo(element)
@@ -106,47 +180,38 @@ export const Inspector: FC<PropsWithChildren<InspectorProps>> = (props) => {
       codeInfo,
       name,
     })
-  }
+  })
 
-  const handleClickElement = (element: HTMLElement) => {
-    stopInspect()
+  const handleClickElement = useEffectEvent((element: HTMLElement) => {
+    deactivate()
 
     const codeInfo = getElementCodeInfo(element)
     const { fiber, name } = getElementInspect(element)
 
-    if (!disableLaunchEditor) gotoEditor(codeInfo)
-    onClickElement?.({
+    const isEnd = onClickElement?.({
       element,
       fiber,
       codeInfo,
       name,
     })
-  }
+
+    if (!isEnd && !disableLaunchEditor) gotoEditor(codeInfo)
+  })
 
   useEffect(() => {
-    document.addEventListener('mousemove', recordMousePoint, true)
-    return () => {
-      document.removeEventListener('mousemove', recordMousePoint, true)
-    }
-  }, [])
+    if (!hotkey) return
 
-  useEffect(() => {
-    const handleHotKeys: KeyHandler = (event, handler) => {
-      if (handler.key === hotkey) {
-        overlayRef.current
-          ? stopInspect()
-          : startInspect()
-      }
-      else if (handler.key === 'esc' && overlayRef.current) {
-        stopInspect()
-      }
+    const handleHotKeys = () => {
+      overlayRef.current
+        ? deactivate()
+        : activate()
     }
 
     // https://github.com/jaywcjlove/hotkeys
-    hotkeys(`${hotkey}, esc`, handleHotKeys)
+    hotkeys(`${hotkey}`, handleHotKeys)
 
     return () => {
-      hotkeys.unbind(`${hotkey}, esc`, handleHotKeys)
+      hotkeys.unbind(`${hotkey}`, handleHotKeys)
     }
   }, [hotkey])
 

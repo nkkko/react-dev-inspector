@@ -1,5 +1,5 @@
 import path from 'node:path'
-import type { NextHandleFunction, IncomingMessage } from 'connect'
+import type { NextHandleFunction } from 'connect'
 import type { RequestHandler } from 'express'
 
 /**
@@ -9,11 +9,12 @@ import type { RequestHandler } from 'express'
 // @ts-expect-error import from deep path for reduce load files
 import launchEditorEndpoint from 'react-dev-utils/launchEditorEndpoint'
 import createReactLaunchEditorMiddleware from 'react-dev-utils/errorOverlayMiddleware'
-import type { QueryParams } from './query-params-parser'
+import type { IncomingRequest } from './query-params-parser'
 
 const reactLaunchEditorMiddleware = createReactLaunchEditorMiddleware() as NextHandleFunction
 
-export const launchEditorMiddleware: NextHandleFunction = (req: IncomingMessage & { query?: QueryParams }, res, next) => {
+
+export const launchEditorMiddleware: NextHandleFunction = (req: IncomingRequest, res, next) => {
   if (!('REACT_EDITOR' in process.env)) {
     /**
      * If not set `REACT_EDITOR` in environment variables, set default to `vscode`.

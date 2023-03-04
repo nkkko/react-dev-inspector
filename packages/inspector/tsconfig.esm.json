@@ -18,5 +18,6 @@
     "**/*.mock.ts",
     "**/tests",
     "**/mocks",
+    "**/.stories",
   ],
 }

@@ -2,14 +2,12 @@
  * mirror from https://github.com/facebook/react/blob/v16.13.1/packages/react-devtools-shared/src/backend/views/utils.js
  */
 
-import type {
-  Rect,
-  BoxSizing,
-} from './utils/overlay'
 import {
   getElementDimensions,
   getNestedBoundingClientRect,
-} from './utils/overlay'
+  type Rect,
+  type BoxSizing,
+} from './utils'
 
 
 interface Box {
@@ -174,7 +172,7 @@ class OverlayTip {
   }
 }
 
-export default class Overlay {
+export class Overlay {
   window: Window
   tipBoundsWindow: Window
   container: HTMLElement
