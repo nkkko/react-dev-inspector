@@ -1,0 +1,11 @@
+import { Inspector } from 'react-dev-inspector'
+import './global.css'
+
+
+export default function App({ Component, pageProps }) {
+  return (
+    <Inspector>
+      <Component {...pageProps} />
+    </Inspector>
+  )
+}

@@ -1,0 +1,29 @@
+{
+  "extends": "@zthxxx/tsconfig/tsconfig.json",
+  "compilerOptions": {
+    "target": "ES2022",
+    "rootDir": ".",
+    "baseUrl": ".",
+
+    "types": [
+      "node",
+    ],
+
+    "jsx": "preserve",
+    "paths": {
+      "@components/*": ["components/*"],
+      "@public/*": ["public/*"],
+    },
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.mdx", ".postcss.config.ts",
+  ],
+  // https://www.typescriptlang.org/docs/handbook/project-references.html
+  "references": [
+    { "path": "../packages/middleware" },
+    { "path": "../packages/inspector" },
+  ],
+}

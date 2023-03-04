@@ -1,0 +1,24 @@
+{
+  "index": {
+    "type": "page",
+    "title": "Nextra",
+    "display": "hidden",
+    "theme": {
+      "layout": "raw"
+    }
+  },
+  "about": {
+    "type": "page",
+    "title": "About",
+    "theme": {
+      "typesetting": "article"
+    }
+  },
+  "react.tsx": {
+    "type": "page",
+    "title": "React Test",
+    "theme": {
+      "typesetting": "article"
+    }
+  }
+}

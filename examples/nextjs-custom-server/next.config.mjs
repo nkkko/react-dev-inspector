@@ -5,7 +5,7 @@
 const isDev = process.env.NODE_ENV !== 'production'
 
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+export default {
   reactStrictMode: true,
   swcMinify: true,
   assetPrefix: isDev ? '/' : '/nextjs-custom-server',
@@ -13,5 +13,3 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
 }
-
-module.exports = nextConfig
