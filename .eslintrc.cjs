@@ -280,14 +280,16 @@ module.exports = {
     'react/display-name': 'off',
     // https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/prop-types.md
     'react/prop-types': 'off',
+    // https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/prop-types.md
+    'react/no-unescaped-entities': 'off',
     // https://eslint.org/docs/latest/rules/jsx-quotes
     // https://github.com/antfu/eslint-config/blob/v0.39.7/packages/eslint-config-react/index.js#L13
     'jsx-quotes': ['error', 'prefer-single'],
 
     // https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/no-unknown-property.md
     //   `css`: https://emotion.sh/docs/css-prop
-    //   `jsx`: https://nextjs.org/blog/styling-next-with-styled-jsx
-    'react/no-unknown-property': ['error', { ignore: ['css', 'jsx'] }],
+    //   `jsx`,`global`: https://nextjs.org/blog/styling-next-with-styled-jsx
+    'react/no-unknown-property': ['error', { ignore: ['css', 'jsx', 'global'] }],
 
 
     /**

@@ -32,3 +32,5 @@ build
 
 # typescript
 *.tsbuildinfo
+
+.gpt-runner

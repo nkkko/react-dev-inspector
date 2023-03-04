@@ -1,6 +1,7 @@
+'use client'
+
 import {
   useState,
-  useLayoutEffect,
   useEffect,
   useRef,
   type FC,
@@ -16,6 +17,7 @@ import {
   type CodeInfo,
 } from './utils'
 import {
+  useLayoutEffect,
   useEffectEvent,
   useMousePosition,
 } from './hooks'

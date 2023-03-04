@@ -1,15 +1,17 @@
 /**
  * https://nextjs.org/docs/advanced-features/custom-server
  */
-const { createServer } = require('node:http')
-const next = require('next')
-const {
+import { createServer } from 'node:http'
+import next from 'next'
+import {
   queryParserMiddleware,
   launchEditorMiddleware,
-} = require('@react-dev-inspector/middleware')
+} from '@react-dev-inspector/middleware'
+
 
 const dev = process.env.NODE_ENV !== 'production'
-const hostname = process.env.HOST || '0.0.0.0'
+
+const hostname = process.env.HOST || 'localhost'
 const port = process.env.PORT ? Number(process.env.PORT) : 3000
 const app = next({
   dev,
@@ -25,7 +27,9 @@ app.prepare().then(() => {
      */
     const middlewares = [
       /**
-       * react-dev-inspector server config for nextjs (two middlewares)
+       * `react-dev-inspector` server config for nextjs (two middlewares)
+       *
+       * That's CANNOT be Next.js middleware due to [middleware is in Edge Runtime](https://github.com/vercel/next.js/discussions/34179)
        */
       queryParserMiddleware,
       launchEditorMiddleware,
@@ -41,7 +45,14 @@ app.prepare().then(() => {
       () => {},
     )
 
-    middlewarePipeline()
+    try {
+      middlewarePipeline()
+    }
+    catch (err) {
+      console.error('Error occurred handling', req.url, err)
+      res.statusCode = 500
+      res.end('internal server error')
+    }
   }).listen(port, (err) => {
     if (err) throw err
     console.debug(`> Ready on http://${hostname}:${port}`)
