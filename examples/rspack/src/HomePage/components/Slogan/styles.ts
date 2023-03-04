@@ -7,11 +7,16 @@ export const Description = styled.div`
   justify-content: center;
   align-items: center;
   margin: 0 auto;
-  padding: 2rem;
+  padding-block: 4rem 2rem;
+  padding-inline: 2rem;
   font-size: 1.5rem;
-  color: #999;
-  
+  color: #777;
+
   p {
     margin: 0.5rem auto;
+  }
+
+  small {
+    color: #999;
   }
 `

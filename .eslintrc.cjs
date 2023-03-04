@@ -72,6 +72,9 @@ module.exports = {
       'error',
       'before',
     ],
+    // https://github.com/un-es/eslint-plugin-i/blob/fork-release/docs/rules/default.md
+    // not interpret `module.exports = ...` as a `default` export
+    'import/default': 'off',
 
 
     /**
@@ -177,6 +180,34 @@ module.exports = {
      * ===================================
      */
 
+    // https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/jsx-first-prop-new-line.md
+    'react/jsx-first-prop-new-line': ['error', 'multiline'],
+    // https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/jsx-max-props-per-line.md
+    'react/jsx-max-props-per-line': [
+      'error',
+      {
+        maximum: 1,
+        when: 'multiline',
+      },
+    ],
+    // https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/jsx-wrap-multilines.md
+    'react/jsx-wrap-multilines': [
+      'error',
+      {
+        declaration: 'parens-new-line',
+        assignment: 'parens-new-line',
+        return: 'parens-new-line',
+        arrow: 'parens-new-line',
+        condition: 'parens-new-line',
+        logical: 'parens-new-line',
+        prop: 'parens-new-line',
+      },
+    ],
+    // https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/jsx-boolean-value.md
+    'react/jsx-boolean-value': 'off',
+    // https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/jsx-curly-brace-presence.md
+    'react/jsx-curly-brace-presence': 'off',
+
     // https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/jsx-tag-spacing.md
     'react/jsx-tag-spacing': [
       'error',
@@ -196,6 +227,11 @@ module.exports = {
     // https://eslint.org/docs/latest/rules/jsx-quotes
     // https://github.com/antfu/eslint-config/blob/v0.39.7/packages/eslint-config-react/index.js#L13
     'jsx-quotes': ['error', 'prefer-single'],
+
+    // https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/no-unknown-property.md
+    //   `css`: https://emotion.sh/docs/css-prop
+    //   `jsx`: https://nextjs.org/blog/styling-next-with-styled-jsx
+    'react/no-unknown-property': ['error', { ignore: ['css', 'jsx'] }],
 
 
     /**

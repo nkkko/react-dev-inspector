@@ -48,8 +48,12 @@ export const HomePage = ({ name, titleBadge }: {
         </Title>
 
         <Slogan>
-          <p>Quick jump to local IDE source code directly from browser React component by just a simple click!</p>
-          <p><small>( for this prod online demo page, jump to GitHub file )</small></p>
+          <p>Click on a React Component, take you to the source code in local IDE!</p>
+          {
+            isDev
+              ? null
+              : (<p><small>( for this online demo page, jump to GitHub file )</small></p>)
+          }
         </Slogan>
 
         <KeyPad>

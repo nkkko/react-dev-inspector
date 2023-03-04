@@ -7,8 +7,7 @@ import { css } from '@emotion/css'
 export const keyTone = css`
   display: inline-block;
   padding: 0.5rem 0.8rem;
-  font: 12px SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
-  font-size: 1.2rem;
+  font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
   font-weight: 600;
   height: 1.2rem;
   line-height: 1.2rem;
@@ -22,12 +21,22 @@ export const keyTone = css`
 
 export const Keys = styled.div`
   display: inline-block;
-  padding: 0 0.5rem;
-  opacity:1;
+  padding-right: 1.2rem;
+  opacity: 1;
+  white-space: nowrap;
   animation: flickerAnimation 2s ease-in-out infinite;
+
+  font-size: min(1.2rem, max(3vw, 0.8rem));
 
   & > .${keyTone} {
     margin: auto 0.8rem;
+
+    &:first-of-type {
+      margin-left: 0;
+    }
+    &:last-of-type {
+      margin-right: 0;
+    }
   }
 
   @keyframes flickerAnimation {
@@ -43,4 +52,14 @@ export const Pad = styled.div`
   padding: 2rem;
   font-size: 1.5rem;
   color: #666;
+
+  & > span:first-of-type {
+    padding-right: 1.2rem;
+  }
+
+  @media screen and (max-width: 640px) {
+    & > span {
+      display: none;
+    }
+  }
 `
