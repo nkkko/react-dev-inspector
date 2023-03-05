@@ -15,6 +15,7 @@
   },
   "type": "module",
   "scripts": {
+    "preinstall": "./.preinstall.js",
     "clean": "rimraf dist",
     "dev": "vite",
     "build": "npm run clean && vite build --base=/vite4/",
