@@ -2,14 +2,15 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Steps } from 'nextra/components'
-import { Inspector } from 'react-dev-inspector'
+import { Inspector, gotoServerEditor } from 'react-dev-inspector'
 import inspectPreview from '@images/inspect.gif'
+import workingPipeline from '@images/working-pipeline.svg'
 import { Feature, Features } from '@components/features'
 import { StackBlitz } from '@components/stack-blitz'
 import { Marquee } from '@components/marquee'
 import { DotsPattern } from '@components/pattern'
 import styles from './index.module.css'
+import * as S from './styles'
 
 
 import {
@@ -27,9 +28,8 @@ export const LandingPage = () => {
       <Inspector
         active={active}
         onActiveChange={setActive}
-        disableLaunchEditor={!isDev}
-        onClickElement={(inspect) => {
-          if (isDev || !inspect.codeInfo) return
+        onInspectElement={(inspect) => {
+          if (isDev) return gotoServerEditor(inspect.codeInfo)
 
           const { relativePath, absolutePath, lineNumber } = inspect.codeInfo
           if (relativePath) {
@@ -77,14 +77,12 @@ export const LandingPage = () => {
               centered
               unbounded
             >
-              <h2
-                className='scroll-mt-20 text-center text-2xl font-bold text-black hover:no-underline dark:text-white lg:text-3xl'
-              >
+              <S.CenterHeader>
                 Simple to integrate with <br /> your React frameworks and Editors
-              </h2>
-              <p className='mx-auto max-w-[70ch] pt-2 text-center text-sm text-zinc-600 dark:text-zinc-300 md:text-base'>
+              </S.CenterHeader>
+              <S.CenterDescription>
                 It's quick and easy to get started with some built-in plugins for most popular React frameworks.
-              </p>
+              </S.CenterDescription>
               <div
                 className='relative mt-10 pb-1'
               >
@@ -106,16 +104,12 @@ export const LandingPage = () => {
               centered
               unbounded
             >
-              <h2
-                className='scroll-mt-20 text-center text-2xl font-bold text-black hover:no-underline dark:text-white lg:text-3xl'
-              >
+              <S.CenterHeader>
                 Prefer an online demo?
-              </h2>
-              <p
-                className='mx-auto max-w-[70ch] pt-2 text-center text-sm text-zinc-600 dark:text-zinc-300 md:text-base'
-              >
+              </S.CenterHeader>
+              <S.CenterDescription>
                 Okay, it's also supported on StackBlitz, CodeSandbox, Gitpod, Replit, <br className='sm:block hidden' /> GitHub Codespaces and other Cloud IDEs.
-              </p>
+              </S.CenterDescription>
             </Feature>
 
             <Feature
@@ -124,7 +118,11 @@ export const LandingPage = () => {
               centered
             >
               <StackBlitz
-                // https://stackblitz.com/edit/github-x3rkzl?file=package.json,vite.config.ts%3AL17
+                /**
+                 * Link: https://stackblitz.com/edit/github-x3rkzl?file=package.json,vite.config.ts%3AL17
+                 * From: https://stackblitz.com/github/zthxxx/react-dev-inspector/tree/docs/nextra/examples/vite4
+                 *   - change: remove `references` field in `tsconfig.json`
+                 */
                 project='edit/github-x3rkzl'
                 openFile='package.json,vite.config.ts%3AL17'
                 view='default'
@@ -134,49 +132,45 @@ export const LandingPage = () => {
 
             <Feature
               large
-              id='fs-card'
-              style={{
-                color: 'white',
-                backgroundImage: 'url(/assets/routing.png), url(/assets/gradient-bg.jpeg)',
-                backgroundSize: '140%, 180%',
-                backgroundPosition: '130px -8px, top',
-                backgroundRepeat: 'no-repeat',
-                textShadow: '0 1px 6px rgb(38 59 82 / 18%)',
-                aspectRatio: '1.765',
-              }}
+              id='working-pipeline'
               href='/docs/docs-theme/page-configuration'
+              className='flex flex-col justify-start'
             >
-              <h3>Organize pages intuitively, <br />with file-system routing from Next.js.</h3>
+              <h3 className='grow-0'>The Working Pipeline</h3>
+              <div
+                className='grow flex justify-center items-center'
+              >
+                <Image
+                  className='relative mt-2 sm:mt-4 lg:mt-6'
+                  src={workingPipeline}
+                  alt='Working Pipeline'
+                  loading='eager'
+                />
+              </div>
             </Feature>
 
             <Feature>
               <h3>That's how it works</h3>
               <div>
-                <Steps
-                  className='
-                    [&>h3]:flex [&>h3]:items-center
-                    [&>h3]:before:flex [&>h3]:before:items-center [&>h3]:before:justify-center [&>h3]:before:content-[counter(step)]
-                    [&>h3]:mt-8 [&>h3]:!text-2xl [&>h3]:!font-medium
-                    [&>h3]:tracking-tight [&>h3]:text-slate-900 [&>h3]:dark:text-slate-100
-                    [&>p]:mt-2
-                  '
-                >
+                <S.Steps>
+                  <h3>Inject JSX Source</h3>
+                  <p>
+                    The compiler's <code>plugin</code> records source info on component's fiber.
+                    Most of frameworks offer this feature out-of-the-box.
+                  </p>
+
                   <h3>The Inspector Component</h3>
                   <p>
-                    The compiler writes source info on component's fiber,
-                    and the <code>react-dev-inspector</code> will read it.
+                    The <code>react-dev-inspector</code> reads the source info,
+                    and sends it to the dev-server when you inspect elements on browser.
                   </p>
 
-                  <h3>Read JSX Code Source</h3>
+                  <h3>Dev Server Middleware</h3>
                   <p>
-                    The compiler writes source info on component's fiber,
-                    and the <code>react-dev-inspector</code> will read it.
+                    The dev server middleware receives the API from the browser,
+                    then call your local IDE/Editor to open the source file.
                   </p>
-
-                  <h3>Step 2</h3>
-                  <p>&nbsp;</p>
-
-                </Steps>
+                </S.Steps>
               </div>
             </Feature>
 
@@ -186,26 +180,13 @@ export const LandingPage = () => {
               <p
                 className='pt-2 lg:pt-8 flex justify-center lg:justify-start'
               >
-                <button
-                  className='
-                    inline-block py-2 px-6 mt-2 rounded-full
-                    select-none text-white no-underline [text-shadow:0_1px_1px_#000]
-                    shadow-sm shadow-blue-500/50
-
-                    bg-gradient-to-b from-[#4fa0fd] to-[#248aff]
-
-                    hover:shadow-[0_5px_30px_-10px] hover:shadow-[#0078ffab] hover:brightness-105
-                    active:shadow active:shadow-[#00295738] active:brightness-95
-                    focus:outline-none
-                    transition-all duration-200 ease
-                    [&_span]:ml-0.5
-                    [&_span]:inline-block [&_span]:transition-all [&_span]:duration-200 [&_span]:ease
-                    [&_span]:hover:translate-x-1 [&_span]:hover:scale-105
-                  '
+                <S.InspectorButton
+                  className='group'
                   onClick={() => setActive(true)}
                 >
-                  Inspect now <span>🍭</span>
-                </button>
+                  <span>Inspect now</span>
+                  <S.ButtonIcon>🍭</S.ButtonIcon>
+                </S.InspectorButton>
               </p>
               <p />
             </Feature>

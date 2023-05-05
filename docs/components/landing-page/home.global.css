@@ -112,6 +112,22 @@
     background-color: #0e0c0e;
   }
 
+  #working-pipeline {
+    &::before {
+      content:'';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: url(/assets/gradient-bg.jpeg);
+      background-size: 160%;
+      background-position: top;
+      background-repeat: no-repeat;
+      filter: blur(2px) brightness(1.1);
+    }
+  }
+
   #highlighting-card {
     min-height: 300px;
     background-image: linear-gradient(to top, transparent, #fff 50%), url(/assets/syntax-highlighting.svg);
@@ -143,15 +159,6 @@
     height: 430px;
     pointer-events: none;
     max-width: 60%;
-  }
-
-  #fs-card {
-    min-height: 240px;
-  }
-  #fs-card h3 {
-    text-align: left;
-    width: min(300px, 41%);
-    min-width: 155px;
   }
 
   #a11y-card {
@@ -237,6 +244,12 @@
   }
   .headline {
     background-image: linear-gradient(146deg,#fff,#757a7d);
+  }
+
+  #working-pipeline {
+    &::before {
+      filter: blur(2px) brightness(.95);
+    }
   }
 
   #highlighting-card {

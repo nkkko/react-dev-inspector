@@ -53,6 +53,6 @@ app.prepare().then(() => {
     }
   }).listen(port, (err) => {
     if (err) throw err
-    console.debug(`> Ready on http://${hostname}:${port}`)
+    console.debug(`\n > Ready on http://${hostname}:${port} \n`)
   })
 })

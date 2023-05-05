@@ -39,7 +39,7 @@
   h3 {
     position: relative;
     font-size: 34px;
-    font-size: min(34px, max(4vw, 24px));
+    font-size: min(34px, max(5vw, 24px));
     font-weight: 600;
     line-height: 1.25;
     letter-spacing: -0.02rem;
@@ -125,7 +125,7 @@
 
     h3 {
       font-size: 28px;
-      font-size: min(28px, max(4vw, 22px));
+      font-size: min(28px, max(5vw, 22px));
       text-align: center;
     }
   }
@@ -148,7 +148,7 @@
 
     h3 {
       font-size: 34px;
-      font-size: min(34px, max(4vw, 22px));
+      font-size: min(34px, max(5vw, 22px));
       text-align: center;
     }
 

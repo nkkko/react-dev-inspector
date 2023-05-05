@@ -15,7 +15,7 @@
   },
   "scripts": {
     "clean": "rimraf .next dist",
-    "dev": "node server.mjs",
+    "dev": "npm run clean && node server.mjs",
     "build": "next build && next export -o dist"
   },
   "dependencies": {

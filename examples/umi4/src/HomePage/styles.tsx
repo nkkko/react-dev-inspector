@@ -41,6 +41,15 @@ export const InspectorButton = styled.button({
   `,
 })
 
+export const ButtonIcon = styled.span({
+  displayName: 'ButtonIcon',
+  className: `
+    inline-block ml-2 transition-all duration-200 ease
+    group-hover:translate-x-0.5
+    group-hover:scale-110
+  `,
+})
+
 export const Pill = styled.div({
   displayName: 'Pill',
   className: `

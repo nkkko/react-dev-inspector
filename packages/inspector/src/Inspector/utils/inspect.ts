@@ -192,7 +192,7 @@ export const getElementCodeInfo = (element: HTMLElement): CodeInfo | undefined =
 /**
  * fetch server api to open the code editor
  */
-export const gotoEditor = (source?: CodeInfo) => {
+export const gotoServerEditor = (source?: CodeInfo) => {
   if (!source) return
 
   const {

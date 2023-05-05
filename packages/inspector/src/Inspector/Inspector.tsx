@@ -12,7 +12,7 @@ import hotkeys from 'hotkeys-js'
 import {
   setupHighlighter,
   getElementCodeInfo,
-  gotoEditor,
+  gotoServerEditor,
   getElementInspect,
   type CodeInfo,
 } from './utils'
@@ -53,28 +53,33 @@ export interface InspectorProps {
    */
   keys?: string[] | null;
 
-  /** callback when hover on a element */
+  /** Callback when hovering on an element */
   onHoverElement?: (params: InspectParams) => void;
 
   /**
-   * callback when left-click on a element.
-   *
-   * @returns if return `true`, will disable launch to local IDE,
-   *   same as set `disableLaunchEditor={true}`.
+   * Callback when left-clicking on an element.
    */
-  onClickElement?: (params: InspectParams) => void | boolean;
+  onClickElement?: (params: InspectParams) => void;
 
   /**
-   * if set `active`, the Inspector will be a Controlled React Component,
+   * callback when left-clicking on an element, with ensuring the source code info is found.
+   *
+   * By setting the `onInspectElement` prop, the `disableLaunchEditor` will automatically default to `true`,
+   *   that means you want to manually handle the source info and goto editor by yourself.
+   */
+  onInspectElement?: (params: Required<InspectParams>) => void;
+
+  /**
+   * If setting `active` prop, the Inspector will be a Controlled React Component,
    *   you need to control the `true`/`false` state to active the Inspector.
    *
-   * if not set `active`, this only a Uncontrolled component that
+   * If not setting `active` prop, this only a Uncontrolled component that
    *   will activate/deactivate by hotkeys.
    */
   active?: boolean;
 
   /**
-   * trigger by `active` state change, includes:
+   * Trigger by `active` state change, includes:
    * - hotkeys toggle, before activate/deactivate Inspector
    * - Escape / Click, before deactivate Inspector
    *
@@ -83,9 +88,9 @@ export interface InspectorProps {
   onActiveChange?: (active: boolean) => void;
 
   /**
-   * whether to disable default behavior: "launch to local IDE when click on component".
+   * Whether to disable default behavior: "launch to local IDE when click on component".
    *
-   * same as set a `onClickElement` callback that return `true`, like `onClickElement={() => true}`.
+   * @default `true` if setting `onInspectElement` callback, otherwise `false`.
    */
   disableLaunchEditor?: boolean;
 }
@@ -95,6 +100,7 @@ export const Inspector: FC<PropsWithChildren<InspectorProps>> = (props) => {
     keys,
     onHoverElement,
     onClickElement,
+    onInspectElement,
     active: controlledActive,
     onActiveChange,
     disableLaunchEditor,
@@ -190,14 +196,25 @@ export const Inspector: FC<PropsWithChildren<InspectorProps>> = (props) => {
     const codeInfo = getElementCodeInfo(element)
     const { fiber, name } = getElementInspect(element)
 
-    const isEnd = onClickElement?.({
+    onClickElement?.({
       element,
       fiber,
       codeInfo,
       name,
     })
 
-    if (!isEnd && !disableLaunchEditor) gotoEditor(codeInfo)
+    if (fiber && codeInfo) {
+      onInspectElement?.({
+        element,
+        fiber,
+        codeInfo,
+        name: name!,
+      })
+
+      if (!onInspectElement && !disableLaunchEditor) {
+        gotoServerEditor(codeInfo)
+      }
+    }
   })
 
   useEffect(() => {

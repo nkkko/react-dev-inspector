@@ -85,15 +85,7 @@ export const HomePage = ({ name, titleBadge }: {
                 <span className='text-sm sm:text-base'>
                   Ctrl + Shift + Command + C
                 </span>
-                <span
-                  className='
-                    ml-3 transition-all duration-200 ease
-                    group-hover:translate-x-0.5
-                    group-hover:scale-110
-                  '
-                >
-                  🍭
-                </span>
+                <S.ButtonIcon>🍭</S.ButtonIcon>
               </S.InspectorButton>
             </div>
           </div>

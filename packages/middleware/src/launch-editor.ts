@@ -55,7 +55,7 @@ export const launchEditorMiddleware: NextHandleFunction = (req: IncomingRequest,
    * retain origin endpoint for backward compatibility <= v1.2.0
    */
   if (
-    // relative route used in `Inspector.tsx` `gotoEditor()` relative path by
+    // relative route used in `Inspector.tsx` `gotoServerEditor()` relative path by
     // react-dev-inspector's babel plugin
     req.url.startsWith(`${launchEditorEndpoint}/relative`)
     && typeof req.query.fileName === 'string'
