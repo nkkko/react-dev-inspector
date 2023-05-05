@@ -7,7 +7,7 @@ import {
 } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import cn from 'clsx'
+import { clsx } from 'clsx'
 import { ArrowRightIcon } from '@components/icons'
 import styles from './style.module.css'
 
@@ -64,7 +64,7 @@ export function Feature({
       }}
       viewport={{ once: true }}
       transition={{ duration: Math.min(0.25 + index * 0.25, 0.8) }}
-      className={cn(
+      className={clsx(
         styles.feature,
         large && styles.large,
         fulled && styles.fulled,

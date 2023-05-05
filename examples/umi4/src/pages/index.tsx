@@ -1,4 +1,5 @@
 import { HomePage } from '../HomePage'
+import './index.css'
 
 export default () => (
   <HomePage

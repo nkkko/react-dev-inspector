@@ -1,5 +1,7 @@
 // https://umijs.org/config/
 import { defineConfig } from 'umi'
+import tailwindcss from 'tailwindcss'
+import autoprefixer from 'autoprefixer'
 
 
 const isDev = process.env.NODE_ENV === 'development'
@@ -14,7 +16,10 @@ export default defineConfig({
       component: 'index.tsx',
     },
   ],
-
+  extraPostCSSPlugins: [
+    tailwindcss,
+    autoprefixer,
+  ],
   plugins: [
     /**
      * react-dev-inspector example configuration is as follows

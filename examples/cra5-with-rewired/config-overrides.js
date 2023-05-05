@@ -5,6 +5,7 @@ const {
   override,
   overrideDevServer,
   addBabelPlugin,
+  addWebpackModuleRule,
 } = require('customize-cra')
 
 
@@ -44,15 +45,24 @@ module.exports = {
 
   webpack: override(
     removeWebpackPlugin('ForkTsCheckerWebpackPlugin'),
-    addBabelPlugin([
-      // https://github.com/emotion-js/emotion/tree/main/packages/babel-plugin#options
-      '@emotion/babel-plugin',
-      {
-        sourceMap: true,
-        autoLabel: 'always',
-        labelFormat: '[local]',
-      },
-    ]),
+    addWebpackModuleRule({
+      test: /\.css$/,
+      use: [
+        'style-loader',
+        'css-loader',
+        {
+          loader: 'postcss-loader',
+          options: {
+            postcssOptions: {
+              plugins: {
+                tailwindcss: {},
+                autoprefixer: {},
+              },
+            },
+          },
+        },
+      ],
+    }),
 
     /** react-dev-inspector - babel config */
     addBabelPlugin([

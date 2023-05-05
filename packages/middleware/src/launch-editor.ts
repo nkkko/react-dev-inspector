@@ -9,12 +9,24 @@ import type { RequestHandler } from 'express'
 // @ts-expect-error import from deep path for reduce load files
 import launchEditorEndpoint from 'react-dev-utils/launchEditorEndpoint'
 import createReactLaunchEditorMiddleware from 'react-dev-utils/errorOverlayMiddleware'
-import type { IncomingRequest } from './query-params-parser'
+import {
+  type IncomingRequest,
+  queryParserMiddleware,
+} from './query-params-parser'
 
 const reactLaunchEditorMiddleware = createReactLaunchEditorMiddleware() as NextHandleFunction
 
 
 export const launchEditorMiddleware: NextHandleFunction = (req: IncomingRequest, res, next) => {
+  if (!req.url?.startsWith(launchEditorEndpoint)) {
+    return next()
+  }
+
+  queryParserMiddleware(req, res, () => {})
+  if (!req.query?.fileName) {
+    return next()
+  }
+
   if (!('REACT_EDITOR' in process.env)) {
     /**
      * If not set `REACT_EDITOR` in environment variables, set default to `vscode`.
@@ -39,24 +51,19 @@ export const launchEditorMiddleware: NextHandleFunction = (req: IncomingRequest,
     process.env.REACT_EDITOR = 'code'
   }
 
-  if (req.url?.startsWith(launchEditorEndpoint) && req.query) {
-    /**
-     * retain origin endpoint for backward compatibility <= v1.2.0
-     */
-    if (
-      // relative route used in `Inspector.tsx` `gotoEditor()`
-      req.url?.startsWith(`${launchEditorEndpoint}/relative`)
-      && typeof req.query.fileName === 'string'
-    ) {
-      // at here, transform relative path to absolute path for launch editor
-      req.query.fileName = path.join(process.cwd(), req.query.fileName)
-    }
+  /**
+   * retain origin endpoint for backward compatibility <= v1.2.0
+   */
+  if (
+    // relative route used in `Inspector.tsx` `gotoEditor()` relative path by
+    // react-dev-inspector's babel plugin
+    req.url.startsWith(`${launchEditorEndpoint}/relative`)
+    && typeof req.query.fileName === 'string'
+  ) {
+    req.query.fileName = path.join(process.cwd(), req.query.fileName)
+  }
 
-    reactLaunchEditorMiddleware(req, res, next)
-  }
-  else {
-    next()
-  }
+  reactLaunchEditorMiddleware(req, res, next)
 }
 
 

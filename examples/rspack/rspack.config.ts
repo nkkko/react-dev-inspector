@@ -48,6 +48,23 @@ const config: Configuration = {
         test: /\.svg$/,
         type: 'asset',
       },
+      {
+        test: /\.css$/,
+        type: 'css',
+        use: [
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: {
+                  tailwindcss: {},
+                  autoprefixer: {},
+                },
+              },
+            },
+          },
+        ],
+      },
 
       /**
        * NOTE: the following `@react-dev-inspector/babel-plugin` is optional,

@@ -8,7 +8,7 @@ import {
   type HTMLAttributes,
 } from 'react'
 
-import cn from 'clsx'
+import { clsx } from 'clsx'
 
 export const Card = forwardRef<
   HTMLDivElement,
@@ -16,7 +16,7 @@ export const Card = forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn(
+    className={clsx(
       'rounded-lg border bg-card text-card-foreground shadow-sm',
       className,
     )}
@@ -36,7 +36,7 @@ export const CardHeader = forwardRef<
 }, ref) => (
   <div
     ref={ref}
-    className={cn('flex flex-col space-y-2.5 p-6', className)}
+    className={clsx('flex flex-col space-y-2.5 p-6', className)}
     {...props}
   >
     {title && (
@@ -60,7 +60,7 @@ export const CardTitle = forwardRef<
 >(({ className, ...props }, ref) => (
   <h3
     ref={ref}
-    className={cn(
+    className={clsx(
       'text-2xl font-semibold leading-none tracking-tight',
       className,
     )}
@@ -75,7 +75,7 @@ export const CardDescription = forwardRef<
 >(({ className, ...props }, ref) => (
   <p
     ref={ref}
-    className={cn('text-sm text-muted-foreground', className)}
+    className={clsx('text-sm text-muted-foreground', className)}
     {...props}
   />
 ))
@@ -85,7 +85,7 @@ export const CardContent = forwardRef<
   HTMLDivElement,
   HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn('p-6 pt-0', className)} {...props} />
+  <div ref={ref} className={clsx('p-6 pt-0', className)} {...props} />
 ))
 CardContent.displayName = 'CardContent'
 
@@ -95,7 +95,7 @@ export const CardFooter = forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn(' flex items-center p-6 pt-0', className)}
+    className={clsx(' flex items-center p-6 pt-0', className)}
     {...props}
   />
 ))

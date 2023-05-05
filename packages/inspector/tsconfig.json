@@ -4,6 +4,10 @@
     "rootDir": "src",
     "outDir": "es",
     "baseUrl": ".",
+
+    "types": [
+      "node",
+    ],
     "paths": {
       "@react-dev-inspector/vite-plugin": ["../vite-plugin/src"],
       "@react-dev-inspector/middleware": ["../middleware/src"],

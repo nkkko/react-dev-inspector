@@ -11,7 +11,6 @@ cd examples
 rm -rf vite3/src/HomePage
 rm -rf vite2/src/HomePage
 rm -rf umi4/src/HomePage
-rm -rf umi3/src/HomePage
 rm -rf rspack/src/HomePage
 rm -rf cra5-with-rewired/src/HomePage
 rm -rf nextjs-custom-server/components/HomePage
@@ -20,7 +19,6 @@ rm -rf nextjs-custom-server/components/HomePage
 cp -R vite4/src/HomePage vite3/src/
 cp -R vite4/src/HomePage vite2/src/
 cp -R vite4/src/HomePage umi4/src/
-cp -R vite4/src/HomePage umi3/src/
 cp -R vite4/src/HomePage rspack/src/
 cp -R vite4/src/HomePage cra5-with-rewired/src/
 cp -R vite4/src/HomePage nextjs-custom-server/components/

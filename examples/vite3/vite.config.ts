@@ -20,16 +20,6 @@ export default defineConfig({
     react({
       babel: {
         plugins: [
-          [
-            // https://github.com/emotion-js/emotion/tree/main/packages/babel-plugin#options
-            '@emotion/babel-plugin',
-            {
-              sourceMap: true,
-              autoLabel: 'always',
-              labelFormat: '[local]',
-            },
-          ],
-
           /**
            * NOTE: the following `@react-dev-inspector/babel-plugin` is optional,
            *       only use for online demo site,

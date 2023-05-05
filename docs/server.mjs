@@ -4,7 +4,6 @@
 import { createServer } from 'node:http'
 import next from 'next'
 import {
-  queryParserMiddleware,
   launchEditorMiddleware,
 } from '@react-dev-inspector/middleware'
 
@@ -31,7 +30,6 @@ app.prepare().then(() => {
        *
        * That's CANNOT be Next.js middleware due to [middleware is in Edge Runtime](https://github.com/vercel/next.js/discussions/34179)
        */
-      queryParserMiddleware,
       launchEditorMiddleware,
 
       /** Next.js default app handle */

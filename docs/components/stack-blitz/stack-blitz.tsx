@@ -1,3 +1,6 @@
+
+const isDev = process.env.NODE_ENV === 'development'
+
 export const StackBlitz = ({
   project,
   height,
@@ -13,6 +16,8 @@ export const StackBlitz = ({
   hideExplorer?: boolean;
   showDevtools?: boolean;
 }) => {
+  if (isDev) return null
+
   // https://developer.stackblitz.com/guides/integration/embedding#embed-url-options
   const params: Record<string, string | number | undefined> = {
     embed: 1,

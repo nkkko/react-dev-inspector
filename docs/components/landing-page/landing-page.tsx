@@ -8,7 +8,7 @@ import inspectPreview from '@images/inspect.gif'
 import { Feature, Features } from '@components/features'
 import { StackBlitz } from '@components/stack-blitz'
 import { Marquee } from '@components/marquee'
-import { DotsPattern } from '@components/dots-pattern'
+import { DotsPattern } from '@components/pattern'
 import styles from './index.module.css'
 
 
@@ -67,7 +67,7 @@ export const LandingPage = () => {
               centered
             >
               <div className='docs-img-wrapper'>
-                <Image src={inspectPreview} alt='Background' loading='eager' />
+                <Image src={isDev ? '' : inspectPreview} alt='Background' loading='eager' />
               </div>
             </Feature>
 

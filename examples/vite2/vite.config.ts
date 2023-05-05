@@ -1,6 +1,8 @@
 import { defineConfig, type PluginOption } from 'vite'
 import react from '@vitejs/plugin-react'
 import { inspectorServer } from '@react-dev-inspector/vite-plugin'
+import tailwindcss from 'tailwindcss'
+import autoprefixer from 'autoprefixer'
 
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -16,6 +18,15 @@ export default defineConfig({
     // https://github.com/vitejs/vite/issues/6215
     include: ['react/jsx-runtime'],
   },
+  css: {
+    postcss: {
+      plugins: [
+        tailwindcss,
+        autoprefixer,
+      ],
+    },
+  },
+
   plugins: [
     /**
      * react-dev-inspector server config for vite
@@ -25,16 +36,6 @@ export default defineConfig({
     react({
       babel: {
         plugins: [
-          [
-            // https://github.com/emotion-js/emotion/tree/main/packages/babel-plugin#options
-            '@emotion/babel-plugin',
-            {
-              sourceMap: true,
-              autoLabel: 'always',
-              labelFormat: '[local]',
-            },
-          ],
-
           /**
            * NOTE: the following `@react-dev-inspector/babel-plugin` is optional,
            *       only use for online demo site,
