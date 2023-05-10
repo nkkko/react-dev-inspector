@@ -1,0 +1,99 @@
+import SnippetDeclaration from './_snip-declaration.mdx'
+
+# Next.js Integration
+
+<SnippetDeclaration />
+
+In this section, follow the simple setup below to integrate `react-dev-inspector` into your [Next.js](https://nextjs.org) project.
+
+## Setup
+
+At first install the package:
+
+```bash npm2yarn
+npm i -D @react-dev-inspector/middleware
+```
+
+This middleware package just provides a **`launchEditorMiddleware`**,
+you need to add it to [Custom Server](https://nextjs.org/docs/pages/building-your-application/configuring/custom-server) of Next.js,
+and update the `dev` script in `package.json`.
+
+Here provide a example template for your to create a `server.mjs` as custom server:
+
+```json filename="package.json" showLineNumbers {4}
+{
+  ...
+  "scripts": {
+    "dev": "node server.mjs",
+    "build": "next build"
+  }
+}
+```
+
+```js filename="server.mjs" showLineNumbers {6,27}
+/**
+ * https://nextjs.org/docs/advanced-features/custom-server
+ */
+import { createServer } from 'node:http'
+import next from 'next'
+import { launchEditorMiddleware } from '@react-dev-inspector/middleware'
+
+
+const dev = process.env.NODE_ENV !== 'production'
+
+const hostname = process.env.HOST || 'localhost'
+const port = process.env.PORT ? Number(process.env.PORT) : 3000
+const app = next({
+  dev,
+  hostname,
+  port,
+})
+const handle = app.getRequestHandler()
+
+app.prepare().then(() => {
+  createServer((req, res) => {
+    /**
+     * middlewares, from top to bottom
+     */
+    const middlewares = [
+      /** `react-dev-inspector` server config for nextjs */
+      launchEditorMiddleware,
+
+      /** Next.js default app handler as middleware */
+      (req, res) => handle(req, res),
+    ]
+
+    const middlewarePipeline = middlewares.reduceRight(
+      (next, middleware) => (
+        () => { middleware(req, res, next) }
+      ),
+      () => {},
+    )
+
+    try {
+      middlewarePipeline()
+    }
+    catch (err) {
+      console.error('Error occurred handling', req.url, err)
+      res.statusCode = 500
+      res.end('internal server error')
+    }
+  }).listen(port, (err) => {
+    if (err) throw err
+    console.debug(`\n > Ready on http://${hostname}:${port} \n`)
+  })
+})
+```
+
+> That is because the `launchEditorMiddleware` can it CANNOT running in Next.js [Edge Runtime](https://github.com/vercel/next.js/discussions/34179),
+that need you to use it in the Custom Server.
+
+
+## Example
+
+Example project code you can find in [examples/nextjs-custom-server](https://github.com/zthxxx/react-dev-inspector/blob/dev/examples/nextjs-custom-server/server.mjs),
+or see online demo via:
+
+[
+  ![Open in StackBlitz](@components/stack-blitz/open-in-stackblitz.svg)
+](https://stackblitz.com/github/zthxxx/react-dev-inspector/tree/dev/examples/nextjs-custom-server)

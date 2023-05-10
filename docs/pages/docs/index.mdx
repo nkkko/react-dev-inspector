@@ -1,0 +1,119 @@
+---
+title: Introduction - React Dev Inspector
+---
+
+import Image from 'next/image'
+import { Steps, Callout } from 'nextra/components'
+import previewDemo from '@images/inspect.gif'
+import workingPipeline from '@images/working-pipeline.svg'
+import { StackBlitz } from '@components/stack-blitz'
+
+# Why React Dev Inspector
+
+## The Problems
+
+Hey folks, have you ever run into any of these issues 🤔:
+
+- You've got to fix some bugs in your team's project, but you have no idea where the heck page/component's code is located.
+- You're eager to dive into an open-source project that interests you, but it's hard to find where the code for the page/component is implemented.
+- You may thinking about a component and want to quickly peek at its code, but don't want to memorize or manually expand those never-ending deep file paths.
+
+That's exactly why react-dev-inspector was created.
+
+## React Dev Inspector
+
+**react-dev-inspector** is the tool for seamlessly code navigation from browser to IDE.
+
+With **just a simple click**, you can jump from a React component on the browser to its source code in your local IDE instantly.
+Think of it as a more advanced version of Chrome's Inspector.
+
+It's designed to work in any environment:
+- **no browser restrictions**, **no framework limitations**.
+- doesn't matter whether your code is running **locally**, **remotely**, or even **in a container**.
+- also flexible enough to handle both **development** and **production** build modes.
+
+It's not just built for app, also designed to be **integrated into tools** you developed or ready to develop,
+like browser extensions and developer toolkits.
+
+
+### Quick Look
+
+Just check out this demo below and you'll get it in a snap.
+
+<Image
+  className='relative my-2 sm:my-4 lg:my-6 w-full'
+  src={previewDemo}
+  alt='Preview Demo'
+  loading='eager'
+/>
+
+### Try It Online
+
+Wanna try out the demo right now? Sure, here is the online demo:
+
+[
+  ![Open in StackBlitz](@components/stack-blitz/open-in-stackblitz.svg)
+](https://stackblitz.com/edit/github-x3rkzl?file=package.json,vite.config.ts%3AL17)
+
+
+<div
+  className="
+    relative -mx-6 md:-ml-12 md:-mr-8 xl:-mr-12
+    my-3 h-[600px] bg-[#0e0c0e] rounded-lg
+  "
+>
+  <StackBlitz
+    project='edit/github-x3rkzl'
+    openFile='package.json,vite.config.ts%3AL17'
+    view='default'
+  />
+</div>
+
+
+## How to Use and Configure
+
+According to the working pipeline [below](#how-it-works), the [**Part.1**](/docs/inspector-component) and [**Part.2**](/docs/integration) are what you need configure to use.
+
+Basically, it's includes:
+1. [add the `<Inspector/>` component in your page](/docs/inspector-component)
+2. [integrate the middleware in your framework's dev-server](/docs/integration)
+
+Check their documentions link for details.
+
+
+## How It Works
+
+Here shows the working pipeline of react-dev-inspector:
+
+<Image
+  className='relative my-2 sm:my-4 lg:my-6 bg-white rounded-lg shadow-xl'
+  src={workingPipeline}
+  alt='Working Pipeline'
+  loading='eager'
+  data-zoomable
+/>
+
+<br/>
+
+<Steps
+  className='[counter-reset:step_-1]'
+>
+### Inject JSX Source
+
+The compiler's `plugin` records source info into React components during development stage.
+
+<Callout type="info" emoji="💡">
+  **Note:** Most frameworks offer this feature **_out-of-the-box_**,
+  which means you usually don't need to manually configure it additionally.
+</Callout>
+
+### Inspector Component
+
+The react-dev-inspector provide a [`<Inspector/>`](/docs/inspector-component) component to reads the source info,
+and sends it to the dev-server when you inspect elements on browser.
+
+### Dev Server Middleware
+
+The react-dev-inspector provide some [middlewares](/docs/integration) for dev-server in most frameworks to receives source path info from API,
+then call your local IDE/Editor to open the source file.
+</Steps>

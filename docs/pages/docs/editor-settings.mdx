@@ -1,0 +1,74 @@
+import { Tabs, Callout } from 'nextra/components'
+
+# IDE / Editor config
+
+
+The `react-dev-inspector` could launch your local IDE/Editor application with file path, but **which one** will be open?
+
+In fact, it uses an **environment variable** named **`REACT_EDITOR`** to specify an IDE application.
+
+For example, if you want it always open VSCode when inspection clicked, set `export REACT_EDITOR=code` in your shell config like `.bashrc` or `.zshrc`.
+
+```zsh filename="~/.zshrc"
+...
+
+# `code` is the command-line-tool of VSCode
+export REACT_EDITOR=code
+```
+
+> **Note: Don't forget restart shell or IDE to reload the updated environment variables.**
+
+<br />
+
+<Callout type="info" emoji="💡">
+  **Note:** if you do NOT specify the environment variable of `REACT_EDITOR`, `react-dev-inspector` will temporarily set it to **`code`** by default.
+  This means that **VSCode** will be used as the default editor. <br/>
+  This setting is designed to be broadly applicable for a wide range of users.
+</Callout>
+
+<br />
+
+## VSCode
+
+Install VSCode command line tools, [follow the official docs](https://code.visualstudio.com/docs/setup/mac#_launching-from-the-command-line),
+  you need to run the command: `>Shell Command: Install 'code' command in PATH`
+  ![install-vscode-cli](@images/install-vscode-cli.png)
+
+Set env to shell, like `.bashrc` or `.zshrc`
+
+```bash
+export REACT_EDITOR=code
+```
+
+<br />
+
+## WebStorm
+
+Just set env with an absolute path to shell, like `.bashrc` or `.zshrc` (only MacOS)
+
+```bash filename="~/.zshrc"
+export REACT_EDITOR='/Applications/WebStorm.app/Contents/MacOS/webstorm'
+```
+
+**OR**
+
+Install WebStorm command line tools:
+  ![install-webstorm-cli](@images/install-webstorm-cli.png)
+
+Then set env to shell, like `.bashrc` or `.zshrc`:
+
+```bash filename="~/.zshrc"
+export REACT_EDITOR=webstorm
+```
+
+<br />
+
+## Nvim / Vim
+
+Yes! you can also use nvim/vim if you want, just set env to shell
+
+```bash filename="~/.zshrc"
+export REACT_EDITOR=nvim
+# or
+export REACT_EDITOR=vim
+```

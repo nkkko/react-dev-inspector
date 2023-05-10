@@ -1,0 +1,76 @@
+import SnippetDeclaration from './_snip-declaration.mdx'
+
+# Create-React-App Integration
+
+<SnippetDeclaration />
+
+In this section, follow the simple setup below to integrate `react-dev-inspector` into your [create-react-app](https://create-react-app.dev) project.
+
+## Setup `customize-cra`
+
+Before setup with `react-dev-inspector`, let's assume you have use [`customize-cra`](https://github.com/arackaf/customize-cra)
+and [`react-app-rewired`](https://github.com/timarney/react-app-rewired)
+to override the `create-react-app` config in your project,
+because `create-react-app` doesn't provide configuration capabilities of its own.
+
+If not yet, please follow the [customize-cra](https://github.com/arackaf/customize-cra) document to work at first.
+
+Now you should already replace the `react-scripts` with `react-app-rewired` in your `package.json` file likes:
+
+```json
+{
+  "scripts": {
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build"
+  }
+}
+```
+
+and already have a `config-overrides.js` for `customize-cra`.
+
+## Setup `react-dev-inspector`
+
+Install the middleware package and add it to your `config-overrides.js`:
+
+```bash npm2yarn
+npm i -D @react-dev-inspector/middleware
+```
+
+```js filename="config-overrides.js" showLineNumbers {5,15}
+const {
+  override,
+  overrideDevServer,
+} = require('customize-cra')
+const { launchEditorMiddleware } = require('@react-dev-inspector/middleware')
+
+module.exports = {
+  /**
+   * react-dev-inspector server config for webpack-dev-server
+   */
+  devServer: overrideDevServer(
+    serverConfig => {
+      // https://webpack.js.org/configuration/dev-server/#devserversetupmiddlewares
+      serverConfig.setupMiddlewares = (middlewares) => {
+        middlewares.unshift(launchEditorMiddleware)
+        return middlewares
+      }
+
+      return serverConfig
+    },
+  ),
+
+  webpack: override(
+    ...
+  ),
+}
+```
+
+
+## Example
+
+Example project code you can find in [examples/cra5-with-rewired](https://github.com/zthxxx/react-dev-inspector/blob/dev/examples/cra5-with-rewired/config-overrides.js),
+or see online demo via:
+
+[
+  ![Open in StackBlitz](@components/stack-blitz/open-in-stackblitz.svg)
+](https://stackblitz.com/github/zthxxx/react-dev-inspector/tree/dev/examples/cra5-with-rewired)

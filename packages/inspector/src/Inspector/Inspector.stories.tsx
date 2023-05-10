@@ -15,7 +15,10 @@ import {
   CardContent,
   CardFooter,
 } from '../.stories/components'
-import { Inspector } from './Inspector'
+import {
+  Inspector,
+  defaultHotkeys,
+} from './Inspector'
 
 // https://storybook.js.org/docs/react/writing-stories/introduction#component-story-format
 export default {
@@ -28,11 +31,26 @@ export const CommonHotkeys = () => {
     <Inspector>
       <Card
         title='React Dev Inspector'
-        description='hotkeys: `Control + Shift + Command + C`'
+        description={`hotkeys: \`${defaultHotkeys().join(' + ')}\``}
       />
     </Inspector>
   )
 }
+
+
+export const CustomHotkeys = () => {
+  return (
+    <Inspector
+      keys={['ctrl', 'shift', 'x']}
+    >
+      <Card
+        title='React Dev Inspector'
+        description='hotkeys: `Control + Shift + X`'
+      />
+    </Inspector>
+  )
+}
+
 
 export const ControlState = () => {
   const [active, setActive] = useState(false)
@@ -112,3 +130,41 @@ export const DisableHotkeys = () => {
     </Inspector>
   )
 }
+
+
+export const Disabled = () => {
+  const [available, setAvailable] = useState(true)
+  const [active, setActive] = useState(false)
+
+  return (
+    <Inspector
+      active={active}
+      onActiveChange={setActive}
+      disable={!available}
+    >
+      <Card
+        title='React Dev Inspector'
+        description='disable for both Hotkeys and Buttons ↓'
+        cancelText='Deactivate'
+        onCancel={() => setActive(false)}
+        confirmText='Activate'
+        onConfirm={() => setActive(true)}
+      >
+        <div className='flex justify-start items-center space-x-2'>
+          <Switch
+            id='inspector-switch'
+            checked={available}
+            onCheckedChange={available => {
+              setAvailable(available)
+              setActive(false)
+            }}
+          />
+          <Label htmlFor='inspector-switch'>
+            {!available ? `Disabled` : `Enabled`}
+          </Label>
+        </div>
+      </Card>
+    </Inspector>
+  )
+}
+

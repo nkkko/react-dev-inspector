@@ -1,11 +1,5 @@
 import type { Fiber, Source } from 'react-reconciler'
 
-/**
- * https://github.com/facebook/create-react-app/blob/v5.0.1/packages/react-dev-utils/launchEditorEndpoint.js
- * used in https://github.com/facebook/create-react-app/blob/v5.0.1/packages/react-dev-utils/errorOverlayMiddleware.js#L14
- */
-// @ts-expect-error import from deep path for reduce load files
-import launchEditorEndpoint from 'react-dev-utils/launchEditorEndpoint'
 import {
   isNativeTagFiber,
   isReactSymbolFiber,
@@ -42,6 +36,15 @@ export interface CodeDataAttribute {
   'data-inspector-column': string;
   'data-inspector-relative-path': string;
 }
+
+/**
+ * `v2.0.0` changes:
+ *   - make 'Ctrl + Shift + Alt + C' as default shortcut on Windows/Linux
+ *   - export `defaultHotkeys`
+ */
+export const defaultHotkeys = () => navigator.platform?.startsWith('Mac')
+  ? ['Ctrl', 'Shift', 'Command', 'C']
+  : ['Ctrl', 'Shift', 'Alt', 'C']
 
 /**
  * react fiber property `_debugSource` created by `@babel/plugin-transform-react-jsx-source`
@@ -187,43 +190,6 @@ export const getElementCodeInfo = (element: HTMLElement): CodeInfo | undefined =
 
   const referenceFiber = getReferenceFiber(fiber)
   return getCodeInfoFromFiber(referenceFiber)
-}
-
-/**
- * fetch server api to open the code editor
- */
-export const gotoServerEditor = (source?: CodeInfo) => {
-  if (!source) return
-
-  const {
-    lineNumber,
-    columnNumber,
-    relativePath,
-    absolutePath,
-  } = source
-
-  const isRelative = Boolean(relativePath)
-  const fileName = isRelative ? relativePath : absolutePath
-
-  if (!fileName) {
-    console.error(`[react-dev-inspector] Cannot open editor without source fileName`, source)
-    return
-  }
-
-  const launchParams = {
-    fileName,
-    lineNumber,
-    colNumber: columnNumber,
-  }
-
-  /**
-   * api path in '@react-dev-inspector/middlewares' launchEditorMiddleware
-   */
-  const apiRoute = isRelative
-    ? `${launchEditorEndpoint}/relative`
-    : launchEditorEndpoint
-
-  fetch(`${apiRoute}?${new URLSearchParams(launchParams)}`)
 }
 
 export const getNamedFiber = (baseFiber?: Fiber): Fiber | undefined => {

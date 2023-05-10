@@ -4,8 +4,7 @@ import {
   useState,
   useEffect,
   useRef,
-  type FC,
-  type PropsWithChildren,
+  type ReactNode,
 } from 'react'
 import type { Fiber } from 'react-reconciler'
 import hotkeys from 'hotkeys-js'
@@ -38,8 +37,14 @@ export interface InspectParams {
   name?: string;
 }
 
-
-const defaultHotkeys = ['control', 'shift', 'command', 'c']
+/**
+ * `v2.0.0` changes:
+ *   - make 'Ctrl + Shift + Alt + C' as default shortcut on Windows/Linux
+ *   - export `defaultHotkeys`
+ */
+export const defaultHotkeys = () => navigator.platform?.startsWith('Mac')
+  ? ['Ctrl', 'Shift', 'Command', 'C']
+  : ['Ctrl', 'Shift', 'Alt', 'C']
 
 export interface InspectorProps {
   /**
@@ -47,27 +52,11 @@ export interface InspectorProps {
    *
    * supported keys see: https://github.com/jaywcjlove/hotkeys#supported-keys
    *
-   * @default - ['control', 'shift', 'command', 'c']
+   * @default - `['Ctrl', 'Shift', 'Command', 'C']` on macOS, `['Ctrl', 'Shift', 'Alt', 'C']` on other platforms.
    *
-   * Setting keys={null} explicitly means that NO hotkeys will trigger it.
+   * Setting `keys={null}` explicitly means that disable use hotkeys to trigger it.
    */
   keys?: string[] | null;
-
-  /** Callback when hovering on an element */
-  onHoverElement?: (params: InspectParams) => void;
-
-  /**
-   * Callback when left-clicking on an element.
-   */
-  onClickElement?: (params: InspectParams) => void;
-
-  /**
-   * callback when left-clicking on an element, with ensuring the source code info is found.
-   *
-   * By setting the `onInspectElement` prop, the `disableLaunchEditor` will automatically default to `true`,
-   *   that means you want to manually handle the source info and goto editor by yourself.
-   */
-  onInspectElement?: (params: Required<InspectParams>) => void;
 
   /**
    * If setting `active` prop, the Inspector will be a Controlled React Component,
@@ -75,6 +64,8 @@ export interface InspectorProps {
    *
    * If not setting `active` prop, this only a Uncontrolled component that
    *   will activate/deactivate by hotkeys.
+   *
+   * > add in version `v2.0.0`
    */
   active?: boolean;
 
@@ -84,18 +75,65 @@ export interface InspectorProps {
    * - Escape / Click, before deactivate Inspector
    *
    * will NOT trigger by `active` prop change.
+   *
+   * > add in version `v2.0.0`
    */
   onActiveChange?: (active: boolean) => void;
 
   /**
+   * Whether to disable all behavior include hotkeys listening or trigger,
+   * will automatically disable in production environment by default.
+   *
+   * @default `true` if `NODE_ENV` is 'production', otherwise is `false`.
+   * > add in version `v2.0.0`
+   */
+  disable?: boolean;
+
+  /**
+   * Callback when left-clicking on an element, with ensuring the source code info is found.
+   *
+   * By setting the `onInspectElement` prop, the default behavior ("open local IDE") will be disabled,
+   *   that means you want to manually handle the source info, or handle how to goto editor by yourself.
+   *
+   * You can also use builtin `gotoServerEditor` utils in `onInspectElement` to get origin behavior ("open local IDE on server-side"),
+   *   it looks like:
+   *
+   * ```tsx
+   * import { Inspector, gotoServerEditor } from 'react-dev-inspector'
+   *
+   * <Inspector
+   *   onInspectElement={({ codeInfo }) => {
+   *     ...; // your processing
+   *     gotoServerEditor(codeInfo)
+   *   }}
+   * </Inspector>
+   * ```
+   *
+   * > add in version `v2.0.0`
+   */
+  onInspectElement?: (params: Required<InspectParams>) => void;
+
+  /** Callback when hovering on an element */
+  onHoverElement?: (params: InspectParams) => void;
+
+  /**
+   * Callback when left-clicking on an element.
+   */
+  onClickElement?: (params: InspectParams) => void;
+
+  /** any children of react nodes */
+  children?: ReactNode;
+
+  /**
    * Whether to disable default behavior: "launch to local IDE when click on component".
    *
-   * @default `true` if setting `onInspectElement` callback, otherwise `false`.
+   * @default `true` if setting `onInspectElement` callback, otherwise is `false`.
+   * @deprecated please use `onInspectElement` callback instead for fully custom controlling.
    */
   disableLaunchEditor?: boolean;
 }
 
-export const Inspector: FC<PropsWithChildren<InspectorProps>> = (props) => {
+export const Inspector = (props: InspectorProps) => {
   const {
     keys,
     onHoverElement,
@@ -104,6 +142,7 @@ export const Inspector: FC<PropsWithChildren<InspectorProps>> = (props) => {
     active: controlledActive,
     onActiveChange,
     disableLaunchEditor,
+    disable = (process.env.NODE_ENV !== 'development'),
     children,
   } = props
 
@@ -120,16 +159,18 @@ export const Inspector: FC<PropsWithChildren<InspectorProps>> = (props) => {
     isActive
       ? startInspect()
       : stopInspect()
+
+    return stopInspect
   }, [isActive])
 
   // hotkeys-js params need string
   const hotkey: string | null = keys === null
     ? null
-    : (keys ?? defaultHotkeys).join('+')
+    : (keys ?? []).join('+')
 
   /** inspector tooltip overlay */
   const overlayRef = useRef<Overlay>()
-  const mouseRef = useMousePosition()
+  const mouseRef = useMousePosition({ disable })
 
   const activate = useEffectEvent(() => {
     onActiveChange?.(true)
@@ -146,6 +187,8 @@ export const Inspector: FC<PropsWithChildren<InspectorProps>> = (props) => {
   })
 
   const startInspect = useEffectEvent(() => {
+    if (overlayRef.current || disable) return
+
     const overlay = new Overlay()
     overlayRef.current = overlay
 
@@ -218,21 +261,25 @@ export const Inspector: FC<PropsWithChildren<InspectorProps>> = (props) => {
   })
 
   useEffect(() => {
-    if (!hotkey) return
-
     const handleHotKeys = () => {
       overlayRef.current
         ? deactivate()
         : activate()
     }
 
-    // https://github.com/jaywcjlove/hotkeys
-    hotkeys(`${hotkey}`, handleHotKeys)
+    const bindKey = (hotkey === null || disable)
+      ? null
+      : (hotkey || defaultHotkeys().join('+'))
 
-    return () => {
-      hotkeys.unbind(`${hotkey}`, handleHotKeys)
+    if (bindKey) {
+      // https://github.com/jaywcjlove/hotkeys
+      hotkeys(bindKey, handleHotKeys)
+
+      return () => {
+        hotkeys.unbind(bindKey, handleHotKeys)
+      }
     }
-  }, [hotkey])
+  }, [hotkey, disable])
 
   return (<>{children ?? null}</>)
 }

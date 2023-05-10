@@ -7,18 +7,32 @@
       "layout": "raw"
     }
   },
-  "about": {
+  "docs": {
     "type": "page",
-    "title": "About",
-    "theme": {
-      "typesetting": "article"
-    }
+    "title": "Documentation"
   },
-  "react.tsx": {
+
+  "Showcase": {
     "type": "page",
-    "title": "React Test",
-    "theme": {
-      "typesetting": "article"
+    "title": "Showcase",
+    "href": "https://react-dev-inspector.zthxxx.me/showcase",
+    "newWindow": true
+  },
+
+  "Changelog": {
+    "type": "menu",
+    "title": "Changelog",
+    "items": {
+      "Changelog V2": {
+        "title": "Changelog V2 ↗",
+        "href": "https://github.com/zthxxx/react-dev-inspector/blob/dev/docs/CHANGELOG.v2.md",
+        "newWindow": true
+      },
+      "Changelog V1": {
+        "title": "Changelog V1 ↗",
+        "href": "https://github.com/zthxxx/react-dev-inspector/blob/dev/docs/CHANGELOG.v1.md",
+        "newWindow": true
+      }
     }
   }
 }

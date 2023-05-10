@@ -1,0 +1,23 @@
+import Image from 'next/image'
+import { Stepper, Step } from '@components/stepper'
+import middlewarePipeline from '@images/middleware-pipeline.svg'
+
+<Stepper>
+  <Step index={0}>
+    Optional <br className='block sm:hidden'/> Compiler
+  </Step>
+  <Step index={1} link='/docs/inspector-component'>
+    Inspector <br className='block sm:hidden'/> Component
+  </Step>
+  <Step index={2} active>
+    Dev Server <br className='block sm:hidden'/> Middleware
+  </Step>
+</Stepper>
+
+This page is the **_Part.2_** of configuration, we will add a middleware in dev-server to receives API from Inspector Component,
+and call your local IDE/Editor to open the source file from server side. Please make sure you have already added the [Inspector Component](/docs/inspector-component) in your project as _Part.1_.
+
+<Image
+  src={middlewarePipeline}
+  className="mt-2 mx-auto w-full"
+/>

@@ -70,6 +70,7 @@ export const Layout = () => {
             if (!codeInfo?.absolutePath) return
             const { absolutePath, lineNumber, columnNumber } = codeInfo
 
+            // https://code.visualstudio.com/docs/editor/command-line#_opening-vs-code-with-urls
             window.open(`vscode://file/${absolutePath}:${lineNumber}:${columnNumber}`)
 
             // you can change the url protocol if you are using another IDE, like for WebStorm:

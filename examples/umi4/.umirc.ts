@@ -1,4 +1,4 @@
-// https://umijs.org/config/
+// https://umijs.org/docs/api/config
 import { defineConfig } from 'umi'
 import tailwindcss from 'tailwindcss'
 import autoprefixer from 'autoprefixer'
@@ -26,4 +26,5 @@ export default defineConfig({
      */
     '@react-dev-inspector/umi4-plugin',
   ],
+  srcTranspiler: 'swc',
 })

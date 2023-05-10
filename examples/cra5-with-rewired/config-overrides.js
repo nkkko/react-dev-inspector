@@ -1,12 +1,10 @@
 const {
-  launchEditorMiddleware,
-} = require('@react-dev-inspector/middleware')
-const {
   override,
   overrideDevServer,
   addBabelPlugin,
   addWebpackModuleRule,
 } = require('customize-cra')
+const { launchEditorMiddleware } = require('@react-dev-inspector/middleware')
 
 
 const removeWebpackPlugin = (pluginName) => (config) => {

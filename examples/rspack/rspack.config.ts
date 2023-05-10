@@ -7,10 +7,8 @@ const publicPath = isDev ? '/' : '/rspack/'
 const config: Configuration = {
   context: process.cwd(),
   devServer: {
-    /**
-     * react-dev-inspector server config for rspack
-     */
     setupMiddlewares(middlewares) {
+      /** react-dev-inspector server config for rspack */
       middlewares.unshift(launchEditorMiddleware)
       return middlewares
     },

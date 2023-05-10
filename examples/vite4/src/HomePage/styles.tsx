@@ -17,19 +17,25 @@ export const GithubCorner = styled(Corner, {
 
 export const Title = styled.h1({
   displayName: 'Title',
-  className: 'text-4xl font-bold text-gray-900 sm:text-6xl [text-wrap:balance]',
+  className: `
+    font-bold whitespace-nowrap text-gray-900 text-[min(8vw,2.25rem)] sm:text-6xl
+    transition-all duration-200 ease
+  `,
 })
 
 export const Slogan = styled.p({
   displayName: 'Slogan',
-  className: `mt-6 text-lg leading-8 text-gray-600`,
+  className: `
+    mt-6 leading-8 text-gray-600 text-[min(4.5vw,1.25rem)] leading-[min(6vw,1.75rem)] sm:text-lg
+    transition-all duration-200 ease
+  `,
 })
 
 export const InspectorButton = styled.button({
   displayName: 'InspectorButton',
   className: `
     inline-block py-2 px-6 rounded-full
-    select-none text-white no-underline [text-shadow:0_1px_1px_#000]
+    select-none text-white whitespace-nowrap no-underline [text-shadow:0_1px_1px_#000]
     shadow-sm shadow-blue-500/50
 
     bg-gradient-to-b from-[#4fa0fd] to-[#248aff]
@@ -53,7 +59,8 @@ export const ButtonIcon = styled.span({
 export const Pill = styled.div({
   displayName: 'Pill',
   className: `
-    relative rounded-full px-3 py-1 text-xs sm:text-sm
-    text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20
+    relative rounded-full px-3 py-1
+    whitespace-nowrap text-gray-600 text-[min(4vw,.75rem)] leading-[min(5vw,1rem)] sm:text-sm
+    ring-1 ring-gray-900/10 hover:ring-gray-900/20
   `,
 })

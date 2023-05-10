@@ -1,5 +1,10 @@
+import dynamic from 'next/dynamic'
 import Head from 'next/head'
-import { HomePage } from '../components/HomePage'
+
+const HomePage = dynamic(
+  () => import('../components/HomePage').then(({ HomePage }) => HomePage),
+  { ssr: false },
+)
 
 export default function Layout() {
   return (

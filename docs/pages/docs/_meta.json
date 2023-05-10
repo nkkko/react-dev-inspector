@@ -1,0 +1,42 @@
+{
+  "index": "Introduction",
+  "-- Guide": {
+    "type": "separator",
+    "title": "Guide"
+  },
+  "inspector-component": "Inspector Component",
+  "integration": "Server-Side Integration",
+  "compiler-plugin": "Compiler Plugin",
+  "editor-settings": "Editor Settings",
+
+  "-- Changelog": {
+    "type": "separator",
+    "title": "Changelog"
+  },
+  "Changelog v2": {
+    "title": "Changelog V2 ↗",
+    "href": "https://github.com/zthxxx/react-dev-inspector/blob/dev/docs/CHANGELOG.v2.md",
+    "newWindow": true
+  },
+  "Changelog v1": {
+    "title": "Changelog V1 ↗",
+    "href": "https://github.com/zthxxx/react-dev-inspector/blob/dev/docs/CHANGELOG.v1.md",
+    "newWindow": true
+  },
+
+  "-- Migration": {
+    "type": "separator",
+    "title": "Migration"
+  },
+  "MigrateV1-V2": "Migrate From V1",
+
+  "-- More": {
+    "type": "separator",
+    "title": "More"
+  },
+  "next.js-link": {
+    "title": "GitHub ↗",
+    "href": "https://github.com/zthxxx/react-dev-inspector",
+    "newWindow": true
+  }
+}

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Inspector } from 'react-dev-inspector'
+import { Inspector, defaultHotkeys } from 'react-dev-inspector'
 import { ChecksPattern } from './components/Pattern'
 
 import * as S from './styles'
@@ -73,17 +73,17 @@ export const HomePage = ({ name, titleBadge }: {
               '
             >
               <div
-                className='mt-6 mb-2 leading-8 text-gray-600 font-light text-base sm:text-lg'
+                className='mt-6 mb-2 text-gray-600 font-light text-[min(4.5vw,1rem)] leading-[min(6vw,1.75rem)] sm:text-lg'
               >
                 try shortcuts or click ↓
               </div>
 
               <S.InspectorButton
-                className='group'
+                className='group text-[min(4vw,.875rem)] leading-[min(5vw,1.25rem)] sm:text-base'
                 onClick={() => setActive(true)}
               >
-                <span className='text-sm sm:text-base'>
-                  Ctrl + Shift + Command + C
+                <span>
+                  {defaultHotkeys().join(' + ')}
                 </span>
                 <S.ButtonIcon>🍭</S.ButtonIcon>
               </S.InspectorButton>

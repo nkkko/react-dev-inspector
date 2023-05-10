@@ -62,6 +62,14 @@ cd examples/vite4
 pnpm dev
 ```
 
+sync demo code from vite4 to other examples:
+
+```bash
+# at project root dir
+./scripts/sync-page-code.sh
+```
+
+
 ### build examples sites
 
 > need to [build plugins packages](#build-packages) at first
@@ -82,3 +90,12 @@ pnpm publish -r --report-summary --tag v2-beta
 # to check log
 cat pnpm-publish-summary.json
 ```
+
+### Miscellaneous
+
+```bash
+# compress svg files
+svgo -p 1 -i docs/images/browser-inspect.svg
+svgo -p 1 --pretty -i docs/images/working-pipeline.svg
+```
+

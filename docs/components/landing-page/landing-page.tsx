@@ -67,7 +67,9 @@ export const LandingPage = () => {
               centered
             >
               <div className='docs-img-wrapper'>
-                <Image src={isDev ? '' : inspectPreview} alt='Background' loading='eager' />
+                {!isDev && (
+                  <Image src={inspectPreview} alt='Background' loading='eager' />
+                )}
               </div>
             </Feature>
 
@@ -108,7 +110,7 @@ export const LandingPage = () => {
                 Prefer an online demo?
               </S.CenterHeader>
               <S.CenterDescription>
-                Okay, it's also supported on StackBlitz, CodeSandbox, Gitpod, Replit, <br className='sm:block hidden' /> GitHub Codespaces and other Cloud IDEs.
+                Okay, it's also supported on StackBlitz, CodeSandbox, Gitpod, Replit, <br className='sm:block hidden' /> GitHub Codespaces and other remote Cloud IDEs.
               </S.CenterDescription>
             </Feature>
 
@@ -120,7 +122,7 @@ export const LandingPage = () => {
               <StackBlitz
                 /**
                  * Link: https://stackblitz.com/edit/github-x3rkzl?file=package.json,vite.config.ts%3AL17
-                 * From: https://stackblitz.com/github/zthxxx/react-dev-inspector/tree/docs/nextra/examples/vite4
+                 * From: https://stackblitz.com/github/zthxxx/react-dev-inspector/tree/dev/examples/vite4
                  *   - change: remove `references` field in `tsconfig.json`
                  */
                 project='edit/github-x3rkzl'
@@ -133,7 +135,7 @@ export const LandingPage = () => {
             <Feature
               large
               id='working-pipeline'
-              href='/docs/docs-theme/page-configuration'
+              href='/docs#how-it-works'
               className='flex flex-col justify-start'
             >
               <h3 className='grow-0'>The Working Pipeline</h3>
@@ -155,19 +157,18 @@ export const LandingPage = () => {
                 <S.Steps>
                   <h3>Inject JSX Source</h3>
                   <p>
-                    The compiler's <code>plugin</code> records source info on component's fiber.
-                    Most of frameworks offer this feature out-of-the-box.
+                    The compiler's <code>plugin</code> records source info into component's react fiber.
                   </p>
 
                   <h3>The Inspector Component</h3>
                   <p>
-                    The <code>react-dev-inspector</code> reads the source info,
-                    and sends it to the dev-server when you inspect elements on browser.
+                    The <code>{`<Inspector/>`}</code> component reads the source info,
+                    sends it to the dev-server when you inspect elements on browser.
                   </p>
 
                   <h3>Dev Server Middleware</h3>
                   <p>
-                    The dev server middleware receives the API from the browser,
+                    The dev server middleware receives source path info from API,
                     then call your local IDE/Editor to open the source file.
                   </p>
                 </S.Steps>

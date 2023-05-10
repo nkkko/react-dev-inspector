@@ -1,0 +1,12 @@
+{
+  "vite": "Vite",
+  "nextjs": "Next.js",
+  "webpack": "Webpack",
+  "rspack": "Rspack",
+  "umijs": "UmiJS",
+  "create-react-app": "Create React App",
+
+  "_snip-declaration": {
+    "display": "hidden"
+  }
+}

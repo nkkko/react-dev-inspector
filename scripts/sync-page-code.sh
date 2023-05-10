@@ -8,18 +8,19 @@ set -euxo pipefail
 
 cd examples
 
-rm -rf vite3/src/HomePage
-rm -rf vite2/src/HomePage
-rm -rf umi4/src/HomePage
-rm -rf rspack/src/HomePage
-rm -rf cra5-with-rewired/src/HomePage
-rm -rf nextjs-custom-server/components/HomePage
+source_code_path='vite4/src'
 
+declare -a synced_dirs=(
+  'vite3/src'
+  'vite2/src'
+  'umi4/src'
+  'rspack/src'
+  'cra5-with-rewired/src'
+  'nextjs-custom-server/components'
+)
 
-cp -R vite4/src/HomePage vite3/src/
-cp -R vite4/src/HomePage vite2/src/
-cp -R vite4/src/HomePage umi4/src/
-cp -R vite4/src/HomePage rspack/src/
-cp -R vite4/src/HomePage cra5-with-rewired/src/
-cp -R vite4/src/HomePage nextjs-custom-server/components/
+for target_dir in "${synced_dirs[@]}"; do
+  rm -rf "${target_dir}/HomePage"
 
+  cp -R "${source_code_path}/HomePage" "$target_dir/"
+done

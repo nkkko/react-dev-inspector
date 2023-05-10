@@ -5,23 +5,28 @@ import {
 } from 'react'
 
 
-export const useMousePosition = (): MutableRefObject<{ x: number; y: number }> => {
+export const useMousePosition = ({ disable }: {
+  disable?: boolean;
+}): MutableRefObject<{ x: number; y: number }> => {
   const mouseRef = useRef<{ x: number; y: number }>({
     x: 0,
     y: 0,
   })
 
-  const recordMousePoint = ({ clientX, clientY }: MouseEvent) => {
-    mouseRef.current.x = clientX
-    mouseRef.current.y = clientY
+  const recordMousePoint = (ev: MouseEvent) => {
+    mouseRef.current.x = ev.clientX
+    mouseRef.current.y = ev.clientY
   }
 
   useEffect(() => {
-    document.addEventListener('mousemove', recordMousePoint, true)
+    if (!disable) {
+      document.addEventListener('mousemove', recordMousePoint, true)
+    }
+
     return () => {
       document.removeEventListener('mousemove', recordMousePoint, true)
     }
-  }, [])
+  }, [disable])
 
   return mouseRef
 }

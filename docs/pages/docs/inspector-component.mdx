@@ -1,0 +1,309 @@
+import Image from 'next/image'
+import { Tabs, Callout } from 'nextra/components'
+import { Stepper, Step } from '@components/stepper'
+import browserInspector from '@images/browser-inspect.svg'
+
+# Inspector Component
+
+<Stepper>
+  <Step index={0}>
+    Optional <br className='block sm:hidden'/> Compiler
+  </Step>
+  <Step index={1} active>
+    Inspector <br className='block sm:hidden'/> Component
+  </Step>
+  <Step index={2} link='/docs/integration'>
+    Dev Server <br className='block sm:hidden'/> Middleware
+  </Step>
+</Stepper>
+
+
+This page is the **_Part.1_** of configuration, we will add the Inspector UI component in your project
+that provider interaction on browser, like this:
+
+
+<Image
+  src={browserInspector}
+  className="mx-auto w-4/5 sm:w-3/5"
+/>
+
+
+## Setup
+
+At first install the package:
+
+```bash npm2yarn
+npm i -D react-dev-inspector
+```
+
+Then import the `react-dev-inspector` in your project entry file, like one of `main.tsx`, `App.tsx`  or `index.tsx`:
+
+<Tabs items={['main.tsx', 'App.tsx', 'index.tsx']}>
+<Tabs.Tab>
+```tsx filename="main.tsx" showLineNumbers {2,9}
+import { createRoot } from 'react-dom/client'
+import { Inspector } from 'react-dev-inspector'
+import { App } from './App'
+import './index.css'
+
+createRoot(document.getElementById('root') as HTMLDivElement)
+  .render(
+    <React.StrictMode>
+      <Inspector />
+      <App />
+    </React.StrictMode>,
+  )
+```
+</Tabs.Tab>
+
+<Tabs.Tab>
+```tsx filename="App.tsx" showLineNumbers {1,8}
+import { Inspector } from 'react-dev-inspector'
+
+export const App = () => {
+  ...
+
+  return (
+    <>
+      <Inspector />
+
+      <h1>Vite App Title</h1>
+      <div className="card">
+        <p>
+          Edit <code>src/App.tsx</code> and save to test HMR
+        </p>
+      </div>
+      <p className="read-the-docs">
+        Click on the Vite and React logos to learn more
+      </p>
+    </>
+  )
+}
+```
+</Tabs.Tab>
+
+
+<Tabs.Tab>
+```tsx filename="index.tsx" showLineNumbers {2,17}
+import type { ReactNode } from 'react'
+import { Inspector } from 'react-dev-inspector'
+import Head from 'next/head'
+
+export default function Layout({ children }: { children: ReactNode }) {
+  return (
+    <>
+      <Head>
+        <meta charSet='utf-8' />
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <meta name='theme-color' content='#000000' />
+        <meta name='description' content='website description' />
+
+        <title>Nextjs App Title</title>
+      </Head>
+
+      <Inspector />
+
+      {children}
+    </>
+  )
+}
+
+```
+</Tabs.Tab>
+</Tabs>
+
+[
+  ![Open in StackBlitz](@components/stack-blitz/open-in-stackblitz.svg)
+](https://stackblitz.com/edit/github-x3rkzl?file=package.json%3AL40,src%2FHomePage%2Fhome.tsx%3AL19)
+
+Now, we've completed the simplest setup way in this **_Part.1_** 🎉.
+
+To begin developing your project, you'll gain access to the Inspector UI in the browser
+via **default keyboard shortcuts**:
+
+- **`Ctrl + Shift + Command + C`** on macOS
+- **`Ctrl + Shift + Alt + C`** on Windows / Linux
+
+By default, clicking inspected element in the browser will trigger the `<Inspector>` to send an API network request to dev-server,
+that will call your local IDE/editor to open the source file.
+
+For the next **_Part.2_**, you'll need to do set up a [Middleware on Server-Side](/docs/dev-server-middleware) to handle these API requests.
+
+Certainly, you also have the option to override these shortcuts by configuring the **props** of the `<Inspector>` component.
+For more advanced controls, refer to the [Props](#props) section below.
+
+## Props
+
+This section refers to the interface of [`InspectorProps`](https://github.com/zthxxx/react-dev-inspector/blob/dev/packages/inspector/src/Inspector/Inspector.tsx#L49)
+for `<Inspector>` component.
+
+```tsx
+<Inspector
+  keys={...}
+  onInspectElement={...}
+  onHoverElement={...}
+  onClickElement={...}
+  active={...}
+  onActiveChange={...}
+  disable={...}
+/>
+```
+
+### `keys`
+
+- **Type:** `keys?: string[] | null{:ts}`
+- **Default:** <br/>
+    `['Ctrl', 'Shift', 'Command', 'C']{:ts}` on macOS <br/>
+    `['Ctrl', 'Shift', 'Alt', 'C']{:ts}` on other platforms
+
+Activity toggle hotkeys for `<Inspector>` component, supported keys see: https://github.com/jaywcjlove/hotkeys#supported-keys
+
+Setting **`keys={null} {:tsx}`** explicitly means that disable use hotkeys to trigger it.
+
+---
+
+### `active`
+
+<p className='mt-3 text-sm text-gray-500'>Added in: `v2.0.0`</p>
+
+**Type:** `active?: boolean{:ts}`
+
+If setting **`active`** prop, the Inspector will be a **Controlled React Component**,
+  you need to control the `true{:ts}` / `false{:ts}` state to active the Inspector.
+
+If **not** setting `active` prop, this only a **Uncontrolled** component that
+  will activate/deactivate by hotkeys.
+
+
+---
+
+### `onActiveChange`
+
+<p className='mt-3 text-sm text-gray-500'>Added in: `v2.0.0`</p>
+
+**Type:** `onActiveChange?: (active: boolean) => void{:ts}`
+
+Callback trigger by `active` state change, includes:
+- hotkeys toggle, before activate/deactivate Inspector
+- Escape / Click, before deactivate Inspector
+
+> Note: `onActiveChange` will **NOT** trigger by change of `active` prop key.
+
+---
+
+### `disable`
+
+<p className='mt-3 text-sm text-gray-500'>Added in: `v2.0.0`</p>
+
+**Type:** `disable?: boolean{:ts}`
+
+Whether to disable all behavior include hotkeys listening or trigger.
+
+<Callout type="info" emoji="💡">
+  **Note:** `react-dev-inspector` will automatically **disable** in **production** environment by default.
+</Callout>
+
+---
+
+### `onInspectElement`
+
+<p className='mt-3 text-sm text-gray-500'>Added in: `v2.0.0`</p>
+
+- **Type:** `onInspectElement?: (params: Required<InspectParams>) => void{:ts}`
+  > interface [`InspectParams{:ts}`](https://github.com/zthxxx/react-dev-inspector/blob/dev/packages/inspector/src/Inspector/Inspector.tsx#L29))
+- **Default:** built-in [`gotoServerEditor{:ts}`](https://github.com/zthxxx/react-dev-inspector/blob/dev/packages/inspector/src/Inspector/utils/editor.ts#L12) util function
+
+
+Callback when left-clicking on an element, with ensuring the source code info is found,
+the default `gotoServerEditor` callback will request the dev-server to open local IDE/editor from server-side.
+
+<Callout type="info" emoji="💡">
+  **Note:** By override the **`onInspectElement`** prop, the default `gotoServerEditor` will be **removed**,
+  that means you want to manually handle the source info, or handle how to goto editor by yourself.
+</Callout>
+
+You can also use the built-in `gotoServerEditor` util funtion in `onInspectElement` to get origin behavior (open local IDE on server-side),
+  it looks like:
+
+```tsx showLineNumbers {7}
+import { Inspector, gotoServerEditor } from 'react-dev-inspector'
+
+<Inspector
+  onInspectElement={({ codeInfo }) => {
+    ... // your processing
+
+    gotoServerEditor(codeInfo)
+  }}
+/>
+```
+
+Or simply use other built-in utils likes `gotoVSCode`, `gotoVSCodeInsiders`, `gotoWebStorm` to open IDE/editor by **URL-scheme**,
+which not need any server side configuration:
+
+```tsx showLineNumbers
+import { gotoVSCode, gotoVSCodeInsiders, gotoWebStorm } from 'react-dev-inspector'
+
+<Inspector
+  onInspectElement={gotoVSCode}
+  // onInspectElement={gotoVSCodeInsiders}
+  // onInspectElement={gotoWebStorm}
+/>
+```
+
+---
+
+### `onHoverElement`
+
+**Type:** `onHoverElement?: (params: InspectParams) => void{:ts}`
+
+Callback when hovering on an element
+
+---
+
+### `onClickElement`
+
+**Type:** `onHoverElement?: (params: InspectParams) => void{:ts}`
+
+Callback when left-clicking on an element.
+
+---
+
+### `children`
+
+**Type:** `children?: ReactNode{:ts}`
+
+Any children of react nodes, to support usages like both of:
+
+```tsx
+<Layout>
+  <Inspector />
+  <App />
+</Layout>
+```
+
+and
+
+```tsx
+<Layout>
+  <Inspector>
+    <App />
+  </Inspector>
+</Layout>
+```
+
+---
+
+### `disableLaunchEditor`
+
+<p className='mt-3 text-sm text-gray-500'>Deprecated after: `v2.0.0`</p>
+
+- **Type:** `disableLaunchEditor?: boolean{:ts}`
+- **Default:** `true{:ts}` if setting [`onInspectElement`](#onInspectElement) callback, otherwise is `false{:ts}`.
+
+Whether to disable default behavior: "open local IDE when click on component".
+
+
+<Callout type="warning">
+  **Deprecated** <br/>
+  `disableLaunchEditor` is deprecated after v2, please use [`onInspectElement`](#onInspectElement) callback instead for fully custom controlling.
+</Callout>

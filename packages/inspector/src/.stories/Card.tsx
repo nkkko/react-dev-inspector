@@ -17,6 +17,7 @@ export const Card = ({
   onCancel,
   confirmText = 'OK',
   onConfirm,
+  children,
 }: {
   title?: ReactNode;
   description?: ReactNode;
@@ -24,6 +25,7 @@ export const Card = ({
   onCancel?: () => void;
   confirmText?: ReactNode;
   onConfirm?: () => void;
+  children?: ReactNode;
 }) => (
   <CardContainer className='w-96'>
     <CardHeader>
@@ -35,7 +37,9 @@ export const Card = ({
       </CardDescription>
     </CardHeader>
 
-    <CardContent />
+    <CardContent>
+      {children}
+    </CardContent>
 
     <CardFooter className='flex justify-between'>
       <Button

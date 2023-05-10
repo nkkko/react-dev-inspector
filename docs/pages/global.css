@@ -18,3 +18,19 @@ code.text-\[\.9em\] {
   font-size: 14px;
 }
 
+a > img {
+  display: inline-block;
+}
+
+[tabindex]:not([tabindex="-1"]):focus-visible {
+  box-shadow: none;
+  outline: none;
+}
+
+.medium-zoom--opened .medium-zoom-overlay {
+  z-index: 20;
+}
+
+.medium-zoom--opened .medium-zoom-image {
+  z-index: 21;
+}

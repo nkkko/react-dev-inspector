@@ -1,0 +1,53 @@
+import SnippetDeclaration from './_snip-declaration.mdx'
+
+# Webpack Integration
+
+<SnippetDeclaration />
+
+In this section, follow the simple setup below to integrate `react-dev-inspector` into your [Webpack](https://webpack.js.org) project.
+
+## Setup
+
+At first install the package:
+
+```bash npm2yarn
+npm i -D @react-dev-inspector/middleware
+```
+
+This package provides a **`launchEditorMiddleware`**,
+just add it in your webpack config's middlewares.
+
+> Note: make `launchEditorMiddleware` as far forward as possible before other middlewares.
+
+For example, use with [`setupMiddlewares`](https://webpack.js.org/configuration/dev-server/#devserversetupmiddlewares) in **Webpack 5** likes:
+
+```ts filename="webpack.config.js" showLineNumbers {1,8}
+const { launchEditorMiddleware } = require('@react-dev-inspector/middleware')
+
+module.exports = {
+  ...
+
+  devServer: {
+    setupMiddlewares(middlewares) {
+      middlewares.unshift(launchEditorMiddleware)
+      return middlewares
+    },
+  },
+}
+```
+
+Use with [`devServer.before`](https://v4.webpack.js.org/configuration/dev-server/#devserverbefore) in **Webpack 4** likes:
+
+```ts filename="webpack.config.js" showLineNumbers {1,8}
+const { launchEditorMiddleware } = require('@react-dev-inspector/middleware')
+
+module.exports = {
+  ...
+
+  devServer: {
+    before: (app, server, compiler) => {
+      app.use(launchEditorMiddleware)
+    },
+  },
+}
+```

@@ -1,0 +1,48 @@
+import SnippetDeclaration from './_snip-declaration.mdx'
+
+# Vite Plugin
+
+<SnippetDeclaration />
+
+In this section, follow the simple setup below to integrate `react-dev-inspector` into your [Vite](https://vitejs.dev) project.
+
+## Setup
+
+At first install the plugin package:
+
+```bash npm2yarn
+npm i -D @react-dev-inspector/vite-plugin
+```
+
+The `@react-dev-inspector/vite-plugin{:ts}` now export a `inspectorServer` that compatible with `vite@4` / `vite@3` / `vite@2`,
+just add it into `vite.config.ts` and that's all done.
+
+
+```ts filename="vite.config.ts" showLineNumbers {3,16}
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import { inspectorServer } from '@react-dev-inspector/vite-plugin'
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  ...
+
+  plugins: [
+    react(),
+
+    /**
+     * react-dev-inspector server config for vite
+     */
+    inspectorServer(),
+  ],
+})
+```
+
+## Example
+
+Example project code you can find in [examples/vite4](https://github.com/zthxxx/react-dev-inspector/blob/dev/examples/vite4/vite.config.ts),
+or see online demo via:
+
+[
+  ![Open in StackBlitz](@components/stack-blitz/open-in-stackblitz.svg)
+](https://stackblitz.com/github/zthxxx/react-dev-inspector/tree/dev/examples/vite4)

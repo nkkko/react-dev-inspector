@@ -1,0 +1,68 @@
+import SnippetDeclaration from './_snip-declaration.mdx'
+
+# Umi Plugin
+
+<SnippetDeclaration />
+
+In this section, follow the simple setup below to integrate `react-dev-inspector` into your [UmiJS](https://umijs.org) project.
+
+## Umi4 Setup
+
+At first install the plugin package:
+
+```bash npm2yarn
+npm i -D @react-dev-inspector/umi4-plugin
+```
+
+Then add the plugin to your UmiJS config file and that's all done, likes `.umirc.dev.ts`:
+
+```ts filename=".umirc.dev.ts" showLineNumbers {10}
+// https://umijs.org/docs/api/config
+import { defineConfig } from 'umi'
+
+export default defineConfig({
+  ...
+
+  plugins: [
+    ...
+
+    '@react-dev-inspector/umi4-plugin',
+  ],
+})
+```
+
+
+## Umi3 Setup
+
+Same as setup with Umi4, but change the plugin package to:
+
+```bash npm2yarn
+npm i -D @react-dev-inspector/umi3-plugin
+```
+
+Then add the plugin to your UmiJS config file and that's all done, likes `.umirc.dev.ts`:
+
+```ts filename=".umirc.dev.ts" showLineNumbers {10}
+// https://v3.umijs.org/config
+import { defineConfig } from 'umi'
+
+export default defineConfig({
+  ...
+
+  plugins: [
+    ...
+
+    '@react-dev-inspector/umi3-plugin',
+  ],
+})
+```
+
+## Example
+
+Example project code you can find in [examples/umi4](https://github.com/zthxxx/react-dev-inspector/blob/dev/examples/umi4/.umirc.ts)
+and [examples/umi3](https://github.com/zthxxx/react-dev-inspector/blob/dev/examples/umi3/.umirc.ts),
+or see online demo via:
+
+[
+  ![Open in StackBlitz](@components/stack-blitz/open-in-stackblitz.svg)
+](https://stackblitz.com/github/zthxxx/react-dev-inspector/tree/dev/examples/umi4)

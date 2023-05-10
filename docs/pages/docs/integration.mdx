@@ -1,0 +1,124 @@
+import { Tabs, Cards } from 'nextra/components'
+import { Logo } from '@components/icons'
+import SnippetDeclaration from './integration/_snip-declaration.mdx'
+
+# Server-Side Integration
+
+<SnippetDeclaration />
+
+`react-dev-inspector` provides a pure middleware and many integrated plugins for popular frameworks,
+you can choose one of them to integrate into your project.
+
+## Frameworks Integration
+
+<Cards>
+  <Cards.Card
+    icon={<Logo.Vitejs />}
+    title="Vite"
+    href="/docs/integration/vite"
+  />
+  <Cards.Card
+    icon={<Logo.Nextjs />}
+    title="Next.js"
+    href="/docs/integration/nextjs"
+  />
+  <Cards.Card
+    icon={<Logo.Webpack className='scale-125' />}
+    title="Webpack"
+    href="/docs/integration/webpack"
+  />
+  <Cards.Card
+    icon={<Logo.Rspack className='scale-110' />}
+    title="Rspack"
+    href="/docs/integration/rspack"
+  />
+  <Cards.Card
+    icon={<Logo.Umijs />}
+    title="UmiJS"
+    href="/docs/integration/umijs"
+  />
+  <Cards.Card
+    icon={<Logo.CreateReactApp className='scale-125' />}
+    title="Create React App"
+    href="/docs/integration/create-react-app"
+  />
+</Cards>
+
+<br/>
+
+All behind those interaction plugins is the **`@react-dev-inspector/middleware{:ts}`**,
+
+for other frameworks, you can use the middleware directly in your framework's dev-server.
+
+
+## Inspector Middleware
+
+```bash npm2yarn
+npm i -D @react-dev-inspector/middleware
+```
+
+This package mainly just provides a **`launchEditorMiddleware`**,
+that is an [Express.js](https://github.com/expressjs/express) / [Connect.js](https://github.com/senchalabs/connect) **compatible** request middleware.
+
+```ts
+import { launchEditorMiddleware } from '@react-dev-inspector/middleware'
+```
+
+
+### Usage Examples
+
+For example, use with [`webpack-dev-server`](https://github.com/webpack/webpack-dev-server) / [`webpack-dev-middleware`](https://github.com/webpack/webpack-dev-middleware):
+
+<Tabs items={['webpack-dev-server', 'webpack-dev-middleware']}>
+<Tabs.Tab>
+
+> Note: make `launchEditorMiddleware` as far forward as possible before other middlewares.
+
+```ts filename="webpack.config.js" showLineNumbers {1,8}
+const { launchEditorMiddleware } = require('@react-dev-inspector/middleware')
+
+module.exports = {
+  ...
+
+  devServer: {
+    setupMiddlewares(middlewares) {
+      middlewares.unshift(launchEditorMiddleware)
+      return middlewares
+    },
+  },
+}
+```
+
+</Tabs.Tab>
+
+<Tabs.Tab>
+
+> Note: make `launchEditorMiddleware` as far forward as possible before other middlewares.
+
+```ts filename="server.js" showLineNumbers {5,17}
+const express = require("express")
+const webpack = require("webpack")
+const webpackDevMiddleware = require("webpack-dev-middleware")
+const webpackHotMiddleware = require("webpack-hot-middleware")
+const { launchEditorMiddleware } = require('@react-dev-inspector/middleware')
+
+const app = express()
+
+const compiler = webpack(webpackConfig)
+const devMiddleware = webpackDevMiddleware(compiler, {
+  // webpack-dev-middleware options
+})
+const hotMiddleware = webpackHotMiddleware(compiler, {
+  // webpack-hot-middleware options
+})
+
+app.use(launchEditorMiddleware)
+
+app.use(devMiddleware)
+app.use(hotMiddleware)
+
+app.listen(3000, () => console.log("Example app listening on port 3000!"))
+```
+
+</Tabs.Tab>
+</Tabs>

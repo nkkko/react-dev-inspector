@@ -1,7 +1,25 @@
 # Changelog
 
 
-## [2.0.0-beta.1](https://github.com/zthxxx/react-dev-inspector/compare/v1.8.6...v2.0.0-beta.1) (2023-07-06)
+## WIP: [2.0.0-beta.2](https://github.com/zthxxx/react-dev-inspector/compare/v2.0.0-beta.1...v2.0.0-beta.2)
+
+### Feat
+
+Inspector Component:
+
+- Change default keyboard shortcuts on Windows/Linux to `Ctrl + Shift + Alt + C`. <br/>
+  (still keep `Ctrl + Shift + Command + C` as default on macOS)
+- Add export of `defaultHotkeys` for your information.
+- Add `onInspectElement` `disable` props, mark `disableLaunchEditor` as deprecated.
+- Make automatically **disable** the `Inspector` component in **production** mode by default.
+- The Umi3/Umi4 plugin no longer adds babel-plugin in **production** mode by default.
+
+### Fix
+
+- Fix missing cleanup during unmount phase in `useEffect` of `Inspector` component.
+
+
+## [2.0.0-beta.1](https://github.com/zthxxx/react-dev-inspector/compare/v1.9.0...v2.0.0-beta.1) (2023-07-06)
 
 ### Feat
 

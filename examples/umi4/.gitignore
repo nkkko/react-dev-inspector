@@ -21,6 +21,7 @@ build
 
 
 # umi
+.swc
 .umi
 .umi-production
 .umi-test

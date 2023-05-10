@@ -1,13 +1,18 @@
+import { useEffect, type FC, type PropsWithChildren } from 'react'
 import { useRouter } from 'next/router'
 import {
   type DocsThemeConfig,
   useConfig,
 } from 'nextra-theme-docs'
+import mediumZoom from 'medium-zoom'
 import { NextraLogo } from '@components/icons'
 
 const nameTitle = (
   <span
-    className='py-2 pr-2 font-bold text-xl hover:transition-[mask-position] hover:duration-1000 hover:ease'
+    className='
+      py-2 font-bold text-xl
+      hover:transition-[mask-position] hover:duration-1000 hover:ease
+    '
   >
     React Dev Inspector
     <style jsx>
@@ -29,6 +34,17 @@ const nameTitle = (
     </style>
   </span>
 )
+
+export const MainContentRender: FC<PropsWithChildren> = ({ children }) => {
+  useEffect(() => {
+    /**
+     * Allow images to be zoomed in on click
+     */
+    mediumZoom('[data-zoomable]', { background: '#666' })
+  }, [])
+
+  return (<>{children ?? null}</>)
+}
 
 const config: DocsThemeConfig = {
   project: {
@@ -88,6 +104,8 @@ const config: DocsThemeConfig = {
     defaultMenuCollapseLevel: 1,
     toggleButton: true,
   },
+  // disable due to some render hooks bug in nextra
+  // main: MainContentRender,
   footer: {
     text: (
       <div className='flex w-full flex-col items-center sm:items-start'>

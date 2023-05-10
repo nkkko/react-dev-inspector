@@ -1,0 +1,55 @@
+import SnippetDeclaration from './_snip-declaration.mdx'
+
+# Rspack Integration
+
+<SnippetDeclaration />
+
+In this section, follow the simple setup below to integrate `react-dev-inspector` into your [Rspack](https://rspack.dev) project.
+
+## Setup
+
+At first install the package:
+
+```bash npm2yarn
+npm i -D @react-dev-inspector/middleware
+```
+
+This package provides a **`launchEditorMiddleware`**,
+just add it in your `rscpack.config.ts` by [`devServer.setupMiddlewares`](https://www.rspack.dev/config/dev-server.html#devserversetupmiddlewares):
+
+> Note: make `launchEditorMiddleware` as far forward as possible before other middlewares.
+
+```ts filename="rspack.config.ts" showLineNumbers {2,15}
+import type { Configuration } from '@rspack/cli'
+import { launchEditorMiddleware } from '@react-dev-inspector/middleware'
+
+const config: Configuration = {
+  context: process.cwd(),
+  entry: {
+    main: './src/main.tsx',
+  },
+
+  ...
+
+  devServer: {
+    setupMiddlewares(middlewares) {
+      /** react-dev-inspector server config for rspack */
+      middlewares.unshift(launchEditorMiddleware)
+      return middlewares
+    },
+  },
+}
+
+export default config
+```
+
+
+## Example
+
+Example project code you can find in [examples/rspack](https://github.com/zthxxx/react-dev-inspector/blob/dev/examples/rspack/rspack.config.ts),
+or see online demo via:
+
+[
+  ![Open in StackBlitz](@components/stack-blitz/open-in-stackblitz.svg)
+](https://stackblitz.com/github/zthxxx/react-dev-inspector/tree/dev/examples/rspack)
+

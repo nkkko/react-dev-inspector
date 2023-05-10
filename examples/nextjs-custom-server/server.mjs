@@ -3,9 +3,7 @@
  */
 import { createServer } from 'node:http'
 import next from 'next'
-import {
-  launchEditorMiddleware,
-} from '@react-dev-inspector/middleware'
+import { launchEditorMiddleware } from '@react-dev-inspector/middleware'
 
 
 const dev = process.env.NODE_ENV !== 'production'
@@ -26,13 +24,13 @@ app.prepare().then(() => {
      */
     const middlewares = [
       /**
-       * `react-dev-inspector` server config for nextjs (two middlewares)
+       * `react-dev-inspector` server config for nextjs
        *
        * That's CANNOT be Next.js middleware due to [middleware is in Edge Runtime](https://github.com/vercel/next.js/discussions/34179)
        */
       launchEditorMiddleware,
 
-      /** Next.js default app handle */
+      /** Next.js default app handler as middleware */
       (req, res) => handle(req, res),
     ]
 

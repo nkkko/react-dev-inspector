@@ -47,26 +47,32 @@ export const FrameworkLogos = ({ reversed }: { reversed?: boolean }) => {
     {
       logo: (<Logo.Vitejs />),
       name: 'Vite',
+      link: '/docs/integration/vite',
     },
     {
       logo: (<Logo.Nextjs />),
       name: 'Next.js',
+      link: '/docs/integration/nextjs',
     },
     {
       logo: (<Logo.Webpack className='scale-125' />),
       name: 'Webpack',
+      link: '/docs/integration/webpack',
     },
     {
       logo: (<Logo.Rspack className='scale-110' />),
       name: 'Rspack',
+      link: '/docs/integration/rspack',
     },
     {
       logo: (<Logo.Umijs />),
       name: 'Umi.js',
+      link: '/docs/integration/umijs',
     },
     {
       logo: (<Logo.Icejs className='scale-125' />),
       name: 'ice.js',
+      link: '/docs/integration/icejs',
     },
     {
       logo: (<Logo.VSCode />),
