@@ -78,14 +78,23 @@ sync demo code from vite4 to other examples:
 pnpm build:examples && pnpm build:site
 ```
 
-# Publish
+## Publish
+
+Bump to specify versions manually:
+
+```bash
+pnpm --filter './packages/**' exec pnpm version 2.0.0-beta.2
+```
+
+
+publish packages manually:
 
 ```bash
 # for check
-pnpm publish -r --report-summary --tag v2-beta --dry-run
+pnpm publish -r --report-summary --tag beta --dry-run
 
 # to publish
-pnpm publish -r --report-summary --tag v2-beta
+pnpm publish -r --report-summary --tag beta
 
 # to check log
 cat pnpm-publish-summary.json
