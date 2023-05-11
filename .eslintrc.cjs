@@ -302,4 +302,14 @@ module.exports = {
     // https://github.com/antfu/eslint-config/blob/v0.39.7/packages/eslint-config-basic/index.js#L398
     'antfu/top-level-function': 'off',
   },
+
+  overrides: [
+    {
+      files: ['packages/*/src/**/*.{js,ts}'],
+      rules: {
+        // For more compatibility with lower Node.js versions
+        'unicorn/prefer-node-protocol': 'off',
+      },
+    },
+  ],
 }

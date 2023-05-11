@@ -1,4 +1,4 @@
-import { relative } from 'node:path'
+import { relative } from 'path'
 import type { PluginPass } from '@babel/core'
 import type {
   JSXAttribute,

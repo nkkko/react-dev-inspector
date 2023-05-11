@@ -3,30 +3,30 @@
 
 ## [1.9.0](https://github.com/zthxxx/react-dev-inspector/compare/v1.8.6...v1.9.0) (2023-08-14)
 
-### feat
+### Features
 
 * compatible with the incorrect `fileName: "</xxx/file>"` by [rspack](https://www.rspack.dev/).
 * integrate `queryParserMiddleware` into the `launchEditorMiddleware`, then mark `queryParserMiddleware` as deprecated.
 
-### docs
+### Document
 
 * add explain for optional babel plugin
 * add example config for rspack
 * add example for webstorm url protocol
 
-### fix
+### Bug Fixes
 
 * fix incorrect resolve path in umi4 plugin
 
 
 ## [1.8.6](https://github.com/zthxxx/react-dev-inspector/compare/v1.8.1...v1.8.6) (2023-07-06)
 
-### feat
+### Features
 
 * try to compatible `umi4` with `addBeforeBabelPlugins` api
 
 
-### fix
+### Bug Fixes
 
 * fix `Inspector` component with non-children to render
 
@@ -34,35 +34,35 @@
 
 ## [1.8.4](https://github.com/zthxxx/react-dev-inspector/compare/v1.8.1...v1.8.4) (2022-12-09)
 
-### revert
+### Reverts
 
 * revert v1.8.3 / v1.8.2 due to umi3/umi4 build TypeError
 
 
 ## [1.8.3](https://github.com/zthxxx/react-dev-inspector/compare/v1.8.2...v1.8.3) `Deprecated` (2022-12-08)
 
-### feat
+### Features
 
 * compatible with `umi3`/`umi4` `addBeforeMiddlewares`/`addBeforeMiddewares` plugin api ([99ff088](https://github.com/zthxxx/react-dev-inspector/commit/99ff088ec6b461135c07c276dba07090c6bb74b7))
 
 
 ## [1.8.2](https://github.com/zthxxx/react-dev-inspector/compare/v1.8.1...v1.8.2) `Deprecated` (2022-10-17)
 
-### feat
+### Features
 
 * compatible with `umi4` plugin api ([8a504d8](https://github.com/zthxxx/react-dev-inspector/commit/8a504d8e723c3d75aa6f553e73ac1f7023f0e9c9))
 
 ## [1.8.1](https://github.com/zthxxx/react-dev-inspector/compare/v1.8.0...v1.8.1) (2021-06-15)
 
-### fix
+### Bug Fixes
 
 * `@babel/types` should be listed in dependencies instead of devDependencies, close #127 ([4aa7072](https://github.com/zthxxx/react-dev-inspector/commit/4aa7072036aaa6a5de53b51636d7bfaea41a8b88))
 
-### docs
+### Document
 
 * add docs for VSCode only, simple without any other configuration ([884d576](https://github.com/zthxxx/react-dev-inspector/commit/884d576a2f04dee98455ae5d16c748c963d38780))
 
-### chore
+### Chore
 
 * update all non-major dependencies
 
@@ -70,15 +70,15 @@
 ## [1.8.0](https://github.com/zthxxx/react-dev-inspector/compare/v1.7.1...v1.8.0) (2021-04-18)
 
 
-### feat
+### Features
 
 * update `ReactInspectorPlugin` for compatible with `webpack` v5 and v4 ([914b12c](https://github.com/zthxxx/react-dev-inspector/commit/914b12c74bce2141fdabbea73c1c7b79e276e414))
 
-### docs
+### Document
 
 * update docs for use with `create-react-app` v5, `webpack` v5 and `webpack-dev-server` v4 ([914b12c](https://github.com/zthxxx/react-dev-inspector/commit/914b12c74bce2141fdabbea73c1c7b79e276e414))
 
-### chore
+### Chore
 
 * upgrade `create-react-app` to v5 and update example project config file ([914b12c](https://github.com/zthxxx/react-dev-inspector/commit/914b12c74bce2141fdabbea73c1c7b79e276e414))
 * upgrade `vite` and `@vitejs/plugin-react`, update example project config file ([914b12c](https://github.com/zthxxx/react-dev-inspector/commit/914b12c74bce2141fdabbea73c1c7b79e276e414))
@@ -88,7 +88,7 @@
 ## [1.7.1](https://github.com/zthxxx/react-dev-inspector/compare/v1.7.0...v1.7.1) (2021-11-02)
 
 
-### feat
+### Features
 
 * inspect element immediately at mouse point while press hotkey ([06b57fb](https://github.com/zthxxx/react-dev-inspector/commit/06b57fb29bf5fa872c3a958e32d799b734bb0fc0))
 
@@ -96,11 +96,11 @@
 
 ## [1.7.0](https://github.com/zthxxx/react-dev-inspector/compare/v1.6.0...v1.7.0) (2021-08-16)
 
-### feat
+### Features
 
 * support for Next.js, add example project and docs ([c7f52ba](https://github.com/zthxxx/react-dev-inspector/commit/c7f52bac8e6ec8cd7f56f12d1035090bb7ced3e5)), close [#98](https://github.com/zthxxx/react-dev-inspector/issues/98)
 
-### chore
+### Chore
 
 * upgrade many dependencies version by renovate bot
 * enhance ts types for tsc build ([b8b8375](https://github.com/zthxxx/react-dev-inspector/commit/b8b837545373e35c075e7b2d804f9614eef9f24f))
@@ -109,7 +109,7 @@
 * update config of jest / npm / ts ([a40f9b8](https://github.com/zthxxx/react-dev-inspector/commit/a40f9b812c6b8c8ab348709f490286c34b701895))
 * upgrade lockFileVersion to v2 ([a45873b](https://github.com/zthxxx/react-dev-inspector/commit/a45873b8289ee2964b794400e2e06d5aecd5471d))
 
-### docs
+### Document
 
 * add docs for changelog ([fe1206b](https://github.com/zthxxx/react-dev-inspector/commit/fe1206b608d1b789315c71ed53f915077868d9f9)), close [#25](https://github.com/zthxxx/react-dev-inspector/issues/25)
 * update comments of inspect reference fiber rule ([fb74698](https://github.com/zthxxx/react-dev-inspector/commit/fb74698eaa41a6c6dab84d4ec448b0b7e1f79028))

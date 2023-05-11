@@ -40,15 +40,20 @@
     "node": ">=12.0.0"
   },
   "dependencies": {
+    "@react-dev-inspector/babel-plugin": "workspace:*",
+    "@react-dev-inspector/middleware": "workspace:*",
+    "@react-dev-inspector/umi3-plugin": "workspace:*",
+    "@react-dev-inspector/umi4-plugin": "workspace:*",
+    "@react-dev-inspector/vite-plugin": "workspace:*",
     "@types/react-reconciler": ">=0.26.6",
     "hotkeys-js": "^3.8.1",
+    "picocolors": "1.0.0",
     "react-dev-utils": "12.0.1"
   },
   "devDependencies": {
     "@radix-ui/react-label": "2.0.2",
     "@radix-ui/react-slot": "1.0.2",
     "@radix-ui/react-switch": "1.0.3",
-    "@react-dev-inspector/vite-plugin": "workspace:*",
     "@storybook/addon-essentials": "7.0.27",
     "@storybook/addon-interactions": "7.0.27",
     "@storybook/addon-links": "7.0.27",

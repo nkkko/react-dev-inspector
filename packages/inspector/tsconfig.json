@@ -8,10 +8,6 @@
     "types": [
       "node",
     ],
-    "paths": {
-      "@react-dev-inspector/vite-plugin": ["../vite-plugin/src"],
-      "@react-dev-inspector/middleware": ["../middleware/src"],
-    },
   },
   "include": [
     "src",
@@ -20,7 +16,10 @@
   ],
   // https://www.typescriptlang.org/docs/handbook/project-references.html
   "references": [
-    { "path": "../vite-plugin" },
+    { "path": "../babel-plugin" },
     { "path": "../middleware" },
+    { "path": "../vite-plugin" },
+    { "path": "../umi4-plugin" },
+    { "path": "../umi3-plugin" },
   ],
 }

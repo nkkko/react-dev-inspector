@@ -1,4 +1,4 @@
-import path from 'node:path'
+import path from 'path'
 import type { NextHandleFunction } from 'connect'
 import type { RequestHandler } from 'express'
 

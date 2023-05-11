@@ -1,9 +1,23 @@
 # Changelog
 
 
-## [2.0.0-beta.2](https://github.com/zthxxx/react-dev-inspector/compare/v2.0.0-beta.1...v2.0.0-beta.2)
 
-### Feat
+## WIP [2.0.0-beta.3](https://github.com/zthxxx/react-dev-inspector/compare/v2.0.0-beta.2...v2.0.0-beta.3)
+
+### Chore
+
+- Remove import with `node-protocol` (`node:`) in packages, for more compatibility with lower Node.js versions.
+- Add compatibility with some plugins path to `react-dev-inspector@v1`, includes:
+  - partial of `react-dev-inspector/plugins/webpack`
+  - `react-dev-inspector/plugins/babel`
+  - `react-dev-inspector/plugins/vite`
+  - `react-dev-inspector/plugins/umi`
+  - `react-dev-inspector/plugins/ice`
+
+
+## [2.0.0-beta.2](https://github.com/zthxxx/react-dev-inspector/compare/v2.0.0-beta.1...v2.0.0-beta.2) (2023-09-03)
+
+### Features
 
 Inspector Component:
 
@@ -14,14 +28,14 @@ Inspector Component:
 - Make automatically **disable** the `Inspector` component in **production** mode by default.
 - The Umi3/Umi4 plugin no longer adds babel-plugin in **production** mode by default.
 
-### Fix
+### Bug Fixes
 
 - Fix missing cleanup during unmount phase in `useEffect` of `Inspector` component.
 
 
 ## [2.0.0-beta.1](https://github.com/zthxxx/react-dev-inspector/compare/v1.9.0...v2.0.0-beta.1) (2023-07-06)
 
-### Feat
+### Features
 
 - Supports most frameworks without requiring the setting of additional Babel plugins, includes `vite4` `nextjs` `rspack`
 - Add controlled mode for `Inspector` component,
