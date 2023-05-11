@@ -2,7 +2,7 @@
 
 
 
-## WIP [2.0.0-beta.3](https://github.com/zthxxx/react-dev-inspector/compare/v2.0.0-beta.2...v2.0.0-beta.3)
+## [2.0.0-beta.3](https://github.com/zthxxx/react-dev-inspector/compare/v2.0.0-beta.2...v2.0.0-beta.3) (2023-09-03)
 
 ### Chore
 
