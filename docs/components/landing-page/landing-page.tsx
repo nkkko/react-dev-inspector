@@ -2,9 +2,10 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Inspector, gotoServerEditor } from 'react-dev-inspector'
+import { Inspector } from 'react-dev-inspector'
 import inspectPreview from '@images/inspect.gif'
 import workingPipeline from '@images/working-pipeline.svg'
+import { isDev, handleInspectOnline } from '@utils'
 import { Feature, Features } from '@components/features'
 import { StackBlitz } from '@components/stack-blitz'
 import { Marquee } from '@components/marquee'
@@ -17,30 +18,16 @@ import {
   FrameworkLogos,
 } from './items'
 
-const projectRepo = 'https://github.com/zthxxx/react-dev-inspector'
-const isDev = process.env.NODE_ENV === 'development'
-
 export const LandingPage = () => {
   const [active, setActive] = useState(false)
 
   return (
     <div className='home-content'>
       <Inspector
+        disable={false}
         active={active}
         onActiveChange={setActive}
-        onInspectElement={(inspect) => {
-          if (isDev) return gotoServerEditor(inspect.codeInfo)
-
-          const { relativePath, absolutePath, lineNumber } = inspect.codeInfo
-          if (relativePath) {
-            const onlineFilePath = `docs/${relativePath}`
-            window.open(`${projectRepo}/blob/dev/${onlineFilePath}#L${lineNumber}`)
-          }
-          else if (absolutePath) {
-            const onlineFilePath = absolutePath.replace(/^.*?\/docs\//, 'docs/')
-            window.open(`${projectRepo}/blob/dev/${onlineFilePath}#L${lineNumber}`)
-          }
-        }}
+        onInspectElement={handleInspectOnline}
       />
       <div className='content-container'>
         <h1 className='headline'>
@@ -65,12 +52,17 @@ export const LandingPage = () => {
               id='preview-card'
               fulled
               centered
+              href='/showcase'
             >
-              <div className='docs-img-wrapper'>
+              <Link
+                className='docs-img-wrapper'
+                href='/showcase'
+                target='_blank'
+              >
                 {!isDev && (
                   <Image src={inspectPreview} alt='Background' loading='eager' />
                 )}
-              </div>
+              </Link>
             </Feature>
 
             <Feature
@@ -144,6 +136,7 @@ export const LandingPage = () => {
               >
                 <Image
                   className='relative mt-2 sm:mt-4 lg:mt-6'
+                  // https://www.figma.com/file/O5hlFMbYP9rGbFiI2BYjMj/React-Dev-Inspector
                   src={workingPipeline}
                   alt='Working Pipeline'
                   loading='eager'
@@ -157,7 +150,7 @@ export const LandingPage = () => {
                 <S.Steps>
                   <h3>Inject JSX Source</h3>
                   <p>
-                    The compiler's <code>plugin</code> records source info into component's react fiber.
+                    The compiler's <code>plugin</code> records source path info into component's react fiber.
                   </p>
 
                   <h3>The Inspector Component</h3>
@@ -168,7 +161,7 @@ export const LandingPage = () => {
 
                   <h3>Dev Server Middleware</h3>
                   <p>
-                    The dev server middleware receives source path info from API,
+                    The dev server <code>middleware</code> receives source path info from API,
                     then call your local IDE/Editor to open the source file.
                   </p>
                 </S.Steps>

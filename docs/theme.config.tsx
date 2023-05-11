@@ -9,10 +9,7 @@ import { NextraLogo } from '@components/icons'
 
 const nameTitle = (
   <span
-    className='
-      py-2 font-bold text-xl
-      hover:transition-[mask-position] hover:duration-1000 hover:ease
-    '
+    className='py-2 font-bold text-xl hover:transition-[mask-position] hover:duration-1000 hover:ease'
   >
     React Dev Inspector
     <style jsx>

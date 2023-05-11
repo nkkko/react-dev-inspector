@@ -32,6 +32,10 @@ export default defineConfig({
 ```
 
 
+> The plugin includes [`@react-dev-inspector/babel-plugin`](/docs/compiler-plugin#react-dev-inspectorbabel-plugin),
+> which will automatically be disabled when using `srcTranspiler: 'swc'` in umi4 config or when in production build mode.
+
+
 ## Umi3 Setup
 
 Same as setup with Umi4, but change the plugin package to:
@@ -56,6 +60,11 @@ export default defineConfig({
   ],
 })
 ```
+
+
+> This plugin has include a [`@react-dev-inspector/babel-plugin`](/docs/compiler-plugin#react-dev-inspectorbabel-plugin)
+> which will automatically disable when production build mode.
+
 
 ## Example
 

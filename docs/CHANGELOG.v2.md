@@ -32,21 +32,33 @@ Inspector Component:
 
 Migration from v1.x to v2.x:
 
-- `import { launchEditorMiddleware } from 'react-dev-inspector/plugins/webpack'`
+**Replaced Imports:**
+
+- `import { launchEditorMiddleware } from 'react-dev-inspector/plugins/webpack'` <br/>
   -> `import { launchEditorMiddleware } from '@react-dev-inspector/middleware'`
+
+- `import { inspectorServer } from 'react-dev-inspector/plugins/vite'` <br/>
+  -> `import { inspectorServer } from '@react-dev-inspector/vite-plugin'`
+
+**Replaced references path:**
+
 - `'react-dev-inspector/plugins/babel'` -> `'@react-dev-inspector/babel-plugin'`
+
 - `'react-dev-inspector/plugins/umi/react-inspector'`
   - -> `'@react-dev-inspector/umi3-plugin'`
   - -> `'@react-dev-inspector/umi4-plugin'`
-- `'react-dev-inspector/plugins/vite'` -> `'@react-dev-inspector/vite-plugin'`
 
 
-Deprecated and Removed:
+**Deprecated and Removed:**
+
+- the babel plugin and middleware in package `react-dev-inspector/plugins/webpack` was splited to two packages:
+  - `@react-dev-inspector/babel-plugin`
+  - `@react-dev-inspector/middleware`
 
 - `import type { InspectorConfig } from 'react-dev-inspector/plugins/webpack'`
-  - set babel config with `'@react-dev-inspector/babel-plugin'`,
-    and config type is `import type { InspectorBabelPlugin } from '@react-dev-inspector/babel-plugin'`
+  - the babel plugin config type changed to <br/>
+    `import type { InspectorBabelPlugin } from '@react-dev-inspector/babel-plugin'`
 
 - `import { ReactInspectorPlugin } from 'react-dev-inspector/plugins/webpack'`
-  - set webpack dev server with the middleware `launchEditorMiddleware`,
+  - the dev server middleware changed to `launchEditorMiddleware`, <br/>
     `import { launchEditorMiddleware } from '@react-dev-inspector/middleware'`

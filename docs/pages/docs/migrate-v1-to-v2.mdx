@@ -1,0 +1,34 @@
+# Migrate From V1 to V2
+
+### Breaking Changes
+
+**Replaced Imports:**
+
+- `import { launchEditorMiddleware } from 'react-dev-inspector/plugins/webpack'{:ts}` <br/>
+  -> `import { launchEditorMiddleware } from '@react-dev-inspector/middleware'{:ts}`
+
+- `import { inspectorServer } from 'react-dev-inspector/plugins/vite'{:ts}` <br/>
+  -> `import { inspectorServer } from '@react-dev-inspector/vite-plugin'{:ts}`
+
+**Replaced references path:**
+
+- `'react-dev-inspector/plugins/babel'{:ts}` -> `'@react-dev-inspector/babel-plugin'{:ts}`
+
+- `'react-dev-inspector/plugins/umi/react-inspector'{:ts}`
+  - -> `'@react-dev-inspector/umi3-plugin'{:ts}`
+  - -> `'@react-dev-inspector/umi4-plugin'{:ts}`
+
+
+**Deprecated and Removed:**
+
+- the babel plugin and middleware in package `react-dev-inspector/plugins/webpack{:ts}` was splited to two packages:
+  - `@react-dev-inspector/babel-plugin{:ts}`
+  - `@react-dev-inspector/middleware{:ts}`
+
+- `import type { InspectorConfig } from 'react-dev-inspector/plugins/webpack'{:ts}`
+  - the babel plugin config type changed to <br/>
+    `import type { InspectorBabelPlugin } from '@react-dev-inspector/babel-plugin'{:ts}`
+
+- `import { ReactInspectorPlugin } from 'react-dev-inspector/plugins/webpack'{:ts}`
+  - the dev server middleware changed to `launchEditorMiddleware{:ts}`, <br/>
+    `import { launchEditorMiddleware } from '@react-dev-inspector/middleware'{:ts}`

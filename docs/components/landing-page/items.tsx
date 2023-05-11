@@ -77,14 +77,17 @@ export const FrameworkLogos = ({ reversed }: { reversed?: boolean }) => {
     {
       logo: (<Logo.VSCode />),
       name: 'VS Code',
+      link: '/docs/editor-settings#vscode',
     },
     {
       logo: (<Logo.WebStorm />),
       name: 'WebStorm',
+      link: '/docs/editor-settings#webstorm',
     },
     {
       logo: (<Logo.Neovim />),
       name: 'Neovim',
+      link: '/docs/editor-settings#nvim--vim',
     },
     {
       logo: (
@@ -97,6 +100,7 @@ export const FrameworkLogos = ({ reversed }: { reversed?: boolean }) => {
     {
       logo: (<Logo.StackBlitz />),
       name: 'StackBlitz',
+      link: 'https://stackblitz.com/edit/github-x3rkzl?file=package.json,vite.config.ts%3AL17',
     },
     {
       logo: (

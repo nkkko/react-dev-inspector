@@ -1,0 +1,158 @@
+import Image from 'next/image'
+import { Tabs, Callout } from 'nextra/components'
+import { Stepper, Step } from '@components/stepper'
+import compilerPart from '@images/compiler-part.svg'
+
+# Compiler Plugin
+
+<Stepper>
+  <Step index={0} link='/docs/compiler-plugin' active>
+    Optional <br className='block sm:hidden'/> Compiler
+  </Step>
+  <Step index={1} link='/docs/inspector-component'>
+    Inspector <br className='block sm:hidden'/> Component
+  </Step>
+  <Step index={2} link='/docs/integration'>
+    Dev Server <br className='block sm:hidden'/> Middleware
+  </Step>
+</Stepper>
+
+This page serves as **_Part.0_** of configuration guide, which focuses on adding a `plugin` the the compiler within your development framework.
+The `plugin` will record source path information into React components during the development phase.
+
+<Image
+  src={compilerPart}
+  className="mt-2 mx-auto w-full"
+/>
+
+<Callout type="info" emoji="💡">
+  **Note:** The **0** of _Part.0_ implies that this section is generally **OPTIONAL**.
+  Most React frameworks offer this feature **_out-of-the-box_**,
+  which means you usually **don't** need to manually configure it additionally.
+</Callout>
+
+
+The [`<Inspector>`](/docs/inspector-component) Component of `react-dev-inspector` can read the source path from element's custom data attributes `data-inspector-`
+or read from React's `fiber._debugSource`, some compiler with plugins can provide these information.
+
+## Babel
+
+There are two supported Babel plugins avaliable should you need them:
+
+### `@babel/plugin-transform-react-jsx-source`
+
+```bash npm2yarn
+npm i -D @babel/plugin-transform-react-jsx-source
+```
+
+[`@babel/plugin-transform-react-jsx-source`](https://babeljs.io/docs/babel-plugin-transform-react-jsx-source) could inject `__source` props to JSX Elements,
+which will be transform to `fiber._debugSource` by React.
+
+```tsx
+// Input
+<div />
+
+// Output
+<div __source={{ fileName: '/absolute/path/Component.tsx', lineNumber: 10, columnNumber: 6 }} />
+```
+
+<Callout type="info" emoji="💡">
+  **Note:** Most React frameworks used `@babel/plugin-transform-react-jsx-source` plugin as **built-in preset**,
+  includes Vite / Next.js / Remix / Gatsby / Umijs / create-react-app / ...
+</Callout>
+
+
+### `@react-dev-inspector/babel-plugin`
+
+```bash npm2yarn
+npm i -D @react-dev-inspector/babel-plugin
+```
+
+`@react-dev-inspector/babel-plugin` could inject some custom data attributes start with `data-inspector-`,
+which will eventually appear on the DOM element.
+
+
+```tsx
+// Input
+<div />
+
+// Output
+<div data-inspector-relative-path="src/path/Component.tsx" data-inspector-line="10" data-inspector-column="6" />
+```
+
+<Callout type="info" emoji="💡">
+  The difference is that `@react-dev-inspector/babel-plugin` will inject the **relative path** for aesthetic reasons,
+  while the `@babel/plugin-transform-react-jsx-source` injects the **absolute path**.
+</Callout>
+
+### Setup Examples
+
+If you wish to use a Babel plugin, please manually add it to your framework's Babel configuration, here ara some examples:
+
+<Tabs items={['Vite', 'Next.js', 'Umijs']}>
+<Tabs.Tab>
+Follow the docs of [vite plugin-react](https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#babel),
+add plugin to `@vitejs/plugin-react`'s config:
+
+```tsx filename="vite.config.ts" showLineNumbers {13}
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import { inspectorServer } from '@react-dev-inspector/vite-plugin'
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [
+    /** react-dev-inspector server config for vite */
+    inspectorServer(),
+    react({
+      babel: {
+        plugins: [
+          '@react-dev-inspector/babel-plugin',
+        ],
+      },
+    }),
+  ],
+})
+```
+
+> If you are using `@vitejs/plugin-react-swc`, you don't need any plugin.
+
+</Tabs.Tab>
+
+<Tabs.Tab>
+Follow the docs of [Nextjs Babel configuration](https://nextjs.org/docs/pages/building-your-application/configuring/babel),
+add plugin to `.babelrc.js` or `babel.config.js`:
+
+```tsx filename=".babelrc.js" showLineNumbers {8}
+// https://nextjs.org/docs/advanced-features/customizing-babel-config
+module.exports = {
+  presets: [
+    'next/babel',
+  ],
+
+  plugins: [
+    '@react-dev-inspector/babel-plugin',
+  ],
+}
+```
+
+> If you are using swc in Next.js, you don't need any plugin.
+
+</Tabs.Tab>
+
+<Tabs.Tab>
+
+Includes in [`@react-dev-inspector/umi4-plugin`](/docs/integration/umijs#umi4-setup) and [`@react-dev-inspector/umi3-plugin`](/docs/integration/umijs#umi3-setup), see their documentation for details.
+
+> In the those umi plugins, the babel plugin will automatically be disabled when using `srcTranspiler: 'swc'` in umi4 config or when in production build mode.
+
+</Tabs.Tab>
+</Tabs>
+
+## SWC
+
+No additional plugins are required when using [`SWC`](https://swc.rs).
+
+## esbuild
+
+No additional plugins are required when using [`esbuild`](https://esbuild.github.io).

@@ -78,15 +78,15 @@ Basically, it's includes:
 1. [add the `<Inspector/>` component in your page](/docs/inspector-component)
 2. [integrate the middleware in your framework's dev-server](/docs/integration)
 
-Check their documentions link for details.
+Check their documentation link for details.
 
 
 ## How It Works
 
-Here shows the working pipeline of react-dev-inspector:
+Here is the working pipeline of `react-dev-inspector`:
 
 <Image
-  className='relative my-2 sm:my-4 lg:my-6 bg-white rounded-lg shadow-xl'
+  className='relative my-2 sm:my-4 lg:my-6 bg-white/90 rounded-lg shadow-xl'
   src={workingPipeline}
   alt='Working Pipeline'
   loading='eager'
@@ -100,7 +100,7 @@ Here shows the working pipeline of react-dev-inspector:
 >
 ### Inject JSX Source
 
-The compiler's `plugin` records source info into React components during development stage.
+The compiler's [`plugin`](/docs/compiler-plugin) records source path info into React components during development stage.
 
 <Callout type="info" emoji="💡">
   **Note:** Most frameworks offer this feature **_out-of-the-box_**,

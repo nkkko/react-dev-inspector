@@ -38,15 +38,6 @@ export interface CodeDataAttribute {
 }
 
 /**
- * `v2.0.0` changes:
- *   - make 'Ctrl + Shift + Alt + C' as default shortcut on Windows/Linux
- *   - export `defaultHotkeys`
- */
-export const defaultHotkeys = () => navigator.platform?.startsWith('Mac')
-  ? ['Ctrl', 'Shift', 'Command', 'C']
-  : ['Ctrl', 'Shift', 'Alt', 'C']
-
-/**
  * react fiber property `_debugSource` created by `@babel/plugin-transform-react-jsx-source`
  *     https://github.com/babel/babel/blob/v7.16.4/packages/babel-plugin-transform-react-jsx-source/src/index.js
  *

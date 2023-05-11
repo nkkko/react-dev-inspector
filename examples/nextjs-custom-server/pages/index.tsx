@@ -1,8 +1,8 @@
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
 
-const HomePage = dynamic(
-  () => import('../components/HomePage').then(({ HomePage }) => HomePage),
+const ShowPage = dynamic(
+  () => import('../components/ShowPage').then(({ ShowPage }) => ShowPage),
   { ssr: false },
 )
 
@@ -21,10 +21,7 @@ export default function Layout() {
         <title>React Dev Inspector | vite4 demo</title>
       </Head>
 
-      <HomePage
-        name={'nextjs-custom-server'}
-        titleBadge={'Next.js 13'}
-      />
+      <ShowPage />
     </>
   )
 }

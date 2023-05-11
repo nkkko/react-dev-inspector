@@ -1,7 +1,7 @@
 {
   "index": {
     "type": "page",
-    "title": "Nextra",
+    "title": "React Dev Inspector",
     "display": "hidden",
     "theme": {
       "layout": "raw"
@@ -12,10 +12,11 @@
     "title": "Documentation"
   },
 
-  "Showcase": {
+
+  "showcase": {
     "type": "page",
     "title": "Showcase",
-    "href": "https://react-dev-inspector.zthxxx.me/showcase",
+    "href": "/showcase",
     "newWindow": true
   },
 

@@ -1,5 +1,9 @@
 # react-dev-inspector website demo for [rspack](https://www.rspack.dev/guide/introduction.html)
 
-preview: https://react-dev-inspector.zthxxx.me/rspack
+Docs see: https://react-dev-inspector.zthxxx.me/docs
 
-custom config see [./rspack.config.ts](https://github.com/zthxxx/react-dev-inspector/blob/master/examples/rspack/rspack.config.ts)
+Custom config see [./rspack.config.ts](https://github.com/zthxxx/react-dev-inspector/blob/master/examples/rspack/rspack.config.ts)
+
+[
+  ![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)
+](https://stackblitz.com/github/zthxxx/react-dev-inspector/tree/dev/examples/rspack)

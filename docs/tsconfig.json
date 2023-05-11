@@ -26,7 +26,7 @@
     "**/*.ts",
     "**/*.tsx",
     "**/*.mdx",
-    ".postcss.config.ts",
+    ".postcss.config.ts", "pages/showcase.msx",
   ],
   // https://www.typescriptlang.org/docs/handbook/project-references.html
   "references": [

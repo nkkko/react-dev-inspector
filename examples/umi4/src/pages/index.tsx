@@ -1,9 +1,6 @@
-import { HomePage } from '../HomePage'
+import { ShowPage } from '../ShowPage'
 import './index.css'
 
 export default () => (
-  <HomePage
-    name={'umi4'}
-    titleBadge={'Umi 4'}
-  />
+  <ShowPage />
 )

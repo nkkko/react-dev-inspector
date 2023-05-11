@@ -22,6 +22,10 @@ a > img {
   display: inline-block;
 }
 
+ul li ul.nx-mt-6 {
+  margin-top: 0.5rem;
+}
+
 [tabindex]:not([tabindex="-1"]):focus-visible {
   box-shadow: none;
   outline: none;

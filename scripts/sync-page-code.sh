@@ -20,7 +20,7 @@ declare -a synced_dirs=(
 )
 
 for target_dir in "${synced_dirs[@]}"; do
-  rm -rf "${target_dir}/HomePage"
+  rm -rf "${target_dir}/ShowPage"
 
-  cp -R "${source_code_path}/HomePage" "$target_dir/"
+  cp -R "${source_code_path}/ShowPage" "$target_dir/"
 done

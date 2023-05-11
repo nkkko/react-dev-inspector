@@ -42,7 +42,7 @@ export const Step = ({
 }) => (
   <S.StepItem
     data-active={active || null}
-    href={link}
+    href={!active ? link : undefined}
   >
     <span
       className='flex justify-start items-center'

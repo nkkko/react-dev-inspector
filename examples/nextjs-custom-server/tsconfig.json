@@ -15,10 +15,12 @@
     "**/*.ts",
     "**/*.tsx",
   ],
+
   // https://www.typescriptlang.org/docs/handbook/project-references.html
-  "references": [
-    { "path": "../../packages/babel-plugin" },
-    { "path": "../../packages/middleware" },
-    { "path": "../../packages/inspector" },
-  ],
+  // need disable `references` for demo in StackBlitz
+  // "references": [
+  //   { "path": "../../packages/babel-plugin" },
+  //   { "path": "../../packages/middleware" },
+  //   { "path": "../../packages/inspector" },
+  // ],
 }

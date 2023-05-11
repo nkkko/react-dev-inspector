@@ -16,7 +16,7 @@
   "scripts": {
     "clean": "rimraf .next dist",
     "dev": "npm run clean && node server.mjs",
-    "build": "next build && next export -o dist"
+    "build": "npm run clean && next build && next export -o dist"
   },
   "dependencies": {
     "clsx": "1.2.1",
@@ -26,7 +26,8 @@
     "nextra": "2.12.3",
     "nextra-theme-docs": "2.12.3",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-github-corner": "2.5.0"
   },
   "devDependencies": {
     "@react-dev-inspector/babel-plugin": "workspace:*",

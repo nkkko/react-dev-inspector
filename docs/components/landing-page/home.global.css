@@ -67,6 +67,7 @@
     background-color: #fefcfe;
 
     .docs-img-wrapper {
+      display: flex;
       position: relative;
       aspect-ratio: 125/70;
       box-sizing: content-box;
@@ -128,7 +129,7 @@
     #preview-card {
       padding: 0;
       .docs-img-wrapper {
-        width: 100%;
+        width: 96%;
       }
     }
   }

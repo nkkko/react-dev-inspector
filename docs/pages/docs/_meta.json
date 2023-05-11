@@ -28,7 +28,7 @@
     "type": "separator",
     "title": "Migration"
   },
-  "MigrateV1-V2": "Migrate From V1",
+  "migrate-v1-to-v2": "Migrate From V1",
 
   "-- More": {
     "type": "separator",

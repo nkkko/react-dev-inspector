@@ -10,7 +10,7 @@
       "node",
     ],
 
-    // Duplicated, for stackblitz
+    // Duplicated, only for stackblitz
     "jsx": "react-jsx",
   },
   "include": [
@@ -19,10 +19,10 @@
   ],
 
   // https://www.typescriptlang.org/docs/handbook/project-references.html
-  // need disable `references` for demo in stackblitz
-  "references": [
-    { "path": "../../packages/vite-plugin" },
-    { "path": "../../packages/babel-plugin" },
-    { "path": "../../packages/inspector" },
-  ],
+  // need disable `references` for demo in StackBlitz
+  // "references": [
+  //   { "path": "../../packages/vite-plugin" },
+  //   { "path": "../../packages/babel-plugin" },
+  //   { "path": "../../packages/inspector" },
+  // ],
 }

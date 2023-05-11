@@ -1,24 +1,22 @@
 import { useState } from 'react'
-import { Inspector, defaultHotkeys } from 'react-dev-inspector'
+import {
+  Inspector,
+  defaultHotkeys,
+} from 'react-dev-inspector'
+import { projectRepo, handleInspectOnline } from '@utils'
 import { ChecksPattern } from './components/Pattern'
 
 import * as S from './styles'
 
-
-const projectRepo = 'https://github.com/zthxxx/react-dev-inspector'
-
-
-export const HomePage = ({ name, titleBadge }: {
-  /** example name, as same as package dirname */
-  name: string;
-  titleBadge?: string;
-}) => {
+export const ShowPage = () => {
   const [active, setActive] = useState(false)
 
   return (
     <Inspector
+      disable={false}
       active={active}
       onActiveChange={setActive}
+      onInspectElement={handleInspectOnline}
     >
       <S.Base>
         <S.GithubCorner
@@ -50,7 +48,7 @@ export const HomePage = ({ name, titleBadge }: {
             <S.Pill>
               {`Read more in `}
               <a
-                href='https://react-dev-inspector.zthxxx.me'
+                href='/docs'
                 className='font-semibold text-blue-600'
               >
                 Documentation →

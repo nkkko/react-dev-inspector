@@ -4,6 +4,9 @@
     "rootDir": "src",
     "baseUrl": ".",
 
+    // Duplicated, only for stackblitz
+    "jsx": "react-jsx",
+
     "paths": {
       "@/*": [
         "src/*"
@@ -20,9 +23,11 @@
     "src",
     ".umirc.ts",
   ],
+
   // https://www.typescriptlang.org/docs/handbook/project-references.html
-  "references": [
-    { "path": "../../packages/inspector" },
-    { "path": "../../packages/umi4-plugin" },
-  ],
+  // need disable `references` for demo in StackBlitz
+  // "references": [
+  //   { "path": "../../packages/inspector" },
+  //   { "path": "../../packages/umi4-plugin" },
+  // ],
 }

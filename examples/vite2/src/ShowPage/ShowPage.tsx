@@ -8,11 +8,7 @@ import * as S from './styles'
 const projectRepo = 'https://github.com/zthxxx/react-dev-inspector'
 
 
-export const HomePage = ({ name, titleBadge }: {
-  /** example name, as same as package dirname */
-  name: string;
-  titleBadge?: string;
-}) => {
+export const ShowPage = () => {
   const [active, setActive] = useState(false)
 
   return (
@@ -50,7 +46,7 @@ export const HomePage = ({ name, titleBadge }: {
             <S.Pill>
               {`Read more in `}
               <a
-                href='https://react-dev-inspector.zthxxx.me'
+                href='https://react-dev-inspector.zthxxx.me/docs'
                 className='font-semibold text-blue-600'
               >
                 Documentation →

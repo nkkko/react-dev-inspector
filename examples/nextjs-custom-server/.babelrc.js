@@ -1,7 +1,7 @@
 
 const isProd = process.env.NODE_ENV === 'production'
 
-// https://nextjs.org/docs/advanced-features/customizing-babel-config
+// https://nextjs.org/docs/pages/building-your-application/configuring/babel
 module.exports = {
   presets: [
     'next/babel',

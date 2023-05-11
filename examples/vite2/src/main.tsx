@@ -1,14 +1,11 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
-import { HomePage } from './HomePage'
+import { ShowPage } from './ShowPage'
 import './index.css'
 
 createRoot(document.getElementById('root') as HTMLDivElement)
   .render(
     <React.StrictMode>
-      <HomePage
-        name={'vite2'}
-        titleBadge={'Vite 2'}
-      />
+      <ShowPage />
     </React.StrictMode>,
   )
