@@ -47,7 +47,7 @@ const config: DocsThemeConfig = {
   project: {
     link: 'https://github.com/zthxxx/react-dev-inspector',
   },
-  docsRepositoryBase: 'https://github.com/zthxxx/react-dev-inspector/tree/main/docs',
+  docsRepositoryBase: 'https://github.com/zthxxx/react-dev-inspector/tree/dev/docs',
   useNextSeoProps() {
     const { asPath } = useRouter()
     if (asPath !== '/') {
@@ -72,7 +72,7 @@ const config: DocsThemeConfig = {
         />
         <meta
           name='description'
-          content='Make beautiful websites with Next.js & MDX.'
+          content='Seamless browser-to-editor code navigation'
         />
         <link rel='icon' href='/favicon.svg' type='image/svg+xml' />
         <link
