@@ -17,7 +17,7 @@ npm i -D @react-dev-inspector/middleware
 This package provides a **`launchEditorMiddleware`**,
 just add it in your `rscpack.config.ts` by [`devServer.setupMiddlewares`](https://www.rspack.dev/config/dev-server.html#devserversetupmiddlewares):
 
-> Note: make `launchEditorMiddleware` as far forward as possible before other middlewares.
+> Note: Place `launchEditorMiddleware` as far forward in the middleware sequence as possible, before other middlewares.
 
 ```ts filename="rspack.config.ts" showLineNumbers {2,15}
 import type { Configuration } from '@rspack/cli'
@@ -46,10 +46,15 @@ export default config
 
 ## Example
 
-Example project code you can find in [examples/rspack](https://github.com/zthxxx/react-dev-inspector/blob/dev/examples/rspack/rspack.config.ts),
-or see online demo via:
+Example project code you can find in [examples/rspack](https://github.com/zthxxx/react-dev-inspector/blob/dev/examples/rspack/rspack.config.ts).
 
-[
-  ![Open in StackBlitz](@components/stack-blitz/open-in-stackblitz.svg)
-](https://stackblitz.com/github/zthxxx/react-dev-inspector/tree/dev/examples/rspack)
+{
+/**
+ * Rspack(0.3) not available in StackBlitz WebContainers
+ *
+ * [
+ *   ![Open in StackBlitz](@components/stack-blitz/open-in-stackblitz.svg)
+ * ](https://stackblitz.com/github/zthxxx/react-dev-inspector/tree/dev/examples/rspack)
+ */
+}
 

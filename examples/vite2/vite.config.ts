@@ -4,7 +4,6 @@ import { inspectorServer } from '@react-dev-inspector/vite-plugin'
 import tailwindcss from 'tailwindcss'
 import autoprefixer from 'autoprefixer'
 
-const isProd = process.env.NODE_ENV === 'production'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -41,7 +40,7 @@ export default defineConfig({
            *       only use for online demo site,
            *       you can remove it from your local development config.
            */
-          ...(isProd ? ['@react-dev-inspector/babel-plugin'] : []),
+          '@react-dev-inspector/babel-plugin',
         ],
       },
     }),

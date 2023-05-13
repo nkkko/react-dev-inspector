@@ -4,6 +4,9 @@
     "rootDir": "src",
     "baseUrl": ".",
 
+    // Duplicated, only for stackblitz
+    "jsx": "react-jsx",
+
     "paths": {
       "@/*": [
         "src/*"

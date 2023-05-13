@@ -37,7 +37,7 @@ or read from React's `fiber._debugSource`, some compiler with plugins can provid
 
 ## Babel
 
-There are two supported Babel plugins avaliable should you need them:
+There are two supported Babel plugins available should you need them:
 
 ### `@babel/plugin-transform-react-jsx-source`
 
@@ -151,7 +151,9 @@ Includes in [`@react-dev-inspector/umi4-plugin`](/docs/integration/umijs#umi4-se
 
 ## SWC
 
-No additional plugins are required when using [`SWC`](https://swc.rs).
+No additional plugins are required when using [`SWC`](https://swc.rs), since `SWC` handles this feature itself
+through the [`jsc.transform.react.development`](https://swc.rs/docs/configuration/compilation#jsctransformreactdevelopment) configuration,
+which is usually set automatically in most frameworks.
 
 ## esbuild
 

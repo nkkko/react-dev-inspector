@@ -17,7 +17,7 @@ npm i -D @react-dev-inspector/middleware
 This package provides a **`launchEditorMiddleware`**,
 just add it in your webpack config's middlewares.
 
-> Note: make `launchEditorMiddleware` as far forward as possible before other middlewares.
+> Note: Place `launchEditorMiddleware` as far forward in the middleware sequence as possible, before other middlewares.
 
 For example, use with [`setupMiddlewares`](https://webpack.js.org/configuration/dev-server/#devserversetupmiddlewares) in **Webpack 5** likes:
 

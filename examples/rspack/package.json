@@ -28,7 +28,7 @@
     "@babel/preset-typescript": "7.22.5",
     "@react-dev-inspector/babel-plugin": "beta",
     "@react-dev-inspector/middleware": "beta",
-    "@rspack/cli": "0.2.5",
+    "@rspack/cli": "0.3.1",
     "@types/node": "16.18.7",
     "@types/react": "18.0.26",
     "@types/react-dom": "18.0.9",
