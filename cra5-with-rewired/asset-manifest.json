@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/cra5-with-rewired/static/js/main.d4bef5b5.js",
+    "index.html": "/cra5-with-rewired/index.html",
+    "main.d4bef5b5.js.map": "/cra5-with-rewired/static/js/main.d4bef5b5.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.d4bef5b5.js"
+  ]
+}
