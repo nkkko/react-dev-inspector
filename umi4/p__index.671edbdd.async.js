@@ -885,7 +885,7 @@ var emotion_styled_browser_esm = __webpack_require__(6555);
 
 var _templateObject;
 
-var TitleName = emotion_styled_browser_esm/* default.h1 */.Z.h1(_templateObject || (_templateObject = taggedTemplateLiteral_default()(["\n  font-size: 4rem;\n  padding: 0 3rem;\n"])));
+var TitleName = emotion_styled_browser_esm/* default.h1 */.Z.h1(_templateObject || (_templateObject = taggedTemplateLiteral_default()(["\n  padding: 0 2rem;\n\n  span {\n    display: inline-flex;\n    font-size: 3.125rem;\n    font-size: min(4.375rem, max(8vw, 3rem));\n    font-weight: 700;\n    font-feature-settings: initial;\n    letter-spacing: -.12rem;\n    white-space: nowrap;\n    margin-right: 1rem;\n    line-height: 1.1;\n    background-image: linear-gradient(146deg, #000, #757a7d);\n    background-clip: text;\n  }\n"])));
 ;// CONCATENATED MODULE: ./src/HomePage/components/Title/Title.tsx
 
 
@@ -904,7 +904,7 @@ var Title = function Title(props) {
 
 var styles_templateObject;
 
-var Description = emotion_styled_browser_esm/* default.div */.Z.div(styles_templateObject || (styles_templateObject = taggedTemplateLiteral_default()(["\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  margin: 0 auto;\n  padding: 2rem;\n  font-size: 1.5rem;\n  color: #999;\n  \n  p {\n    margin: 0.5rem auto;\n  }\n"])));
+var Description = emotion_styled_browser_esm/* default.div */.Z.div(styles_templateObject || (styles_templateObject = taggedTemplateLiteral_default()(["\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  margin: 0 auto;\n  padding-block: 4rem 2rem;\n  padding-inline: 2rem;\n  font-size: 1.5rem;\n  color: #777;\n\n  p {\n    margin: 0.5rem auto;\n  }\n\n  small {\n    color: #999;\n  }\n"])));
 ;// CONCATENATED MODULE: ./src/HomePage/components/Slogan/Slogan.tsx
 
 
@@ -942,9 +942,9 @@ var Keypress_styles_templateObject, _templateObject2, _templateObject3;
 /**
  * https://github.com/sindresorhus/github-markdown-css/blob/gh-pages/github-markdown.css#L183
  */
-var keyTone = (0,emotion_css_esm/* css */.iv)(Keypress_styles_templateObject || (Keypress_styles_templateObject = taggedTemplateLiteral_default()(["\n  display: inline-block;\n  padding: 0.5rem 0.8rem;\n  font: 12px SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;\n  font-size: 1.2rem;\n  font-weight: 600;\n  height: 1.2rem;\n  line-height: 1.2rem;\n  color: #444d56;\n  vertical-align: middle;\n  background-color: #fafbfc;\n  border: 1px solid #d1d5da;\n  border-radius: 0.4rem;\n  box-shadow: inset 0 -1px 0 #d1d5da;\n"])));
-var Keys = emotion_styled_browser_esm/* default.div */.Z.div(_templateObject2 || (_templateObject2 = taggedTemplateLiteral_default()(["\n  display: inline-block;\n  padding: 0 0.5rem;\n  opacity:1;\n  animation: flickerAnimation 2s ease-in-out infinite;\n\n  & > .", " {\n    margin: auto 0.8rem;\n  }\n\n  @keyframes flickerAnimation {\n    0%   { opacity: 1; }\n    50%  { opacity: .6; }\n    100% { opacity: 1; }\n  }\n"])), keyTone);
-var Pad = emotion_styled_browser_esm/* default.div */.Z.div(_templateObject3 || (_templateObject3 = taggedTemplateLiteral_default()(["\n  vertical-align: center;\n  margin: 0 auto;\n  padding: 2rem;\n  font-size: 1.5rem;\n  color: #666;\n"])));
+var keyTone = (0,emotion_css_esm/* css */.iv)(Keypress_styles_templateObject || (Keypress_styles_templateObject = taggedTemplateLiteral_default()(["\n  display: inline-block;\n  padding: 0.5rem 0.8rem;\n  font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;\n  font-weight: 600;\n  height: 1.2rem;\n  line-height: 1.2rem;\n  color: #444d56;\n  vertical-align: middle;\n  background-color: #fafbfc;\n  border: 1px solid #d1d5da;\n  border-radius: 0.4rem;\n  box-shadow: inset 0 -1px 0 #d1d5da;\n"])));
+var Keys = emotion_styled_browser_esm/* default.div */.Z.div(_templateObject2 || (_templateObject2 = taggedTemplateLiteral_default()(["\n  display: inline-block;\n  padding-right: 1.2rem;\n  opacity: 1;\n  white-space: nowrap;\n  animation: flickerAnimation 2s ease-in-out infinite;\n\n  font-size: min(1.2rem, max(3vw, 0.8rem));\n\n  & > .", " {\n    margin: auto 0.8rem;\n\n    &:first-of-type {\n      margin-left: 0;\n    }\n    &:last-of-type {\n      margin-right: 0;\n    }\n  }\n\n  @keyframes flickerAnimation {\n    0%   { opacity: 1; }\n    50%  { opacity: .6; }\n    100% { opacity: 1; }\n  }\n"])), keyTone);
+var Pad = emotion_styled_browser_esm/* default.div */.Z.div(_templateObject3 || (_templateObject3 = taggedTemplateLiteral_default()(["\n  vertical-align: center;\n  margin: 0 auto;\n  padding: 2rem;\n  font-size: 1.5rem;\n  color: #666;\n\n  & > span:first-of-type {\n    padding-right: 1.2rem;\n  }\n\n  @media screen and (max-width: 640px) {\n    & > span {\n      display: none;\n    }\n  }\n"])));
 ;// CONCATENATED MODULE: ./src/HomePage/components/Keypress/Keypress.tsx
 
 
@@ -1006,7 +1006,7 @@ var KeyPad = /*#__PURE__*/function (_Component) {
 
 var Badge_styles_templateObject;
 
-var Badge = emotion_styled_browser_esm/* default.div */.Z.div(Badge_styles_templateObject || (Badge_styles_templateObject = taggedTemplateLiteral_default()(["\n  display: inline-block;\n  margin-left: 1rem;\n  border: 1px solid transparent;\n  border-radius: 2rem;\n  padding: .2rem 1rem;\n  line-height: 1;\n  font-size: 1.5rem;\n  font-weight: 600;\n  /* transform: translateY(-0.4rem); */\n\n  border-color: #059669;\n  color: #10b981;\n  background-color: #10b9810d;\n"])));
+var Badge = emotion_styled_browser_esm/* default.div */.Z.div(Badge_styles_templateObject || (Badge_styles_templateObject = taggedTemplateLiteral_default()(["\n  display: inline-block;\n  border: 1px solid transparent;\n  border-radius: 2rem;\n  padding: .2rem 1rem;\n  line-height: 1;\n  font-size: min(1.5rem, max(3vw, 1.2rem));\n  font-weight: 600;\n\n  border-color: #059669;\n  color: #10b981;\n  background-color: #10b9810d;\n"])));
 ;// CONCATENATED MODULE: ./src/HomePage/components/Badge/Badge.tsx
 
 
@@ -1105,39 +1105,39 @@ var HomePage = function HomePage(_ref) {
           "data-inspector-line": "51",
           "data-inspector-column": "10",
           "data-inspector-relative-path": "src/HomePage/index.tsx",
-          children: "Quick jump to local IDE source code directly from browser React component by just a simple click!"
-        }), /*#__PURE__*/(0,jsx_runtime.jsx)("p", {
-          "data-inspector-line": "52",
-          "data-inspector-column": "10",
+          children: "Click on a React Component, take you to the source code in local IDE!"
+        }), isDev ? null : /*#__PURE__*/(0,jsx_runtime.jsx)("p", {
+          "data-inspector-line": "55",
+          "data-inspector-column": "17",
           "data-inspector-relative-path": "src/HomePage/index.tsx",
           children: /*#__PURE__*/(0,jsx_runtime.jsx)("small", {
-            "data-inspector-line": "52",
-            "data-inspector-column": "13",
+            "data-inspector-line": "55",
+            "data-inspector-column": "20",
             "data-inspector-relative-path": "src/HomePage/index.tsx",
-            children: "( for this prod online demo page, jump to GitHub file )"
+            children: "( for this online demo page, jump to GitHub file )"
           })
         })]
       }), /*#__PURE__*/(0,jsx_runtime.jsxs)(KeyPad, {
-        "data-inspector-line": "55",
+        "data-inspector-line": "59",
         "data-inspector-column": "8",
         "data-inspector-relative-path": "src/HomePage/index.tsx",
         children: [/*#__PURE__*/(0,jsx_runtime.jsx)(Keypress, {
-          "data-inspector-line": "56",
+          "data-inspector-line": "60",
           "data-inspector-column": "10",
           "data-inspector-relative-path": "src/HomePage/index.tsx",
           children: "Ctrl \u2303"
         }), "+", /*#__PURE__*/(0,jsx_runtime.jsx)(Keypress, {
-          "data-inspector-line": "58",
+          "data-inspector-line": "62",
           "data-inspector-column": "10",
           "data-inspector-relative-path": "src/HomePage/index.tsx",
           children: "Shift \u21E7"
         }), "+", /*#__PURE__*/(0,jsx_runtime.jsx)(Keypress, {
-          "data-inspector-line": "60",
+          "data-inspector-line": "64",
           "data-inspector-column": "10",
           "data-inspector-relative-path": "src/HomePage/index.tsx",
           children: "Command \u2318"
         }), "+", /*#__PURE__*/(0,jsx_runtime.jsx)(Keypress, {
-          "data-inspector-line": "62",
+          "data-inspector-line": "66",
           "data-inspector-column": "10",
           "data-inspector-relative-path": "src/HomePage/index.tsx",
           children: "C"

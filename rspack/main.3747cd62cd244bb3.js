@@ -11874,49 +11874,49 @@ const isDev = false;
                                 "data-inspector-line": "51",
                                 "data-inspector-column": "10",
                                 "data-inspector-relative-path": "src/HomePage/index.tsx",
-                                children: "Quick jump to local IDE source code directly from browser React component by just a simple click!"
+                                children: "Click on a React Component, take you to the source code in local IDE!"
                             }),
-                            (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0_["jsx"])("p", {
-                                "data-inspector-line": "52",
-                                "data-inspector-column": "10",
+                            isDev ? null : (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0_["jsx"])("p", {
+                                "data-inspector-line": "55",
+                                "data-inspector-column": "17",
                                 "data-inspector-relative-path": "src/HomePage/index.tsx",
                                 children: (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0_["jsx"])("small", {
-                                    "data-inspector-line": "52",
-                                    "data-inspector-column": "13",
+                                    "data-inspector-line": "55",
+                                    "data-inspector-column": "20",
                                     "data-inspector-relative-path": "src/HomePage/index.tsx",
-                                    children: "( for this prod online demo page, jump to GitHub file )"
+                                    children: "( for this online demo page, jump to GitHub file )"
                                 })
                             })
                         ]
                     }),
                     (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0_["jsxs"])(_components_Keypress__WEBPACK_IMPORTED_MODULE_5_["KeyPad"], {
-                        "data-inspector-line": "55",
+                        "data-inspector-line": "59",
                         "data-inspector-column": "8",
                         "data-inspector-relative-path": "src/HomePage/index.tsx",
                         children: [
                             (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0_["jsx"])(_components_Keypress__WEBPACK_IMPORTED_MODULE_5_["Keypress"], {
-                                "data-inspector-line": "56",
+                                "data-inspector-line": "60",
                                 "data-inspector-column": "10",
                                 "data-inspector-relative-path": "src/HomePage/index.tsx",
                                 children: "Ctrl ⌃"
                             }),
                             "+",
                             (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0_["jsx"])(_components_Keypress__WEBPACK_IMPORTED_MODULE_5_["Keypress"], {
-                                "data-inspector-line": "58",
+                                "data-inspector-line": "62",
                                 "data-inspector-column": "10",
                                 "data-inspector-relative-path": "src/HomePage/index.tsx",
                                 children: "Shift ⇧"
                             }),
                             "+",
                             (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0_["jsx"])(_components_Keypress__WEBPACK_IMPORTED_MODULE_5_["Keypress"], {
-                                "data-inspector-line": "60",
+                                "data-inspector-line": "64",
                                 "data-inspector-column": "10",
                                 "data-inspector-relative-path": "src/HomePage/index.tsx",
                                 children: "Command ⌘"
                             }),
                             "+",
                             (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0_["jsx"])(_components_Keypress__WEBPACK_IMPORTED_MODULE_5_["Keypress"], {
-                                "data-inspector-line": "62",
+                                "data-inspector-line": "66",
                                 "data-inspector-column": "10",
                                 "data-inspector-relative-path": "src/HomePage/index.tsx",
                                 children: "C"
@@ -11970,9 +11970,9 @@ __webpack_require__.d(__webpack_exports__, {'Badge': function() { return Badge; 
 /* harmony import */var _emotion_styled__WEBPACK_IMPORTED_MODULE_0_ = __webpack_require__(/* @emotion/styled */"8029");
 
  const Badge = (0, _emotion_styled__WEBPACK_IMPORTED_MODULE_0_["default"])("div", {
-    target: "edp7g180",
+    target: "esrdoin0",
     label: "Badge"
-})("display:inline-block;margin-left:1rem;border:1px solid transparent;border-radius:2rem;padding:.2rem 1rem;line-height:1;font-size:1.5rem;font-weight:600;/* transform:translateY(-0.4rem);*/\n\n  border-color:#059669;color:#10b981;background-color:#10b9810d;");
+})("display:inline-block;border:1px solid transparent;border-radius:2rem;padding:.2rem 1rem;line-height:1;font-size:min(1.5rem,max(3vw,1.2rem));font-weight:600;border-color:#059669;color:#10b981;background-color:#10b9810d;");
 },
 "6316": function (module, __webpack_exports__, __webpack_require__) {
 'use strict';
@@ -11991,15 +11991,15 @@ __webpack_require__.d(__webpack_exports__, {'keyTone': function() { return keyTo
 
 /**
  * https://github.com/sindresorhus/github-markdown-css/blob/gh-pages/github-markdown.css#L183
- */  const keyTone = (0, _emotion_css__WEBPACK_IMPORTED_MODULE_1_["css"])("display:inline-block;padding:0.5rem 0.8rem;font:12px SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;font-size:1.2rem;font-weight:600;height:1.2rem;line-height:1.2rem;color:#444d56;vertical-align:middle;background-color:#fafbfc;border:1px solid #d1d5da;border-radius:0.4rem;box-shadow:inset 0 -1px 0 #d1d5da;", "keyTone");
+ */  const keyTone = (0, _emotion_css__WEBPACK_IMPORTED_MODULE_1_["css"])("display:inline-block;padding:0.5rem 0.8rem;font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;font-weight:600;height:1.2rem;line-height:1.2rem;color:#444d56;vertical-align:middle;background-color:#fafbfc;border:1px solid #d1d5da;border-radius:0.4rem;box-shadow:inset 0 -1px 0 #d1d5da;", "keyTone");
  const Keys = (0, _emotion_styled__WEBPACK_IMPORTED_MODULE_0_["default"])("div", {
-    target: "eth505r0",
+    target: "edswk5h0",
     label: "Keys"
-})("display:inline-block;padding:0 0.5rem;opacity:1;animation:flickerAnimation 2s ease-in-out infinite;& > .", keyTone, "{margin:auto 0.8rem;}@keyframes flickerAnimation{0%{opacity:1;}50%{opacity:.6;}100%{opacity:1;}}");
+})("display:inline-block;padding-right:1.2rem;opacity:1;white-space:nowrap;animation:flickerAnimation 2s ease-in-out infinite;font-size:min(1.2rem,max(3vw,0.8rem));& > .", keyTone, "{margin:auto 0.8rem;&:first-of-type{margin-left:0;}&:last-of-type{margin-right:0;}}@keyframes flickerAnimation{0%{opacity:1;}50%{opacity:.6;}100%{opacity:1;}}");
  const Pad = (0, _emotion_styled__WEBPACK_IMPORTED_MODULE_0_["default"])("div", {
-    target: "eth505r1",
+    target: "edswk5h1",
     label: "Pad"
-})("vertical-align:center;margin:0 auto;padding:2rem;font-size:1.5rem;color:#666;");
+})("vertical-align:center;margin:0 auto;padding:2rem;font-size:1.5rem;color:#666;& > span:first-of-type{padding-right:1.2rem;}@media screen and (max-width:640px){& > span{display:none;}}");
 },
 "9914": function (module, __webpack_exports__, __webpack_require__) {
 'use strict';
@@ -12015,9 +12015,9 @@ __webpack_require__.d(__webpack_exports__, {'Description': function() { return D
 /* harmony import */var _emotion_styled__WEBPACK_IMPORTED_MODULE_0_ = __webpack_require__(/* @emotion/styled */"8029");
 
  const Description = (0, _emotion_styled__WEBPACK_IMPORTED_MODULE_0_["default"])("div", {
-    target: "evgwtms0",
+    target: "en40dzk0",
     label: "Description"
-})("display:flex;flex-direction:column;justify-content:center;align-items:center;margin:0 auto;padding:2rem;font-size:1.5rem;color:#999;p{margin:0.5rem auto;}");
+})("display:flex;flex-direction:column;justify-content:center;align-items:center;margin:0 auto;padding-block:4rem 2rem;padding-inline:2rem;font-size:1.5rem;color:#777;p{margin:0.5rem auto;}small{color:#999;}");
 },
 "1924": function (module, __webpack_exports__, __webpack_require__) {
 'use strict';
@@ -12033,9 +12033,9 @@ __webpack_require__.d(__webpack_exports__, {'TitleName': function() { return Tit
 /* harmony import */var _emotion_styled__WEBPACK_IMPORTED_MODULE_0_ = __webpack_require__(/* @emotion/styled */"8029");
 
  const TitleName = (0, _emotion_styled__WEBPACK_IMPORTED_MODULE_0_["default"])("h1", {
-    target: "es552ef0",
+    target: "ed4uia30",
     label: "TitleName"
-})("font-size:4rem;padding:0 3rem;");
+})("padding:0 2rem;span{display:inline-flex;font-size:3.125rem;font-size:min(4.375rem,max(8vw,3rem));font-weight:700;font-feature-settings:initial;letter-spacing:-.12rem;white-space:nowrap;margin-right:1rem;line-height:1.1;background-image:linear-gradient(146deg,#000,#757a7d);background-clip:text;}");
 },
 "6381": function (module, __webpack_exports__, __webpack_require__) {
 'use strict';

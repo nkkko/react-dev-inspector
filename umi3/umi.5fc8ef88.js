@@ -13208,8 +13208,8 @@ var TitleName = /*#__PURE__*/emotion_styled_base_browser_esm("h1", {
   target: "ezkp4ib0",
   label: "TitleName"
 })( true ? {
-  name: "1trfe00",
-  styles: "font-size:4rem;padding:0 3rem"
+  name: "rh65zo",
+  styles: "padding:0 2rem;span{display:inline-flex;font-size:3.125rem;font-size:min(4.375rem, max(8vw, 3rem));font-weight:700;font-feature-settings:initial;letter-spacing:-.12rem;white-space:nowrap;margin-right:1rem;line-height:1.1;background-image:linear-gradient(146deg, #000, #757a7d);background-clip:text;}"
 } : undefined);
 // CONCATENATED MODULE: ./src/HomePage/components/Title/Title.tsx
 
@@ -13234,8 +13234,8 @@ var Description = /*#__PURE__*/emotion_styled_base_browser_esm("div", {
   target: "e1xh0pcr0",
   label: "Description"
 })( true ? {
-  name: "17iv70g",
-  styles: "display:flex;flex-direction:column;justify-content:center;align-items:center;margin:0 auto;padding:2rem;font-size:1.5rem;color:#999;p{margin:0.5rem auto;}"
+  name: "1dij4be",
+  styles: "display:flex;flex-direction:column;justify-content:center;align-items:center;margin:0 auto;padding-block:4rem 2rem;padding-inline:2rem;font-size:1.5rem;color:#777;p{margin:0.5rem auto;}small{color:#999;}"
 } : undefined);
 // CONCATENATED MODULE: ./src/HomePage/components/Slogan/Slogan.tsx
 
@@ -13426,19 +13426,19 @@ function Keypress_styles_EMOTION_STRINGIFIED_CSS_ERROR_() { return "You have tri
  */
 
 var keyTone = /*#__PURE__*/emotion_css_esm_css( true ? {
-  name: "1662ycn-keyTone",
-  styles: "display:inline-block;padding:0.5rem 0.8rem;font:12px SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;font-size:1.2rem;font-weight:600;height:1.2rem;line-height:1.2rem;color:#444d56;vertical-align:middle;background-color:#fafbfc;border:1px solid #d1d5da;border-radius:0.4rem;box-shadow:inset 0 -1px 0 #d1d5da;label:keyTone;"
+  name: "lkz544-keyTone",
+  styles: "display:inline-block;padding:0.5rem 0.8rem;font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;font-weight:600;height:1.2rem;line-height:1.2rem;color:#444d56;vertical-align:middle;background-color:#fafbfc;border:1px solid #d1d5da;border-radius:0.4rem;box-shadow:inset 0 -1px 0 #d1d5da;label:keyTone;"
 } : undefined);
 var Keys = /*#__PURE__*/emotion_styled_base_browser_esm("div", {
   target: "eo5zy4m1",
   label: "Keys"
-})("display:inline-block;padding:0 0.5rem;opacity:1;animation:flickerAnimation 2s ease-in-out infinite;&>.", keyTone, "{margin:auto 0.8rem;}@keyframes flickerAnimation{0%{opacity:1;}50%{opacity:.6;}100%{opacity:1;}}" + ( true ? "" : undefined));
+})("display:inline-block;padding-right:1.2rem;opacity:1;white-space:nowrap;animation:flickerAnimation 2s ease-in-out infinite;font-size:min(1.2rem, max(3vw, 0.8rem));&>.", keyTone, "{margin:auto 0.8rem;&:first-of-type{margin-left:0;}&:last-of-type{margin-right:0;}}@keyframes flickerAnimation{0%{opacity:1;}50%{opacity:.6;}100%{opacity:1;}}" + ( true ? "" : undefined));
 var Pad = /*#__PURE__*/emotion_styled_base_browser_esm("div", {
   target: "eo5zy4m0",
   label: "Pad"
 })( true ? {
-  name: "1bj9ao8",
-  styles: "vertical-align:center;margin:0 auto;padding:2rem;font-size:1.5rem;color:#666"
+  name: "unndn1",
+  styles: "vertical-align:center;margin:0 auto;padding:2rem;font-size:1.5rem;color:#666;&>span:first-of-type{padding-right:1.2rem;}@media screen and (max-width: 640px){&>span{display:none;}}"
 } : undefined);
 // CONCATENATED MODULE: ./src/HomePage/components/Keypress/Keypress.tsx
 
@@ -13488,8 +13488,8 @@ var Badge = /*#__PURE__*/emotion_styled_base_browser_esm("div", {
   target: "e138oolv0",
   label: "Badge"
 })( true ? {
-  name: "v6av",
-  styles: "display:inline-block;margin-left:1rem;border:1px solid transparent;border-radius:2rem;padding:.2rem 1rem;line-height:1;font-size:1.5rem;font-weight:600;border-color:#059669;color:#10b981;background-color:#10b9810d"
+  name: "1k62bsc",
+  styles: "display:inline-block;border:1px solid transparent;border-radius:2rem;padding:.2rem 1rem;line-height:1;font-size:min(1.5rem, max(3vw, 1.2rem));font-weight:600;border-color:#059669;color:#10b981;background-color:#10b9810d"
 } : undefined);
 // CONCATENATED MODULE: ./src/HomePage/components/Badge/Badge.tsx
 
@@ -13602,32 +13602,32 @@ var HomePage = _ref => {
     "data-inspector-line": "51",
     "data-inspector-column": "10",
     "data-inspector-relative-path": "src/HomePage/index.tsx"
-  }, "Quick jump to local IDE source code directly from browser React component by just a simple click!"), /*#__PURE__*/react_default.a.createElement("p", {
-    "data-inspector-line": "52",
-    "data-inspector-column": "10",
+  }, "Click on a React Component, take you to the source code in local IDE!"), isDev ? null : /*#__PURE__*/react_default.a.createElement("p", {
+    "data-inspector-line": "55",
+    "data-inspector-column": "17",
     "data-inspector-relative-path": "src/HomePage/index.tsx"
   }, /*#__PURE__*/react_default.a.createElement("small", {
-    "data-inspector-line": "52",
-    "data-inspector-column": "13",
-    "data-inspector-relative-path": "src/HomePage/index.tsx"
-  }, "( for this prod online demo page, jump to GitHub file )"))), /*#__PURE__*/react_default.a.createElement(Keypress_KeyPad, {
     "data-inspector-line": "55",
+    "data-inspector-column": "20",
+    "data-inspector-relative-path": "src/HomePage/index.tsx"
+  }, "( for this online demo page, jump to GitHub file )"))), /*#__PURE__*/react_default.a.createElement(Keypress_KeyPad, {
+    "data-inspector-line": "59",
     "data-inspector-column": "8",
     "data-inspector-relative-path": "src/HomePage/index.tsx"
   }, /*#__PURE__*/react_default.a.createElement(Keypress, {
-    "data-inspector-line": "56",
-    "data-inspector-column": "10",
-    "data-inspector-relative-path": "src/HomePage/index.tsx"
-  }, "Ctrl \u2303"), "+", /*#__PURE__*/react_default.a.createElement(Keypress, {
-    "data-inspector-line": "58",
-    "data-inspector-column": "10",
-    "data-inspector-relative-path": "src/HomePage/index.tsx"
-  }, "Shift \u21E7"), "+", /*#__PURE__*/react_default.a.createElement(Keypress, {
     "data-inspector-line": "60",
     "data-inspector-column": "10",
     "data-inspector-relative-path": "src/HomePage/index.tsx"
-  }, "Command \u2318"), "+", /*#__PURE__*/react_default.a.createElement(Keypress, {
+  }, "Ctrl \u2303"), "+", /*#__PURE__*/react_default.a.createElement(Keypress, {
     "data-inspector-line": "62",
+    "data-inspector-column": "10",
+    "data-inspector-relative-path": "src/HomePage/index.tsx"
+  }, "Shift \u21E7"), "+", /*#__PURE__*/react_default.a.createElement(Keypress, {
+    "data-inspector-line": "64",
+    "data-inspector-column": "10",
+    "data-inspector-relative-path": "src/HomePage/index.tsx"
+  }, "Command \u2318"), "+", /*#__PURE__*/react_default.a.createElement(Keypress, {
+    "data-inspector-line": "66",
     "data-inspector-column": "10",
     "data-inspector-relative-path": "src/HomePage/index.tsx"
   }, "C"))));
