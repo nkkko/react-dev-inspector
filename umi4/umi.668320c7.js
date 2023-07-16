@@ -17753,7 +17753,7 @@ function _extends() {
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = function(chunkId) {
 /******/ 			// return url for filenames based on template
-/******/ 			return "" + (chunkId === 866 ? "p__index" : chunkId) + "." + {"267":"e5d6b6e1","866":"671edbdd"}[chunkId] + ".async.js";
+/******/ 			return "" + (chunkId === 866 ? "p__index" : chunkId) + "." + {"866":"48e26a93","930":"c44e9e39"}[chunkId] + ".async.js";
 /******/ 		};
 /******/ 	}();
 /******/ 	
@@ -20865,7 +20865,7 @@ function _getRoutes() {
             routes: routes,
             routeComponents: {
               '1': /*#__PURE__*/react.lazy(function () {
-                return Promise.all(/*! import() | p__index */[__webpack_require__.e(267), __webpack_require__.e(866)]).then(__webpack_require__.bind(__webpack_require__, /*! @/pages/index.tsx */ 882));
+                return Promise.all(/*! import() | p__index */[__webpack_require__.e(930), __webpack_require__.e(866)]).then(__webpack_require__.bind(__webpack_require__, /*! @/pages/index.tsx */ 2347));
               })
             }
           });
@@ -21335,7 +21335,7 @@ function _createClass(Constructor, protoProps, staticProps) {
   });
   return Constructor;
 }
-;// CONCATENATED MODULE: ../../node_modules/.pnpm/umi@4.0.72_@babel+core@7.22.8_@types+node@16.18.7_@types+react@18.0.26_eslint@8.44.0_postcss@_l7pjnbfse3x3itfdqaqlqtcori/node_modules/umi/client/client/utils.js
+;// CONCATENATED MODULE: ../../node_modules/.pnpm/umi@4.0.72_@babel+core@7.22.8_@types+node@16.18.7_@types+react@18.0.26_eslint@8.44.0_postcss@_l3neqbpqkifs4sn7x2czcvee7q/node_modules/umi/client/client/utils.js
 
 function assert(value, message) {
   if (!value) throw new Error(message);
@@ -21356,7 +21356,7 @@ function compose(_ref) {
 function isPromiseLike(obj) {
   return !!obj && _typeof(obj) === 'object' && typeof obj.then === 'function';
 }
-;// CONCATENATED MODULE: ../../node_modules/.pnpm/umi@4.0.72_@babel+core@7.22.8_@types+node@16.18.7_@types+react@18.0.26_eslint@8.44.0_postcss@_l7pjnbfse3x3itfdqaqlqtcori/node_modules/umi/client/client/plugin.js
+;// CONCATENATED MODULE: ../../node_modules/.pnpm/umi@4.0.72_@babel+core@7.22.8_@types+node@16.18.7_@types+react@18.0.26_eslint@8.44.0_postcss@_l3neqbpqkifs4sn7x2czcvee7q/node_modules/umi/client/client/plugin.js
 
 
 

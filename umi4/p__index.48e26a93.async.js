@@ -1,9 +1,9 @@
 "use strict";
 (self["webpackChunk_example_umi4"] = self["webpackChunk_example_umi4"] || []).push([[866],{
 
-/***/ 882:
+/***/ 2347:
 /*!******************************************!*\
-  !*** ./src/pages/index.tsx + 20 modules ***!
+  !*** ./src/pages/index.tsx + 22 modules ***!
   \******************************************/
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
@@ -21,8 +21,8 @@ var emotion_react_browser_esm = __webpack_require__(3348);
 var jsx_runtime = __webpack_require__(7458);
 // EXTERNAL MODULE: ../../node_modules/.pnpm/react@18.2.0/node_modules/react/index.js
 var react = __webpack_require__(2983);
-// EXTERNAL MODULE: ../../node_modules/.pnpm/hotkeys-js@3.10.1/node_modules/hotkeys-js/dist/hotkeys.esm.js
-var hotkeys_esm = __webpack_require__(3113);
+// EXTERNAL MODULE: ../../node_modules/.pnpm/hotkeys-js@3.8.1/node_modules/hotkeys-js/dist/hotkeys.esm.js
+var hotkeys_esm = __webpack_require__(1905);
 ;// CONCATENATED MODULE: ../../packages/inspector/es/Inspector/utils/highlight.js
 /**
  * mirror from https://github.com/facebook/react/blob/v16.13.1/packages/react-devtools-shared/src/backend/views/Highlighter/index.js
@@ -329,6 +329,9 @@ const getElementCodeInfo = (element) => {
     const referenceFiber = getReferenceFiber(fiber);
     return getCodeInfoFromFiber(referenceFiber);
 };
+/**
+ * fetch server api to open the code editor
+ */
 const gotoEditor = (source) => {
     if (!source)
         return;
@@ -345,7 +348,7 @@ const gotoEditor = (source) => {
         colNumber: columnNumber,
     };
     /**
-     * api in '@react-dev-inspector/plugin-webpack/middlewares' launchEditorMiddleware
+     * api path in '@react-dev-inspector/middlewares' launchEditorMiddleware
      */
     const apiRoute = isRelative
         ? `${(launchEditorEndpoint_default())}/relative`
@@ -393,6 +396,53 @@ const getElementInspect = (element) => {
         name: fiberName,
         title,
     };
+};
+
+;// CONCATENATED MODULE: ../../packages/inspector/es/Inspector/hooks/use-mouse.js
+
+const useMousePosition = () => {
+    const mouseRef = (0,react.useRef)({
+        x: 0,
+        y: 0,
+    });
+    const recordMousePoint = ({ clientX, clientY }) => {
+        mouseRef.current.x = clientX;
+        mouseRef.current.y = clientY;
+    };
+    (0,react.useEffect)(() => {
+        document.addEventListener('mousemove', recordMousePoint, true);
+        return () => {
+            document.removeEventListener('mousemove', recordMousePoint, true);
+        };
+    }, []);
+    return mouseRef;
+};
+
+;// CONCATENATED MODULE: ../../packages/inspector/es/Inspector/hooks/use-effect-event.js
+/**
+ * Simple but not robust implement of React18 experimental hook `useEffectEvent`,
+ *   to keep compatible with other React versions.
+ *
+ * for some more robust implements, you can see:
+ * - `useEvent` in https://github.com/scottrippey/react-use-event-hook
+ * - `useMemoizedFn` in https://github.com/alibaba/hooks
+ */
+
+const useEffectEvent = (callback) => {
+    const callbackRef = (0,react.useRef)(callback);
+    /**
+     * same as modify ref value in `useEffect`, use for avoid tear of layout update
+     */
+    callbackRef.current = (0,react.useMemo)(() => callback, [callback]);
+    const stableRef = (0,react.useRef)();
+    // init once
+    if (!stableRef.current) {
+        stableRef.current = (function (...args) {
+            var _a;
+            return (_a = callbackRef.current) === null || _a === void 0 ? void 0 : _a.apply(this, args);
+        });
+    }
+    return stableRef.current;
 };
 
 ;// CONCATENATED MODULE: ../../packages/inspector/es/Inspector/utils/overlay.js
@@ -791,38 +841,62 @@ const overlayStyles = {
 
 
 
-const defaultHotKeys = ['control', 'shift', 'command', 'c'];
+const defaultHotkeys = ['control', 'shift', 'command', 'c'];
 const Inspector = (props) => {
-    const { keys, onHoverElement, onClickElement, disableLaunchEditor, children, } = props;
+    const { keys, onHoverElement, onClickElement, active: controlledActive, onActiveChange, disableLaunchEditor, children, } = props;
+    const [isActive, setActive] = (0,react.useState)(controlledActive !== null && controlledActive !== void 0 ? controlledActive : false);
+    // sync state as controlled component
+    (0,react.useLayoutEffect)(() => {
+        if (controlledActive !== undefined) {
+            setActive(controlledActive);
+        }
+    }, [controlledActive]);
+    (0,react.useEffect)(() => {
+        isActive
+            ? startInspect()
+            : stopInspect();
+    }, [isActive]);
     // hotkeys-js params need string
-    const hotkey = (keys !== null && keys !== void 0 ? keys : defaultHotKeys).join('+');
+    const hotkey = keys === null
+        ? null
+        : (keys !== null && keys !== void 0 ? keys : defaultHotkeys).join('+');
     /** inspector tooltip overlay */
     const overlayRef = (0,react.useRef)();
-    const mousePointRef = (0,react.useRef)({ x: 0, y: 0 });
-    const recordMousePoint = ({ clientX, clientY }) => {
-        mousePointRef.current.x = clientX;
-        mousePointRef.current.y = clientY;
-    };
-    const startInspect = () => {
+    const mouseRef = useMousePosition();
+    const activate = useEffectEvent(() => {
+        onActiveChange === null || onActiveChange === void 0 ? void 0 : onActiveChange(true);
+        if (controlledActive === undefined) {
+            setActive(true);
+        }
+    });
+    const deactivate = useEffectEvent(() => {
+        onActiveChange === null || onActiveChange === void 0 ? void 0 : onActiveChange(false);
+        if (controlledActive === undefined) {
+            setActive(false);
+        }
+    });
+    const startInspect = useEffectEvent(() => {
         const overlay = new Overlay();
         overlayRef.current = overlay;
+        (0,hotkeys_esm/* default */.Z)(`esc`, deactivate);
         const stopCallback = setupHighlighter({
             onPointerOver: handleHoverElement,
             onClick: handleClickElement,
         });
         overlay.setRemoveCallback(stopCallback);
         // inspect element immediately at mouse point
-        const initPoint = mousePointRef.current;
+        const initPoint = mouseRef.current;
         const initElement = document.elementFromPoint(initPoint.x, initPoint.y);
         if (initElement)
             handleHoverElement(initElement);
-    };
-    const stopInspect = () => {
+    });
+    const stopInspect = useEffectEvent(() => {
         var _a;
         (_a = overlayRef.current) === null || _a === void 0 ? void 0 : _a.remove();
         overlayRef.current = undefined;
-    };
-    const handleHoverElement = (element) => {
+        hotkeys_esm/* default.unbind */.Z.unbind(`esc`, deactivate);
+    });
+    const handleHoverElement = useEffectEvent((element) => {
         var _a;
         const overlay = overlayRef.current;
         const codeInfo = getElementCodeInfo(element);
@@ -836,41 +910,32 @@ const Inspector = (props) => {
             codeInfo,
             name,
         });
-    };
-    const handleClickElement = (element) => {
-        stopInspect();
+    });
+    const handleClickElement = useEffectEvent((element) => {
+        deactivate();
         const codeInfo = getElementCodeInfo(element);
         const { fiber, name } = getElementInspect(element);
-        if (!disableLaunchEditor)
-            gotoEditor(codeInfo);
-        onClickElement === null || onClickElement === void 0 ? void 0 : onClickElement({
+        const isEnd = onClickElement === null || onClickElement === void 0 ? void 0 : onClickElement({
             element,
             fiber,
             codeInfo,
             name,
         });
-    };
+        if (!isEnd && !disableLaunchEditor)
+            gotoEditor(codeInfo);
+    });
     (0,react.useEffect)(() => {
-        document.addEventListener('mousemove', recordMousePoint, true);
-        return () => {
-            document.removeEventListener('mousemove', recordMousePoint, true);
-        };
-    }, []);
-    (0,react.useEffect)(() => {
-        const handleHotKeys = (event, handler) => {
-            if (handler.key === hotkey) {
-                overlayRef.current
-                    ? stopInspect()
-                    : startInspect();
-            }
-            else if (handler.key === 'esc' && overlayRef.current) {
-                stopInspect();
-            }
+        if (!hotkey)
+            return;
+        const handleHotKeys = () => {
+            overlayRef.current
+                ? deactivate()
+                : activate();
         };
         // https://github.com/jaywcjlove/hotkeys
-        (0,hotkeys_esm/* default */.Z)(`${hotkey}, esc`, handleHotKeys);
+        (0,hotkeys_esm/* default */.Z)(`${hotkey}`, handleHotKeys);
         return () => {
-            hotkeys_esm/* default.unbind */.Z.unbind(`${hotkey}, esc`, handleHotKeys);
+            hotkeys_esm/* default.unbind */.Z.unbind(`${hotkey}`, handleHotKeys);
         };
     }, [hotkey]);
     return ((0,jsx_runtime.jsx)(jsx_runtime.Fragment, { children: children !== null && children !== void 0 ? children : null }));

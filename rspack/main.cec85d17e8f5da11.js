@@ -1693,20 +1693,21 @@ function hoistNonReactStatics(targetComponent, sourceComponent, blacklist) {
 }
 module.exports = hoistNonReactStatics;
 },
-"4025": function (module, __webpack_exports__, __webpack_require__) {
+"3003": function (module, __webpack_exports__, __webpack_require__) {
 'use strict';
 __webpack_require__.r(__webpack_exports__);
-__webpack_require__.d(__webpack_exports__, {'default': function() { return hotkeys; }});
-/**! 
- * hotkeys-js v3.10.1 
- * A simple micro-library for defining and dispatching keyboard shortcuts. It has no dependencies. 
+__webpack_require__.d(__webpack_exports__, {'default': function() { return __WEBPACK_DEFAULT_EXPORT__; }});
+/*!
+ * hotkeys-js v3.8.1
+ * A simple micro-library for defining and dispatching keyboard shortcuts. It has no dependencies.
  * 
- * Copyright (c) 2022 kenny wong <wowohoo@qq.com> 
- * http://jaywcjlove.github.io/hotkeys 
- * Licensed under the MIT license 
+ * Copyright (c) 2020 kenny wong <wowohoo@qq.com>
+ * http://jaywcjlove.github.io/hotkeys
+ * 
+ * Licensed under the MIT license.
  */ var isff = typeof navigator !== 'undefined' ? navigator.userAgent.toLowerCase().indexOf('firefox') > 0 : false; // 绑定事件
-function addEvent(object, event, method, useCapture) {
-    if (object.addEventListener) object.addEventListener(event, method, useCapture);
+function addEvent(object, event, method) {
+    if (object.addEventListener) object.addEventListener(event, method, false);
     else if (object.attachEvent) object.attachEvent("on".concat(event), function() {
         method(window.event);
     });
@@ -1737,11 +1738,9 @@ function compareArray(a1, a2) {
 }
 var _keyMap = {
     backspace: 8,
-    '⌫': 8,
     tab: 9,
     clear: 12,
     enter: 13,
-    '↩': 13,
     return: 13,
     esc: 27,
     escape: 27,
@@ -1759,22 +1758,6 @@ var _keyMap = {
     pageup: 33,
     pagedown: 34,
     capslock: 20,
-    num_0: 96,
-    num_1: 97,
-    num_2: 98,
-    num_3: 99,
-    num_4: 100,
-    num_5: 101,
-    num_6: 102,
-    num_7: 103,
-    num_8: 104,
-    num_9: 105,
-    num_multiply: 106,
-    num_add: 107,
-    num_enter: 108,
-    num_subtract: 109,
-    num_decimal: 110,
-    num_divide: 111,
     '⇪': 20,
     ',': 188,
     '.': 190,
@@ -1824,22 +1807,11 @@ var _mods = {
 var _handlers = {}; // F1~F12 special key
 for(var k = 1; k < 20; k++)_keyMap["f".concat(k)] = 111 + k;
 var _downKeys = []; // 记录摁下的绑定键
-var winListendFocus = false; // window是否已经监听了focus事件
 var _scope = 'all'; // 默认热键范围
 var elementHasBindEvent = []; // 已绑定事件的节点记录
 // 返回键码
 var code = function code(x) {
     return _keyMap[x.toLowerCase()] || _modifier[x.toLowerCase()] || x.toUpperCase().charCodeAt(0);
-};
-var getKey = function getKey(x) {
-    return Object.keys(_keyMap).find(function(k) {
-        return _keyMap[k] === x;
-    });
-};
-var getModifier = function getModifier(x) {
-    return Object.keys(_modifier).find(function(k) {
-        return _modifier[k] === x;
-    });
 }; // 设置获取当前范围（默认为'所有'）
 function setScope(scope) {
     _scope = scope || 'all';
@@ -1849,11 +1821,6 @@ function getScope() {
 } // 获取摁下绑定键的键值
 function getPressedKeyCodes() {
     return _downKeys.slice(0);
-}
-function getPressedKeyString() {
-    return _downKeys.map(function(c) {
-        return getKey(c) || getModifier(c) || String.fromCharCode(c);
-    });
 } // 表单控件控件判断 返回 Boolean
 // hotkey is effective only when filter return true
 function filter(event) {
@@ -1894,7 +1861,7 @@ function clearModifier(event) {
 }
 function unbind(keysInfo) {
     // unbind(), unbind all keys
-    if (typeof keysInfo === 'undefined') Object.keys(_handlers).forEach(function(key) {
+    if (!keysInfo) Object.keys(_handlers).forEach(function(key) {
         return delete _handlers[key];
     });
     else if (Array.isArray(keysInfo)) // support like : unbind([{key: 'ctrl+a', scope: 's1'}, {key: 'ctrl-a', scope: 's2', splitKey: '-'}])
@@ -1932,15 +1899,15 @@ var eachUnbind = function eachUnbind(_ref) {
         if (!_handlers[keyCode]) return; // 判断是否传入范围，没有就获取范围
         if (!scope) scope = getScope();
         var mods = len > 1 ? getMods(_modifier, unbindKeys) : [];
-        _handlers[keyCode] = _handlers[keyCode].filter(function(record) {
+        _handlers[keyCode] = _handlers[keyCode].map(function(record) {
             // 通过函数判断，是否解除绑定，函数相等直接返回
             var isMatchingMethod = method ? record.method === method : true;
-            return !(isMatchingMethod && record.scope === scope && compareArray(record.mods, mods));
+            if (isMatchingMethod && record.scope === scope && compareArray(record.mods, mods)) return {};
+            return record;
         });
     });
 }; // 对监听对应快捷键的回调函数进行处理
-function eventHandler(event, handler, scope, element) {
-    if (handler.element !== element) return;
+function eventHandler(event, handler, scope) {
     var modifiersMatch; // 看它是否在当前范围
     if (handler.scope === scope || handler.scope === 'all') {
         // 检查是否匹配修饰符（如果有返回true）
@@ -1960,7 +1927,7 @@ function eventHandler(event, handler, scope, element) {
         }
     }
 } // 处理keydown事件
-function dispatch(event, element) {
+function dispatch(event) {
     var asterisk = _handlers['*'];
     var key = event.keyCode || event.which || event.charCode; // 表单控件过滤 默认表单控件不触发快捷键
     if (!hotkeys.filter.call(this, event)) return; // Gecko(Firefox)的command键值224，在Webkit(Chrome)中保持一致
@@ -2012,7 +1979,7 @@ function dispatch(event, element) {
     } // 获取范围 默认为 `all`
     var scope = getScope(); // 对任何快捷键都需要做的处理
     if (asterisk) {
-        for(var i = 0; i < asterisk.length; i++)if (asterisk[i].scope === scope && (event.type === 'keydown' && asterisk[i].keydown || event.type === 'keyup' && asterisk[i].keyup)) eventHandler(event, asterisk[i], scope, element);
+        for(var i = 0; i < asterisk.length; i++)if (asterisk[i].scope === scope && (event.type === 'keydown' && asterisk[i].keydown || event.type === 'keyup' && asterisk[i].keyup)) eventHandler(event, asterisk[i], scope);
     } // key 不在 _handlers 中返回
     if (!(key in _handlers)) return;
     for(var _i = 0; _i < _handlers[key].length; _i++){
@@ -2024,7 +1991,7 @@ function dispatch(event, element) {
                 var _downKeysCurrent = []; // 记录当前按键键值
                 for(var a = 0; a < keyShortcut.length; a++)_downKeysCurrent.push(code(keyShortcut[a]));
                 if (_downKeysCurrent.sort().join('') === _downKeys.sort().join('')) // 找到处理内容
-                eventHandler(event, record, scope, element);
+                eventHandler(event, record, scope);
             }
         }
     }
@@ -2041,15 +2008,13 @@ function hotkeys(key, option, method) {
     var i = 0;
     var keyup = false;
     var keydown = true;
-    var splitKey = '+';
-    var capture = false; // 对为设定范围的判断
+    var splitKey = '+'; // 对为设定范围的判断
     if (method === undefined && typeof option === 'function') method = option;
     if (Object.prototype.toString.call(option) === '[object Object]') {
         if (option.scope) scope = option.scope; // eslint-disable-line
         if (option.element) element = option.element; // eslint-disable-line
         if (option.keyup) keyup = option.keyup; // eslint-disable-line
         if (option.keydown !== undefined) keydown = option.keydown; // eslint-disable-line
-        if (option.capture !== undefined) capture = option.capture; // eslint-disable-line
         if (typeof option.splitKey === 'string') splitKey = option.splitKey; // eslint-disable-line
     }
     if (typeof option === 'string') scope = option; // 对于每个快捷键进行处理
@@ -2069,51 +2034,31 @@ function hotkeys(key, option, method) {
             shortcut: keys[i],
             method: method,
             key: keys[i],
-            splitKey: splitKey,
-            element: element
+            splitKey: splitKey
         });
     } // 在全局document上设置快捷键
     if (typeof element !== 'undefined' && !isElementBind(element) && window) {
         elementHasBindEvent.push(element);
         addEvent(element, 'keydown', function(e) {
-            dispatch(e, element);
-        }, capture);
-        if (!winListendFocus) {
-            winListendFocus = true;
-            addEvent(window, 'focus', function() {
-                _downKeys = [];
-            }, capture);
-        }
+            dispatch(e);
+        });
+        addEvent(window, 'focus', function() {
+            _downKeys = [];
+        });
         addEvent(element, 'keyup', function(e) {
-            dispatch(e, element);
+            dispatch(e);
             clearModifier(e);
-        }, capture);
+        });
     }
 }
-function trigger(shortcut) {
-    var scope = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'all';
-    Object.keys(_handlers).forEach(function(key) {
-        var dataList = _handlers[key].filter(function(item) {
-            return item.scope === scope && item.shortcut === shortcut;
-        });
-        dataList.forEach(function(data) {
-            if (data && data.method) data.method();
-        });
-    });
-}
 var _api = {
-    getPressedKeyString: getPressedKeyString,
     setScope: setScope,
     getScope: getScope,
     deleteScope: deleteScope,
     getPressedKeyCodes: getPressedKeyCodes,
     isPressed: isPressed,
     filter: filter,
-    trigger: trigger,
-    unbind: unbind,
-    keyMap: _keyMap,
-    modifier: _modifier,
-    modifierMap: modifierMap
+    unbind: unbind
 };
 for(var a in _api)if (Object.prototype.hasOwnProperty.call(_api, a)) hotkeys[a] = _api[a];
 if (typeof window !== 'undefined') {
@@ -2124,7 +2069,7 @@ if (typeof window !== 'undefined') {
     };
     window.hotkeys = hotkeys;
 }
-
+var __WEBPACK_DEFAULT_EXPORT__ = hotkeys;
 },
 "9162": function (module, exports, __webpack_require__) {
 /**
@@ -10143,9 +10088,9 @@ __webpack_require__.d(__webpack_exports__, {'Inspector': function() { return Ins
 /* harmony import */var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0_);
 /* harmony import */var react__WEBPACK_IMPORTED_MODULE_1_ = __webpack_require__(/* react */"1100");
 /* harmony import */var react__WEBPACK_IMPORTED_MODULE_1__default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1_);
-/* harmony import */var hotkeys_js__WEBPACK_IMPORTED_MODULE_2_ = __webpack_require__(/* hotkeys-js */"4025");
-/* harmony import */var _utils_highlight__WEBPACK_IMPORTED_MODULE_3_ = __webpack_require__(/* ./utils/highlight */"448");
-/* harmony import */var _utils_inspect__WEBPACK_IMPORTED_MODULE_4_ = __webpack_require__(/* ./utils/inspect */"8783");
+/* harmony import */var hotkeys_js__WEBPACK_IMPORTED_MODULE_2_ = __webpack_require__(/* hotkeys-js */"3003");
+/* harmony import */var _utils__WEBPACK_IMPORTED_MODULE_3_ = __webpack_require__(/* ./utils */"2539");
+/* harmony import */var _hooks__WEBPACK_IMPORTED_MODULE_4_ = __webpack_require__(/* ./hooks */"5650");
 /* harmony import */var _Overlay__WEBPACK_IMPORTED_MODULE_5_ = __webpack_require__(/* ./Overlay */"7636");
 
 
@@ -10153,50 +10098,65 @@ __webpack_require__.d(__webpack_exports__, {'Inspector': function() { return Ins
 
 
 
- const defaultHotKeys = [
+const defaultHotkeys = [
     'control',
     'shift',
     'command',
     'c'
 ];
  const Inspector = (props)=>{
-    const { keys , onHoverElement , onClickElement , disableLaunchEditor , children  } = props;
+    const { keys , onHoverElement , onClickElement , active: controlledActive , onActiveChange , disableLaunchEditor , children  } = props;
+    const [isActive, setActive] = (0, react__WEBPACK_IMPORTED_MODULE_1_["useState"])(controlledActive !== null && controlledActive !== void 0 ? controlledActive : false);
+    // sync state as controlled component
+    (0, react__WEBPACK_IMPORTED_MODULE_1_["useLayoutEffect"])(()=>{
+        if (controlledActive !== undefined) setActive(controlledActive);
+    }, [
+        controlledActive
+    ]);
+    (0, react__WEBPACK_IMPORTED_MODULE_1_["useEffect"])(()=>{
+        isActive ? startInspect() : stopInspect();
+    }, [
+        isActive
+    ]);
     // hotkeys-js params need string
-    const hotkey = (keys !== null && keys !== void 0 ? keys : defaultHotKeys).join('+');
+    const hotkey = keys === null ? null : (keys !== null && keys !== void 0 ? keys : defaultHotkeys).join('+');
     /** inspector tooltip overlay */ const overlayRef = (0, react__WEBPACK_IMPORTED_MODULE_1_["useRef"])();
-    const mousePointRef = (0, react__WEBPACK_IMPORTED_MODULE_1_["useRef"])({
-        x: 0,
-        y: 0
+    const mouseRef = (0, _hooks__WEBPACK_IMPORTED_MODULE_4_["useMousePosition"])();
+    const activate = (0, _hooks__WEBPACK_IMPORTED_MODULE_4_["useEffectEvent"])(()=>{
+        onActiveChange === null || onActiveChange === void 0 || onActiveChange(true);
+        if (controlledActive === undefined) setActive(true);
     });
-    const recordMousePoint = ({ clientX , clientY  })=>{
-        mousePointRef.current.x = clientX;
-        mousePointRef.current.y = clientY;
-    };
-    const startInspect = ()=>{
-        const overlay = new _Overlay__WEBPACK_IMPORTED_MODULE_5_["default"]();
+    const deactivate = (0, _hooks__WEBPACK_IMPORTED_MODULE_4_["useEffectEvent"])(()=>{
+        onActiveChange === null || onActiveChange === void 0 || onActiveChange(false);
+        if (controlledActive === undefined) setActive(false);
+    });
+    const startInspect = (0, _hooks__WEBPACK_IMPORTED_MODULE_4_["useEffectEvent"])(()=>{
+        const overlay = new _Overlay__WEBPACK_IMPORTED_MODULE_5_["Overlay"]();
         overlayRef.current = overlay;
-        const stopCallback = (0, _utils_highlight__WEBPACK_IMPORTED_MODULE_3_["setupHighlighter"])({
+        (0, hotkeys_js__WEBPACK_IMPORTED_MODULE_2_["default"])(`esc`, deactivate);
+        const stopCallback = (0, _utils__WEBPACK_IMPORTED_MODULE_3_["setupHighlighter"])({
             onPointerOver: handleHoverElement,
             onClick: handleClickElement
         });
         overlay.setRemoveCallback(stopCallback);
         // inspect element immediately at mouse point
-        const initPoint = mousePointRef.current;
+        const initPoint = mouseRef.current;
         const initElement = document.elementFromPoint(initPoint.x, initPoint.y);
         if (initElement) handleHoverElement(initElement);
-    };
-    const stopInspect = ()=>{
+    });
+    const stopInspect = (0, _hooks__WEBPACK_IMPORTED_MODULE_4_["useEffectEvent"])(()=>{
         var _a;
         (_a = overlayRef.current) === null || _a === void 0 || _a.remove();
         overlayRef.current = undefined;
-    };
-    const handleHoverElement = (element)=>{
+        (0, hotkeys_js__WEBPACK_IMPORTED_MODULE_2_["default"]).unbind(`esc`, deactivate);
+    });
+    const handleHoverElement = (0, _hooks__WEBPACK_IMPORTED_MODULE_4_["useEffectEvent"])((element)=>{
         var _a;
         const overlay = overlayRef.current;
-        const codeInfo = (0, _utils_inspect__WEBPACK_IMPORTED_MODULE_4_["getElementCodeInfo"])(element);
+        const codeInfo = (0, _utils__WEBPACK_IMPORTED_MODULE_3_["getElementCodeInfo"])(element);
         const relativePath = codeInfo === null || codeInfo === void 0 ? void 0 : codeInfo.relativePath;
         const absolutePath = codeInfo === null || codeInfo === void 0 ? void 0 : codeInfo.absolutePath;
-        const { fiber , name , title  } = (0, _utils_inspect__WEBPACK_IMPORTED_MODULE_4_["getElementInspect"])(element);
+        const { fiber , name , title  } = (0, _utils__WEBPACK_IMPORTED_MODULE_3_["getElementInspect"])(element);
         (_a = overlay === null || overlay === void 0 ? void 0 : overlay.inspect) === null || _a === void 0 || _a.call(overlay, [
             element
         ], title, relativePath !== null && relativePath !== void 0 ? relativePath : absolutePath);
@@ -10206,34 +10166,28 @@ __webpack_require__.d(__webpack_exports__, {'Inspector': function() { return Ins
             codeInfo,
             name
         });
-    };
-    const handleClickElement = (element)=>{
-        stopInspect();
-        const codeInfo = (0, _utils_inspect__WEBPACK_IMPORTED_MODULE_4_["getElementCodeInfo"])(element);
-        const { fiber , name  } = (0, _utils_inspect__WEBPACK_IMPORTED_MODULE_4_["getElementInspect"])(element);
-        if (!disableLaunchEditor) (0, _utils_inspect__WEBPACK_IMPORTED_MODULE_4_["gotoEditor"])(codeInfo);
-        onClickElement === null || onClickElement === void 0 || onClickElement({
+    });
+    const handleClickElement = (0, _hooks__WEBPACK_IMPORTED_MODULE_4_["useEffectEvent"])((element)=>{
+        deactivate();
+        const codeInfo = (0, _utils__WEBPACK_IMPORTED_MODULE_3_["getElementCodeInfo"])(element);
+        const { fiber , name  } = (0, _utils__WEBPACK_IMPORTED_MODULE_3_["getElementInspect"])(element);
+        const isEnd = onClickElement === null || onClickElement === void 0 ? void 0 : onClickElement({
             element,
             fiber,
             codeInfo,
             name
         });
-    };
+        if (!isEnd && !disableLaunchEditor) (0, _utils__WEBPACK_IMPORTED_MODULE_3_["gotoEditor"])(codeInfo);
+    });
     (0, react__WEBPACK_IMPORTED_MODULE_1_["useEffect"])(()=>{
-        document.addEventListener('mousemove', recordMousePoint, true);
-        return ()=>{
-            document.removeEventListener('mousemove', recordMousePoint, true);
-        };
-    }, []);
-    (0, react__WEBPACK_IMPORTED_MODULE_1_["useEffect"])(()=>{
-        const handleHotKeys = (event, handler)=>{
-            if (handler.key === hotkey) overlayRef.current ? stopInspect() : startInspect();
-            else if (handler.key === 'esc' && overlayRef.current) stopInspect();
+        if (!hotkey) return;
+        const handleHotKeys = ()=>{
+            overlayRef.current ? deactivate() : activate();
         };
         // https://github.com/jaywcjlove/hotkeys
-        (0, hotkeys_js__WEBPACK_IMPORTED_MODULE_2_["default"])(`${hotkey}, esc`, handleHotKeys);
+        (0, hotkeys_js__WEBPACK_IMPORTED_MODULE_2_["default"])(`${hotkey}`, handleHotKeys);
         return ()=>{
-            (0, hotkeys_js__WEBPACK_IMPORTED_MODULE_2_["default"]).unbind(`${hotkey}, esc`, handleHotKeys);
+            (0, hotkeys_js__WEBPACK_IMPORTED_MODULE_2_["default"]).unbind(`${hotkey}`, handleHotKeys);
         };
     }, [
         hotkey
@@ -10246,8 +10200,8 @@ __webpack_require__.d(__webpack_exports__, {'Inspector': function() { return Ins
 "7636": function (module, __webpack_exports__, __webpack_require__) {
 'use strict';
 __webpack_require__.r(__webpack_exports__);
-__webpack_require__.d(__webpack_exports__, {'default': function() { return Overlay; }});
-/* harmony import */var _utils_overlay__WEBPACK_IMPORTED_MODULE_0_ = __webpack_require__(/* ./utils/overlay */"8071");
+__webpack_require__.d(__webpack_exports__, {'Overlay': function() { return Overlay; }});
+/* harmony import */var _utils__WEBPACK_IMPORTED_MODULE_0_ = __webpack_require__(/* ./utils */"2539");
 /**
  * mirror from https://github.com/facebook/react/blob/v16.13.1/packages/react-devtools-shared/src/backend/views/utils.js
  */ 
@@ -10409,7 +10363,7 @@ class OverlayTip {
         Object.assign(this.tip.style, tipPos.style);
     }
 }
-class Overlay {
+ class Overlay {
     constructor(){
         Object.defineProperty(this, "window", {
             enumerable: true,
@@ -10492,8 +10446,8 @@ class Overlay {
             left: Number.POSITIVE_INFINITY
         };
         elements.forEach((element, index)=>{
-            const box = (0, _utils_overlay__WEBPACK_IMPORTED_MODULE_0_["getNestedBoundingClientRect"])(element, this.window);
-            const dims = (0, _utils_overlay__WEBPACK_IMPORTED_MODULE_0_["getElementDimensions"])(element);
+            const box = (0, _utils__WEBPACK_IMPORTED_MODULE_0_["getNestedBoundingClientRect"])(element, this.window);
+            const dims = (0, _utils__WEBPACK_IMPORTED_MODULE_0_["getElementDimensions"])(element);
             outerBox.top = Math.min(outerBox.top, box.top - dims.marginTop);
             outerBox.right = Math.max(outerBox.right, box.left + box.width + dims.marginRight);
             outerBox.bottom = Math.max(outerBox.bottom, box.top + box.height + dims.marginBottom);
@@ -10518,7 +10472,7 @@ class Overlay {
             }
         }
         this.tip.updateText(name, info, outerBox.right - outerBox.left, outerBox.bottom - outerBox.top);
-        const tipBounds = (0, _utils_overlay__WEBPACK_IMPORTED_MODULE_0_["getNestedBoundingClientRect"])(this.tipBoundsWindow.document.documentElement, this.window);
+        const tipBounds = (0, _utils__WEBPACK_IMPORTED_MODULE_0_["getNestedBoundingClientRect"])(this.tipBoundsWindow.document.documentElement, this.window);
         this.tip.updatePosition({
             top: outerBox.top,
             left: outerBox.left,
@@ -10570,11 +10524,77 @@ const overlayStyles = {
     border: 'rgba(255, 200, 50, 0.3)'
 };
 },
+"5650": function (module, __webpack_exports__, __webpack_require__) {
+'use strict';
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */var _use_effect_event__WEBPACK_IMPORTED_MODULE_0_ = __webpack_require__(/* ./use-effect-event */"1176");
+__webpack_require__.es(_use_effect_event__WEBPACK_IMPORTED_MODULE_0_, __webpack_exports__);
+/* harmony import */var _use_mouse__WEBPACK_IMPORTED_MODULE_1_ = __webpack_require__(/* ./use-mouse */"3780");
+__webpack_require__.es(_use_mouse__WEBPACK_IMPORTED_MODULE_1_, __webpack_exports__);
+
+
+},
+"1176": function (module, __webpack_exports__, __webpack_require__) {
+'use strict';
+__webpack_require__.r(__webpack_exports__);
+__webpack_require__.d(__webpack_exports__, {'useEffectEvent': function() { return useEffectEvent; }});
+/* harmony import */var react__WEBPACK_IMPORTED_MODULE_0_ = __webpack_require__(/* react */"1100");
+/* harmony import */var react__WEBPACK_IMPORTED_MODULE_0__default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0_);
+/**
+ * Simple but not robust implement of React18 experimental hook `useEffectEvent`,
+ *   to keep compatible with other React versions.
+ *
+ * for some more robust implements, you can see:
+ * - `useEvent` in https://github.com/scottrippey/react-use-event-hook
+ * - `useMemoizedFn` in https://github.com/alibaba/hooks
+ */ 
+ const useEffectEvent = (callback)=>{
+    const callbackRef = (0, react__WEBPACK_IMPORTED_MODULE_0_["useRef"])(callback);
+    /**
+     * same as modify ref value in `useEffect`, use for avoid tear of layout update
+     */ callbackRef.current = (0, react__WEBPACK_IMPORTED_MODULE_0_["useMemo"])(()=>callback, [
+        callback
+    ]);
+    const stableRef = (0, react__WEBPACK_IMPORTED_MODULE_0_["useRef"])();
+    // init once
+    if (!stableRef.current) stableRef.current = function(...args) {
+        var _a;
+        return (_a = callbackRef.current) === null || _a === void 0 ? void 0 : _a.apply(this, args);
+    };
+    return stableRef.current;
+};
+},
+"3780": function (module, __webpack_exports__, __webpack_require__) {
+'use strict';
+__webpack_require__.r(__webpack_exports__);
+__webpack_require__.d(__webpack_exports__, {'useMousePosition': function() { return useMousePosition; }});
+/* harmony import */var react__WEBPACK_IMPORTED_MODULE_0_ = __webpack_require__(/* react */"1100");
+/* harmony import */var react__WEBPACK_IMPORTED_MODULE_0__default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0_);
+
+ const useMousePosition = ()=>{
+    const mouseRef = (0, react__WEBPACK_IMPORTED_MODULE_0_["useRef"])({
+        x: 0,
+        y: 0
+    });
+    const recordMousePoint = ({ clientX , clientY  })=>{
+        mouseRef.current.x = clientX;
+        mouseRef.current.y = clientY;
+    };
+    (0, react__WEBPACK_IMPORTED_MODULE_0_["useEffect"])(()=>{
+        document.addEventListener('mousemove', recordMousePoint, true);
+        return ()=>{
+            document.removeEventListener('mousemove', recordMousePoint, true);
+        };
+    }, []);
+    return mouseRef;
+};
+},
 "7974": function (module, __webpack_exports__, __webpack_require__) {
 'use strict';
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */var _Inspector__WEBPACK_IMPORTED_MODULE_0_ = __webpack_require__(/* ./Inspector */"5133");
-__webpack_require__.es(_Inspector__WEBPACK_IMPORTED_MODULE_0_, __webpack_exports__);
+/* harmony import */var _Inspector__WEBPACK_IMPORTED_MODULE_1_ = __webpack_require__(/* ./Inspector */"5133");
+__webpack_require__.es(_Inspector__WEBPACK_IMPORTED_MODULE_1_, __webpack_exports__);
+
 
 },
 "1888": function (module, __webpack_exports__, __webpack_require__) {
@@ -10734,6 +10754,19 @@ let iframesListeningTo = new Set();
     return stopInspectingNative;
 }
 },
+"2539": function (module, __webpack_exports__, __webpack_require__) {
+'use strict';
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */var _highlight__WEBPACK_IMPORTED_MODULE_0_ = __webpack_require__(/* ./highlight */"448");
+__webpack_require__.es(_highlight__WEBPACK_IMPORTED_MODULE_0_, __webpack_exports__);
+/* harmony import */var _inspect__WEBPACK_IMPORTED_MODULE_1_ = __webpack_require__(/* ./inspect */"8783");
+__webpack_require__.es(_inspect__WEBPACK_IMPORTED_MODULE_1_, __webpack_exports__);
+/* harmony import */var _overlay__WEBPACK_IMPORTED_MODULE_2_ = __webpack_require__(/* ./overlay */"8071");
+__webpack_require__.es(_overlay__WEBPACK_IMPORTED_MODULE_2_, __webpack_exports__);
+
+
+
+},
 "8783": function (module, __webpack_exports__, __webpack_require__) {
 'use strict';
 __webpack_require__.r(__webpack_exports__);
@@ -10853,7 +10886,9 @@ __webpack_require__.d(__webpack_exports__, {'getElementCodeInfo': function() { r
     const referenceFiber = getReferenceFiber(fiber);
     return getCodeInfoFromFiber(referenceFiber);
 };
- const gotoEditor = (source)=>{
+/**
+ * fetch server api to open the code editor
+ */  const gotoEditor = (source)=>{
     if (!source) return;
     const { lineNumber , columnNumber , relativePath , absolutePath  } = source;
     const isRelative = Boolean(relativePath);
@@ -10868,7 +10903,7 @@ __webpack_require__.d(__webpack_exports__, {'getElementCodeInfo': function() { r
         colNumber: columnNumber
     };
     /**
-     * api in '@react-dev-inspector/plugin-webpack/middlewares' launchEditorMiddleware
+     * api path in '@react-dev-inspector/middlewares' launchEditorMiddleware
      */ const apiRoute = isRelative ? `${react_dev_utils_launchEditorEndpoint__WEBPACK_IMPORTED_MODULE_0__default}/relative` : react_dev_utils_launchEditorEndpoint__WEBPACK_IMPORTED_MODULE_0__default;
     fetch(`${apiRoute}?${new URLSearchParams(launchParams)}`);
 };
