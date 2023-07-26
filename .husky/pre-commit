@@ -3,4 +3,6 @@
 # run by git
 . "$(dirname -- "$0")/_/husky.sh"
 
-TIMING=1 npx lint-staged
+# https://github.com/lint-staged/lint-staged
+# `TIMING` for eslint
+TIMING=1 exec npx lint-staged

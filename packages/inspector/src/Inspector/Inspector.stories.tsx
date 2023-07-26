@@ -133,7 +133,7 @@ export const DisableHotkeys = () => {
 
 
 export const Disabled = () => {
-  const [available, setAvailable] = useState(true)
+  const [available, setAvailable] = useState(false)
   const [active, setActive] = useState(false)
 
   return (
@@ -168,3 +168,29 @@ export const Disabled = () => {
   )
 }
 
+export const InspectWithIframe = () => {
+  return (
+    <>
+      <div
+        className='
+          flex justify-center items-center
+          p-10 w-4/5 min-w-[800px] h-[600px]
+          rounded-xl shadow-xl bg-gray-50
+        '
+      >
+        <Inspector />
+        <div
+          className='
+          flex justify-center items-center
+          p-6 w-full h-full
+          '
+        >
+          <iframe
+            className='rounded-xl shadow-md w-full h-full'
+            src={'https://react-dev-inspector.zthxxx.me/showcase'}
+          />
+        </div>
+      </div>
+    </>
+  )
+}

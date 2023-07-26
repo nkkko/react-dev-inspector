@@ -9,7 +9,7 @@ import {
 import type { Fiber } from 'react-reconciler'
 import hotkeys from 'hotkeys-js'
 import {
-  setupHighlighter,
+  setupListener,
   getElementCodeInfo,
   gotoServerEditor,
   getElementInspect,
@@ -170,6 +170,7 @@ export const Inspector = (props: InspectorProps) => {
 
   /** inspector tooltip overlay */
   const overlayRef = useRef<Overlay>()
+  const removeListenerRef = useRef<() => void>()
   const mouseRef = useMousePosition({ disable })
 
   const activate = useEffectEvent(() => {
@@ -194,12 +195,10 @@ export const Inspector = (props: InspectorProps) => {
 
     hotkeys(`esc`, deactivate)
 
-    const stopCallback = setupHighlighter({
+    removeListenerRef.current = setupListener({
       onPointerOver: handleHoverElement,
       onClick: handleClickElement,
     })
-
-    overlay.setRemoveCallback(stopCallback)
 
     // inspect element immediately at mouse point
     const initPoint = mouseRef.current
@@ -210,6 +209,9 @@ export const Inspector = (props: InspectorProps) => {
   const stopInspect = useEffectEvent(() => {
     overlayRef.current?.remove()
     overlayRef.current = undefined
+
+    removeListenerRef.current?.()
+    removeListenerRef.current = undefined
 
     hotkeys.unbind(`esc`, deactivate)
   })
@@ -223,7 +225,11 @@ export const Inspector = (props: InspectorProps) => {
 
     const { fiber, name, title } = getElementInspect(element)
 
-    overlay?.inspect?.([element], title, relativePath ?? absolutePath)
+    overlay?.inspect({
+      element,
+      title,
+      info: relativePath ?? absolutePath,
+    })
 
     onHoverElement?.({
       element,

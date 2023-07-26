@@ -36,6 +36,20 @@ type StyledTagCreator = {
 interface StyledCreator extends StyledComponentCreator, StyledTagCreator {}
 
 
+/**
+ * style-component method for tailwindcss
+ *
+ * Note: add this config in VSCode `settings.json` for code hinting
+ *   via [Tailwind CSS IntelliSense](https://github.com/tailwindlabs/tailwindcss-intellisense):
+ *
+ * ```json
+ * "tailwindCSS.experimental.classRegex": [
+ *   "className: *`([^`]*)`",
+ *   "className: *\"([^\"]*)\"",
+ *   "className: *'([^']*)'",
+ * ],
+ * ```
+ */
 export const twStyled = (
   <T, P extends { className?: string }, Tag extends keyof JSX.IntrinsicElements>(
     Component: ForwardRefRenderFunction<T, P> | ComponentType<P> | Tag,

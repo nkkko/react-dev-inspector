@@ -26,7 +26,7 @@ export const Title = styled.h1({
 export const Slogan = styled.p({
   displayName: 'Slogan',
   className: `
-    mt-6 leading-8 text-gray-600 text-[min(4.5vw,1.25rem)] leading-[min(6vw,1.75rem)] sm:text-lg
+    mt-6 text-gray-600 text-[min(4.5vw,1.25rem)] leading-[min(6vw,1.75rem)] sm:text-lg
     transition-all duration-200 ease
   `,
 })

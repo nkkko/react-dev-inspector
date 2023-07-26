@@ -8,6 +8,15 @@
     "types": [
       "node",
     ],
+
+    // https://lit.dev/docs/components/decorators/#decorators-typescript
+    // https://www.typescriptlang.org/tsconfig#useDefineForClassFields
+    "useDefineForClassFields": false,
+
+    "paths": {
+      "react-dev-inspector": ["src"],
+      "@stories/*": ["src/.stories/*"],
+    },
   },
   "include": [
     "src",

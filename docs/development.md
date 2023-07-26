@@ -17,6 +17,7 @@ pnpm i
 pnpm update -rDL typescript
 # it's equal to
 pnpm update --recursive --dev --latest typescript
+# https://pnpm.io/cli/update
 ```
 
 Or
@@ -68,6 +69,8 @@ sync demo code from vite4 to other examples:
 # at project root dir
 ./scripts/sync-page-code.sh
 ```
+
+> **NOTE:** use copied files rather than symlink is design for StackBlitz online demo with pure subpath.
 
 
 ### build examples sites

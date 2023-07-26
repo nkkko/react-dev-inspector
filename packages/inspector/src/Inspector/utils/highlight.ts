@@ -1,68 +1,46 @@
-/**
- * mirror from https://github.com/facebook/react/blob/v16.13.1/packages/react-devtools-shared/src/backend/views/Highlighter/index.js
- */
-
-
-// This plug-in provides in-page highlighting of the selected element.
-// It is used by the browser extension nad the standalone DevTools shell
-// (when connected to a browser).
-// It is not currently the mechanism used to highlight React Native views.
-// That is done by the React Native Inspector component.
-
-let iframesListeningTo: Set<HTMLIFrameElement> = new Set()
-
 export type StopFunction = () => void
 
-export function setupHighlighter(
+export function setupListener(
   handlers: {
     onPointerOver?: (element: HTMLElement) => void;
     onClick?: (element: HTMLElement) => void;
   },
 ): StopFunction {
   function startInspectingNative() {
-    registerListenersOnWindow(window)
+    registerListeners(window)
   }
 
-  function registerListenersOnWindow(window?: Window | null) {
+  function registerListeners(element?: HTMLElement | Window) {
     // This plug-in may run in non-DOM environments (e.g. React Native).
-    if (window && typeof window.addEventListener === 'function') {
-      window.addEventListener('click', onClick, true)
-      window.addEventListener('mousedown', onMouseEvent, true)
-      window.addEventListener('mouseover', onMouseEvent, true)
-      window.addEventListener('mouseup', onMouseEvent, true)
-      window.addEventListener('pointerdown', onPointerDown, true)
-      window.addEventListener('pointerover', onPointerOver, true)
-      window.addEventListener('pointerup', onPointerUp, true)
+    if (element && typeof element.addEventListener === 'function') {
+      element.addEventListener('click', onClick, { capture: true })
+      element.addEventListener('mousedown', onMouseEvent, { capture: true })
+      element.addEventListener('mouseover', onMouseEvent, { capture: true })
+      element.addEventListener('mouseup', onMouseEvent, { capture: true })
+      element.addEventListener('pointerdown', onPointerDown, { capture: true })
+      element.addEventListener('pointerover', onPointerOver, { capture: true })
+      element.addEventListener('pointerup', onPointerUp, { capture: true })
     }
   }
 
   function stopInspectingNative() {
-    removeListenersOnWindow(window)
-    iframesListeningTo.forEach((frame) => {
-      try {
-        removeListenersOnWindow(frame.contentWindow)
-      }
-      catch (error) {
-        // This can error when the iframe is on a cross-origin.
-      }
-    })
-    iframesListeningTo = new Set()
+    removeListeners(window)
   }
 
-  function removeListenersOnWindow(window?: Window | null) {
+  function removeListeners(element?: HTMLElement | Window) {
     // This plug-in may run in non-DOM environments (e.g. React Native).
-    if (window && typeof window.removeEventListener === 'function') {
-      window.removeEventListener('click', onClick, true)
-      window.removeEventListener('mousedown', onMouseEvent, true)
-      window.removeEventListener('mouseover', onMouseEvent, true)
-      window.removeEventListener('mouseup', onMouseEvent, true)
-      window.removeEventListener('pointerdown', onPointerDown, true)
-      window.removeEventListener('pointerover', onPointerOver, true)
-      window.removeEventListener('pointerup', onPointerUp, true)
+    if (element && typeof element.removeEventListener === 'function') {
+      element.removeEventListener('click', onClick, { capture: true })
+      element.removeEventListener('mousedown', onMouseEvent, { capture: true })
+      element.removeEventListener('mouseover', onMouseEvent, { capture: true })
+      element.removeEventListener('mouseup', onMouseEvent, { capture: true })
+      element.removeEventListener('pointerdown', onPointerDown, { capture: true })
+      element.removeEventListener('pointerover', onPointerOver, { capture: true })
+      element.removeEventListener('pointerup', onPointerUp, { capture: true })
     }
   }
 
-  function onClick(event: MouseEvent) {
+  function onClick(event: Event) {
     event.preventDefault()
     event.stopPropagation()
 
@@ -71,40 +49,26 @@ export function setupHighlighter(
     handlers.onClick?.(event.target as HTMLElement)
   }
 
-  function onMouseEvent(event: MouseEvent) {
+  function onMouseEvent(event: Event) {
     event.preventDefault()
     event.stopPropagation()
   }
 
-  function onPointerDown(event: MouseEvent) {
+  function onPointerDown(event: Event) {
     event.preventDefault()
     event.stopPropagation()
   }
 
-  function onPointerOver(event: MouseEvent) {
+  function onPointerOver(event: Event) {
     event.preventDefault()
     event.stopPropagation()
 
     const target = event.target as HTMLElement
 
-    if (target.tagName === 'IFRAME') {
-      const iframe: HTMLIFrameElement = target as HTMLIFrameElement
-      try {
-        if (!iframesListeningTo.has(iframe)) {
-          const window = iframe.contentWindow
-          registerListenersOnWindow(window)
-          iframesListeningTo.add(iframe)
-        }
-      }
-      catch (error) {
-        // This can error when the iframe is on a cross-origin.
-      }
-    }
-
-    handlers.onPointerOver?.(event.target as HTMLElement)
+    handlers.onPointerOver?.(target)
   }
 
-  function onPointerUp(event: MouseEvent) {
+  function onPointerUp(event: Event) {
     event.preventDefault()
     event.stopPropagation()
   }

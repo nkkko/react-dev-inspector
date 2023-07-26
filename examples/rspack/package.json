@@ -26,8 +26,8 @@
   },
   "devDependencies": {
     "@babel/preset-typescript": "7.22.5",
-    "@react-dev-inspector/babel-plugin": "beta",
-    "@react-dev-inspector/middleware": "beta",
+    "@react-dev-inspector/babel-plugin": "^2",
+    "@react-dev-inspector/middleware": "^2",
     "@rspack/cli": "0.3.1",
     "@types/node": "16.18.7",
     "@types/react": "18.0.26",
@@ -38,11 +38,11 @@
     "npm-run-all": "4.1.5",
     "postcss": "8.4.26",
     "postcss-loader": "7.3.3",
-    "react-dev-inspector": "beta",
+    "react-dev-inspector": "^2",
     "rimraf": "3.0.2",
     "tailwindcss": "3.3.3",
     "ts-node": "10.9.1",
-    "typescript": "5.1.6"
+    "typescript": "5.3.2"
   },
   "browserslist": {
     "production": [

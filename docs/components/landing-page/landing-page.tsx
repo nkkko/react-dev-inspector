@@ -123,7 +123,6 @@ export const LandingPage = () => {
               />
             </Feature>
 
-
             <Feature
               large
               id='working-pipeline'

@@ -8,7 +8,6 @@ module.exports = {
    * https://github.com/antfu/eslint-config/blob/v0.39.7
    */
   extends: [
-    '@antfu',
     '@antfu/react',
   ],
 
@@ -194,6 +193,7 @@ module.exports = {
           'TSTypeParameterInstantiation',
           'TSIntersectionType',
           'TSUnionType',
+          'PropertyDefinition[decorators]',
           // 'ConditionalExpression',
           // 'TemplateLiteral *',
           // 'JSXElement',
