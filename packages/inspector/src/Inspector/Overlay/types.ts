@@ -1,4 +1,4 @@
-export interface Rect {
+export interface Box {
   top: number;
   left: number;
   width: number;
@@ -7,7 +7,7 @@ export interface Rect {
   bottom: number;
 }
 
-export interface Box {
+export interface Rect {
   top: number;
   left: number;
   width: number;

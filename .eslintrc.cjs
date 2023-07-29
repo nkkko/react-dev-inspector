@@ -305,7 +305,7 @@ module.exports = {
 
   overrides: [
     {
-      files: ['packages/*/src/**/*.{js,ts}'],
+      files: ['packages/*/src/**/*.{js,ts,tsx}'],
       rules: {
         // For more compatibility with lower Node.js versions
         'unicorn/prefer-node-protocol': 'off',

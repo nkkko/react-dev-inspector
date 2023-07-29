@@ -13,9 +13,9 @@ declare global {
 
   namespace JSX {
     interface IntrinsicElements {
-      'inspector-overlay': RefAttributes<InspectorOverlay>;
-      'inspector-overlay-rect': RefAttributes<InspectorOverlayRect>;
-      'inspector-overlay-tip': RefAttributes<InspectorOverlayTip>;
+      'inspector-overlay': RefAttributes<InspectorOverlay> & HTMLAttributes;
+      'inspector-overlay-rect': RefAttributes<InspectorOverlayRect> & HTMLAttributes;
+      'inspector-overlay-tip': RefAttributes<InspectorOverlayTip> & HTMLAttributes;
     }
   }
 }

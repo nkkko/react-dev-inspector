@@ -1,6 +1,14 @@
-
+import assert from 'assert'
 import { useState, useRef, useEffect } from 'react'
-import type { Meta } from '@storybook/react'
+import type { StoryFn, Meta } from '@storybook/react'
+import { clsx } from 'clsx'
+import {
+  fromEvent,
+  map,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs'
 import {
   Button,
   Card as CardContainer,
@@ -18,7 +26,7 @@ import {
 } from '../utils'
 import {
   getElementDimensions,
-  getNestedBoundingClientRect,
+  getNestedBoundingBox,
 } from './utils'
 import {
   type InspectorOverlay,
@@ -40,8 +48,7 @@ export default {
   title: 'Overlay',
 } satisfies Meta
 
-
-export const OverlayTips = () => {
+export const CornerItems = () => {
   const setup = async () => {
     const tips = document.querySelectorAll('inspector-overlay-tip')
     const rects = document.querySelectorAll('inspector-overlay-rect')
@@ -77,6 +84,30 @@ export const OverlayTips = () => {
         top: (screenHeight - itemSize) / 2,
         left: (screenWidth - itemSize) / 2,
       },
+
+      // Top-Center but outside the space
+      {
+        top: -2 * itemSize,
+        left: (screenWidth - itemSize) / 2,
+      },
+
+      // Bottom-Center but outside the space
+      {
+        top: screenHeight + 2 * itemSize,
+        left: (screenWidth - itemSize) / 2,
+      },
+
+      // Left-Center but outside the space
+      {
+        top: (screenHeight - itemSize) / 2,
+        left: -2 * itemSize,
+      },
+
+      // Right-Center but outside the space
+      {
+        top: (screenHeight - itemSize) / 2,
+        left: screenWidth + 2 * itemSize,
+      },
     ]
 
 
@@ -84,13 +115,13 @@ export const OverlayTips = () => {
     positions.forEach((position, index) => {
       const rect = rects[index]
       const tip = tips[index]
+      assert(rect)
+      assert(tip)
 
       const boundingRect: Rect = {
         ...position,
         width: itemSize,
         height: itemSize,
-        right: position.left + itemSize,
-        bottom: position.top + itemSize,
       }
 
       const boxSizing: BoxSizing = {
@@ -141,9 +172,135 @@ export const OverlayTips = () => {
 
       <inspector-overlay-rect />
       <inspector-overlay-tip />
+
+      <inspector-overlay-rect />
+      <inspector-overlay-tip />
+
+      <inspector-overlay-rect />
+      <inspector-overlay-tip />
+
+      <inspector-overlay-rect />
+      <inspector-overlay-tip />
+
+      <inspector-overlay-rect />
+      <inspector-overlay-tip />
     </Inspector>
   )
 }
+
+
+export const MoveableDragItem: StoryFn<{ itemSize: 'normal' | 'full' | 'large' }> = ({ itemSize }) => {
+  const elementRef = useRef<HTMLDivElement>(null)
+  const overlayRef = useRef<InspectorOverlayRect>(null)
+  const overlayTipRef = useRef<InspectorOverlayTip>(null)
+
+  const positionRef = useRef({
+    top: 0,
+    left: 0,
+  })
+  const [position, setPosition] = useState(positionRef.current)
+
+  const mockInspectElement = (element?: HTMLElement | null) => {
+    const overlayRect = overlayRef.current
+    const overlayTip = overlayTipRef.current
+    if (!(element && overlayRect && overlayTip)) return
+
+    const boxSizing = getElementDimensions(element)
+    const boundingRect = getNestedBoundingBox(element)
+
+    overlayRect.updateBound({
+      boundingRect,
+      boxSizing,
+    })
+
+    overlayTip.updateTip({
+      title: 'div in <Card>',
+      info: 'relative/path/to/packages/component.tsx',
+      boundingRect,
+      boxSizing,
+    })
+  }
+
+  useEffect(() => {
+    const element = elementRef.current
+    assert(element)
+    mockInspectElement(element)
+
+    const subscriber = fromEvent<PointerEvent>(element, 'pointerdown').pipe(
+      switchMap(down => {
+        const start = positionRef.current
+        return fromEvent<PointerEvent>(document, 'pointermove').pipe(
+          map(move => ({
+            x: move.clientX - down.clientX,
+            y: move.clientY - down.clientY,
+          })),
+          map(movement => ({
+            left: movement.x + start.left,
+            top: movement.y + start.top,
+          })),
+          takeUntil(fromEvent(document, 'pointerup')),
+        )
+      }),
+      tap(position => {
+        setPosition(position)
+        positionRef.current = position
+        mockInspectElement(element)
+      }),
+    ).subscribe()
+
+    return () => subscriber.unsubscribe()
+  }, [])
+
+  return (
+    <div>
+      <div
+        ref={elementRef}
+        className={clsx(
+          `
+            relative flex justify-center items-center
+            m-4 p-2
+            border border-slate-800 text-black
+            select-none cursor-move
+          `,
+          itemSize === 'normal' && 'w-32 h-32',
+          itemSize === 'full' && 'w-screen h-screen',
+          itemSize === 'large' && 'w-[120vw] h-[120vw]',
+        )}
+        style={position}
+      >
+        <span>({position.top.toFixed(0)}, {position.left.toFixed(0)})</span>
+      </div>
+
+      <inspector-overlay-rect
+        ref={overlayRef}
+        class='pointer-events-none'
+      />
+      <inspector-overlay-tip
+        ref={overlayTipRef}
+      />
+    </div>
+  )
+}
+
+/**
+ * https://storybook.js.org/docs/api/arg-types
+ */
+MoveableDragItem.argTypes = {
+  itemSize: {
+    name: 'Item Size',
+    type: {
+      name: 'enum',
+      value: ['normal', 'full', 'large'],
+      required: true,
+    },
+  },
+}
+
+// https://storybook.js.org/docs/writing-stories/args
+MoveableDragItem.args = {
+  itemSize: 'normal',
+}
+
 
 export const OverlayRectAndTipItems = () => {
   const [active, setActive] = useState(false)
@@ -157,7 +314,7 @@ export const OverlayRectAndTipItems = () => {
     if (!(element && overlayRect && overlayTip)) return
 
     const boxSizing = getElementDimensions(element)
-    const boundingRect = getNestedBoundingClientRect(element)
+    const boundingRect = getNestedBoundingBox(element)
 
     overlayRect.updateBound({
       boundingRect,

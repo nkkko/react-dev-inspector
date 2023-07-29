@@ -1,5 +1,5 @@
 import type {
-  Rect,
+  Box,
   BoxSizing,
 } from './types'
 
@@ -10,8 +10,16 @@ export const registerElement = (tagName: string, elementClass: CustomElementCons
   }
 }
 
-export function getNestedBoundingClientRect(node: HTMLElement): Rect {
-  return node.getBoundingClientRect()
+export function getNestedBoundingBox(node: HTMLElement): Box {
+  const domRect = node.getBoundingClientRect()
+  return {
+    top: domRect.top,
+    left: domRect.left,
+    width: domRect.width,
+    height: domRect.height,
+    right: domRect.right,
+    bottom: domRect.bottom,
+  }
 }
 
 export function getElementDimensions(domElement: Element): BoxSizing {

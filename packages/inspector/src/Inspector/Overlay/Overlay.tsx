@@ -4,7 +4,7 @@ import { ref, createRef, type Ref } from 'lit/directives/ref.js'
 import {
   registerElement,
   getElementDimensions,
-  getNestedBoundingClientRect,
+  getNestedBoundingBox,
 } from './utils'
 import {
   InspectorOverlayRect,
@@ -58,7 +58,7 @@ export class InspectorOverlay extends LitElement {
     overlayTip: InspectorOverlayTip;
   }) {
     const boxSizing = getElementDimensions(element)
-    const boundingRect = getNestedBoundingClientRect(element)
+    const boundingRect = getNestedBoundingBox(element)
 
     overlayRect.updateBound({
       boundingRect,

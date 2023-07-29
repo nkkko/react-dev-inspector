@@ -3,25 +3,70 @@ import { html, css, LitElement } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 import { styleMap, type StyleInfo } from 'lit/directives/style-map.js'
 import type {
-  Box,
+  Rect,
   BoxSizing,
 } from './types'
 
 
 @customElement('inspector-overlay-rect')
 export class InspectorOverlayRect extends LitElement {
-  @property({ attribute: false })
-  public boundingRect?: Box
+  private boxSizing?: BoxSizing
+  private boundingRect?: Rect
 
   @property({ attribute: false })
-  public boxSizing?: BoxSizing
+  private styles: {
+    hostStyle: Pick<CSSProperties, 'top' | 'left'>;
+    marginStyle: ReturnType<typeof styleMap>;
+    borderStyle: ReturnType<typeof styleMap>;
+    paddingStyle: ReturnType<typeof styleMap>;
+    contentStyle: ReturnType<typeof styleMap>;
+  } = {
+    hostStyle: {
+      top: 0,
+      left: 0,
+    },
+    marginStyle: styleMap({ display: 'none' }),
+    borderStyle: styleMap({ display: 'none' }),
+    paddingStyle: styleMap({ display: 'none' }),
+    contentStyle: styleMap({ display: 'none' }),
+  }
 
-  public updateBound({ boundingRect, boxSizing }: {
-    boundingRect: Box;
+  public updateBound({ boxSizing, boundingRect }: {
     boxSizing: BoxSizing;
+    boundingRect: Rect;
   }) {
-    this.boundingRect = boundingRect
     this.boxSizing = boxSizing
+    this.boundingRect = boundingRect
+
+    this.styles = {
+      hostStyle: {
+        top: (this.boundingRect?.top ?? 0) - (this.boxSizing?.marginTop ?? 0),
+        left: (this.boundingRect?.left ?? 0) - (this.boxSizing?.marginLeft ?? 0),
+      },
+
+      marginStyle: styleMap(this.getBoxStyle(this.boxSizing, 'margin') as StyleInfo),
+      borderStyle: styleMap(this.getBoxStyle(this.boxSizing, 'border') as StyleInfo),
+      paddingStyle: styleMap(this.getBoxStyle(this.boxSizing, 'padding') as StyleInfo),
+
+      contentStyle: !(this.boundingRect && this.boxSizing)
+        ? styleMap({})
+        : styleMap({
+          height: `${
+            this.boundingRect.height
+            - this.boxSizing.borderTop
+            - this.boxSizing.borderBottom
+            - this.boxSizing.paddingTop
+            - this.boxSizing.paddingBottom
+          }px`,
+          width: `${
+            this.boundingRect.width
+            - this.boxSizing.borderLeft
+            - this.boxSizing.borderRight
+            - this.boxSizing.paddingLeft
+            - this.boxSizing.paddingRight
+          }px`,
+        }),
+    }
   }
 
   protected getBoxStyle(boxSizing: BoxSizing | undefined, type: 'margin' | 'padding' | 'border'): CSSProperties {
@@ -41,34 +86,22 @@ export class InspectorOverlayRect extends LitElement {
   }
 
   override render() {
-    const marginStyle = styleMap({
-      ...this.getBoxStyle(this.boxSizing, 'margin') as StyleInfo,
-      top: `${(this.boundingRect?.top ?? 0) - (this.boxSizing?.marginTop ?? 0)}px`,
-      left: `${(this.boundingRect?.left ?? 0) - (this.boxSizing?.marginLeft ?? 0)}px`,
-    })
+    const {
+      hostStyle,
+      marginStyle,
+      borderStyle,
+      paddingStyle,
+      contentStyle,
+    } = this.styles
 
-    const borderStyle = styleMap(this.getBoxStyle(this.boxSizing, 'border') as StyleInfo)
-
-    const paddingStyle = styleMap(this.getBoxStyle(this.boxSizing, 'padding') as StyleInfo)
-
-    const contentStyle = !(this.boundingRect && this.boxSizing)
-      ? styleMap({})
-      : styleMap({
-        height: `${
-          this.boundingRect.height
-          - this.boxSizing.borderTop
-          - this.boxSizing.borderBottom
-          - this.boxSizing.paddingTop
-          - this.boxSizing.paddingBottom
-        }px`,
-        width: `${
-          this.boundingRect.width
-          - this.boxSizing.borderLeft
-          - this.boxSizing.borderRight
-          - this.boxSizing.paddingLeft
-          - this.boxSizing.paddingRight
-        }px`,
-      })
+    this.style.setProperty(
+      '--inspector-overlay-rect-top',
+      `${hostStyle.top}px`,
+    )
+    this.style.setProperty(
+      '--inspector-overlay-rect-left',
+      `${hostStyle.left}px`,
+    )
 
     return html`
       <div
@@ -99,15 +132,20 @@ export class InspectorOverlayRect extends LitElement {
    * https://github.com/ChromeDevTools/devtools-frontend/blob/chromium/6210/front_end/core/sdk/OverlayModel.ts#L553
    */
   static styles = css`
-    .inspector-overlay-margin {
+    :host {
       position: fixed;
       z-index: 10000000;
+      cursor: default;
+      top: var(--inspector-overlay-rect-top, 0);
+      left: var(--inspector-overlay-rect-left, 0);
+    }
+
+    .inspector-overlay-margin {
       /**
        * PageHighlight.Margin in
        *   https://github.com/ChromeDevTools/devtools-frontend/blob/chromium/6210/front_end/core/common/Color.ts#L2322
        */
       border-color: rgba(246, 178, 107, .66);
-      cursor: default;
     }
     .inspector-overlay-border {
       /**

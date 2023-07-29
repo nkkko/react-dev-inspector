@@ -39,3 +39,6 @@
     --radius: 0.5rem;
   }
 
+  #storybook-root {
+    padding: 0 !important;
+  }
