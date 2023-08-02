@@ -53,5 +53,5 @@ export default function inspectorPlugin(api: IApi) {
   }
 
   // https://umijs.org/docs/api/plugin-api#addbeforemiddlewares
-  api.addBeforeMiddlewares(createLaunchEditorMiddleware)
+  api.addBeforeMiddlewares(createLaunchEditorMiddleware as unknown as Parameters<typeof api.addBeforeMiddlewares>[0])
 }
