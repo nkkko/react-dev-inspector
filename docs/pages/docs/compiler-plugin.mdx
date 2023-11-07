@@ -37,15 +37,65 @@ or read from React's `fiber._debugSource`, some compiler with plugins can provid
 
 ## Babel
 
-There are two supported Babel plugins available should you need them:
+There are some supported Babel plugins available should you need them to record source path information into React components during the development phase:
 
-### `@babel/plugin-transform-react-jsx-source`
+### `@babel/preset-react`
 
 ```bash npm2yarn
-npm i -D @babel/plugin-transform-react-jsx-source
+npm i -D @babel/preset-react
 ```
 
-[`@babel/plugin-transform-react-jsx-source`](https://babeljs.io/docs/babel-plugin-transform-react-jsx-source) could inject `__source` props to JSX Elements,
+[`@babel/preset-react`](https://babeljs.io/docs/babel-preset-react) is a Babel preset that compiles JSX and other stuff to React,
+and most React frameworks used it as **built-in preset**, so maybe you don't have to install it.
+
+If you are already using `@babel/preset-react`, **make sure it have enabled the `development` option**, that will provide precise code location information for debugging React apps.
+
+```ts  showLineNumbers {7}
+{
+  presets: [
+    [
+      '@babel/preset-react',
+      {
+        runtime: 'automatic', // for react >= 16.14.0
+        development: process.env.NODE_ENV === 'development',
+      },
+    ],
+  ],
+}
+```
+
+
+With `development` and `runtime: 'automatic'` options enabled, it will append `@babel/plugin-transform-react-jsx-development` into plugins.
+
+> while set `runtime: 'classic'` _(for react < 16.14.0)_, it will append legacy `@babel/plugin-transform-react-jsx-source` as instead.
+
+Furthermore, you can also manually add these plugins to your Babel configuration if required.
+
+
+#### `@babel/plugin-transform-react-jsx-development`
+
+If you are already using `@babel/preset-react`, it will be automatically enabled by the `development` option so you don't have to install it.
+
+[`@babel/plugin-transform-react-jsx-development`](https://babeljs.io/docs/babel-plugin-transform-react-jsx-development) could inject the `source` params to `_jsxDEV` function,
+which will be transform to `fiber._debugSource` by React.
+
+```tsx
+// Input
+<div />
+
+// Output
+_jsxDEV("div", {}, void 0, false, {
+    fileName: '/absolute/path/Component.tsx',
+    lineNumber: 10,
+    columnNumber: 6
+  },
+)
+```
+
+
+#### `@babel/plugin-transform-react-jsx-source`
+
+The legacy plugin [`@babel/plugin-transform-react-jsx-source`](https://babeljs.io/docs/babel-plugin-transform-react-jsx-source) could inject `__source` props to JSX Elements,
 which will be transform to `fiber._debugSource` by React.
 
 ```tsx
@@ -56,10 +106,6 @@ which will be transform to `fiber._debugSource` by React.
 <div __source={{ fileName: '/absolute/path/Component.tsx', lineNumber: 10, columnNumber: 6 }} />
 ```
 
-<Callout type="info" emoji="💡">
-  **Note:** Most React frameworks used `@babel/plugin-transform-react-jsx-source` plugin as **built-in preset**,
-  includes Vite / Next.js / Remix / Gatsby / Umijs / create-react-app / ...
-</Callout>
 
 
 ### `@react-dev-inspector/babel-plugin`
@@ -81,8 +127,9 @@ which will eventually appear on the DOM element.
 ```
 
 <Callout type="info" emoji="💡">
-  The difference is that `@react-dev-inspector/babel-plugin` will inject the **relative path** for aesthetic reasons,
-  while the `@babel/plugin-transform-react-jsx-source` injects the **absolute path**.
+  The difference is that **`@react-dev-inspector/babel-plugin`** will inject the **relative path** for aesthetic reasons,
+  while the [`@babel/plugin-transform-react-jsx-development`](https://react-dev-inspector.zthxxx.me/docs/compiler-plugin#babelplugin-transform-react-jsx-development)
+  injects the **absolute path**.
 </Callout>
 
 ### Setup Examples
