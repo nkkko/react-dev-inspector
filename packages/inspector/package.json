@@ -6,6 +6,18 @@
   "main": "lib",
   "module": "es",
   "types": "es",
+  "exports": {
+    ".": {
+      "import": "./es/index.js",
+      "require": "./lib/index.js"
+    },
+    "./plugins/babel": "./lib/plugins/babel.js",
+    "./plugins/vite": "./lib/plugins/vite.js",
+    "./plugins/webpack": "./lib/plugins/webpack.js",
+    "./plugins/umi": "./lib/plugins/umi.js",
+    "./plugins/umi/react-inspector": "./lib/plugins/umi.js",
+    "./plugins/ice": "./lib/plugins/ice.js"
+  },
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest watch",
