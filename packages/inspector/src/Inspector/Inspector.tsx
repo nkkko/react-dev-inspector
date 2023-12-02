@@ -1,34 +1,37 @@
 'use client'
 
 import {
-  useState,
   useEffect,
   useRef,
   type ReactNode,
 } from 'react'
 import type { Fiber } from 'react-reconciler'
-import hotkeys from 'hotkeys-js'
 import {
-  setupListener,
-  getElementCodeInfo,
   gotoServerEditor,
-  getElementInspect,
-  type CodeInfo,
 } from './utils'
 import {
-  useLayoutEffect,
+  useHotkeyToggle,
   useEffectEvent,
-  useMousePosition,
+  useRecordPointer,
+  useControlledActive,
 } from './hooks'
-import { Overlay } from './Overlay'
+import { domInspectAgent } from './DOMInspectAgent'
+import type {
+  CodeInfo,
+  InspectAgent,
+} from './types'
 
+
+const defaultInspectAgents: InspectAgent<HTMLElement>[] = [
+  domInspectAgent,
+]
 
 /**
  * the inspect meta info that is sent to the callback when an element is hovered over or clicked.
  */
-export interface InspectParams {
+export interface InspectParams<Element = HTMLElement> {
   /** hover / click event target dom element */
-  element: HTMLElement;
+  element: Element;
   /** nearest named react component fiber for dom element */
   fiber?: Fiber;
   /** source file line / column / path info for react component */
@@ -37,16 +40,7 @@ export interface InspectParams {
   name?: string;
 }
 
-/**
- * `v2.0.0` changes:
- *   - make 'Ctrl + Shift + Alt + C' as default shortcut on Windows/Linux
- *   - export `defaultHotkeys`
- */
-export const defaultHotkeys = () => navigator.platform?.startsWith('Mac')
-  ? ['Ctrl', 'Shift', 'Command', 'C']
-  : ['Ctrl', 'Shift', 'Alt', 'C']
-
-export interface InspectorProps {
+export interface InspectorProps<Element> {
   /**
    * Inspector Component toggle hotkeys,
    *
@@ -90,6 +84,12 @@ export interface InspectorProps {
   disable?: boolean;
 
   /**
+   * Agent for get inspection info in different React renderer with user interaction
+   * @default [domInspectAgent]
+   */
+  inspectAgents?: InspectAgent<Element>[];
+
+  /**
    * Callback when left-clicking on an element, with ensuring the source code info is found.
    *
    * By setting the `onInspectElement` prop, the default behavior ("open local IDE") will be disabled,
@@ -111,15 +111,15 @@ export interface InspectorProps {
    *
    * > add in version `v2.0.0`
    */
-  onInspectElement?: (params: Required<InspectParams>) => void;
+  onInspectElement?: (params: Required<InspectParams<Element>>) => void;
 
   /** Callback when hovering on an element */
-  onHoverElement?: (params: InspectParams) => void;
+  onHoverElement?: (params: InspectParams<Element>) => void;
 
   /**
    * Callback when left-clicking on an element.
    */
-  onClickElement?: (params: InspectParams) => void;
+  onClickElement?: (params: InspectParams<Element>) => void;
 
   /** any children of react nodes */
   children?: ReactNode;
@@ -133,7 +133,7 @@ export interface InspectorProps {
   disableLaunchEditor?: boolean;
 }
 
-export const Inspector = (props: InspectorProps) => {
+export const Inspector = function<Element>(props: InspectorProps<Element>) {
   const {
     keys,
     onHoverElement,
@@ -141,115 +141,105 @@ export const Inspector = (props: InspectorProps) => {
     onInspectElement,
     active: controlledActive,
     onActiveChange,
+    inspectAgents = defaultInspectAgents as InspectAgent<Element>[],
     disableLaunchEditor,
     disable = (process.env.NODE_ENV !== 'development'),
     children,
   } = props
 
-  const [isActive, setActive] = useState<boolean>(controlledActive ?? false)
-
-  // sync state as controlled component
-  useLayoutEffect(() => {
-    if (controlledActive !== undefined) {
-      setActive(controlledActive)
-    }
-  }, [controlledActive])
+  const pointerRef = useRecordPointer({ disable })
+  const agentRef = useRef<InspectAgent<Element>>()
 
   useEffect(() => {
-    isActive
-      ? startInspect()
-      : stopInspect()
-
-    return stopInspect
-  }, [isActive])
-
-  // hotkeys-js params need string
-  const hotkey: string | null = keys === null
-    ? null
-    : (keys ?? []).join('+')
-
-  /** inspector tooltip overlay */
-  const overlayRef = useRef<Overlay>()
-  const removeListenerRef = useRef<() => void>()
-  const mouseRef = useMousePosition({ disable })
-
-  const activate = useEffectEvent(() => {
-    onActiveChange?.(true)
-    if (controlledActive === undefined) {
-      setActive(true)
+    return () => {
+      agentRef.current = undefined
+      inspectAgents.forEach(agent => {
+        agent.deactivate()
+      })
     }
-  })
+  }, [inspectAgents])
 
-  const deactivate = useEffectEvent(() => {
-    onActiveChange?.(false)
-    if (controlledActive === undefined) {
-      setActive(false)
-    }
-  })
-
-  const startInspect = useEffectEvent(() => {
-    if (overlayRef.current || disable) return
-
-    const overlay = new Overlay()
-    overlayRef.current = overlay
-
-    hotkeys(`esc`, deactivate)
-
-    removeListenerRef.current = setupListener({
-      onPointerOver: handleHoverElement,
-      onClick: handleClickElement,
+  const startInspecting = useEffectEvent(() => {
+    inspectAgents.forEach(agent => {
+      agent.activate({
+        pointer: pointerRef.current,
+        onHover: (params) => handleHoverElement({
+          agent,
+          ...params,
+        }),
+        onClick: (params) => handleClickElement({
+          agent,
+          ...params,
+        }),
+      })
     })
-
-    // inspect element immediately at mouse point
-    const initPoint = mouseRef.current
-    const initElement = document.elementFromPoint(initPoint.x, initPoint.y)
-    if (initElement) handleHoverElement(initElement as HTMLElement)
   })
 
-  const stopInspect = useEffectEvent(() => {
-    overlayRef.current?.remove()
-    overlayRef.current = undefined
-
-    removeListenerRef.current?.()
-    removeListenerRef.current = undefined
-
-    hotkeys.unbind(`esc`, deactivate)
+  const stopInspecting = useEffectEvent(() => {
+    inspectAgents.forEach(agent => {
+      agent.deactivate()
+    })
   })
 
-  const handleHoverElement = useEffectEvent((element: HTMLElement) => {
-    const overlay = overlayRef.current
+  const handleHoverElement = useEffectEvent(({ agent, element, pointer }: {
+    agent: InspectAgent<Element>;
+    element: Element;
+    pointer: PointerEvent;
+  }) => {
+    if (agent !== agentRef.current) {
+      agentRef.current?.removeIndicate()
+      agentRef.current = agent
+    }
 
-    const codeInfo = getElementCodeInfo(element)
-    const relativePath = codeInfo?.relativePath
-    const absolutePath = codeInfo?.absolutePath
-
-    const { fiber, name, title } = getElementInspect(element)
-
-    overlay?.inspect({
+    const nameInfo = agent.getNameInfo(element)
+    agent.indicate({
       element,
-      title,
-      info: relativePath ?? absolutePath,
+      pointer,
+      name: nameInfo?.name,
+      title: nameInfo?.title,
     })
 
-    onHoverElement?.({
+    if (!onHoverElement) {
+      return
+    }
+
+    const codeInfo = agent.findCodeInfo(element)
+    const fiber = (element instanceof HTMLElement)
+      ? domInspectAgent.getElementFiber(element)
+      : undefined
+
+    onHoverElement({
       element,
       fiber,
       codeInfo,
-      name,
+      name: nameInfo?.name ?? '',
     })
   })
 
-  const handleClickElement = useEffectEvent((element: HTMLElement) => {
-    deactivate()
+  const handleClickElement = useEffectEvent(({ agent, element, pointer }: {
+    agent: InspectAgent<Element>;
+    element: Element;
+    pointer: PointerEvent;
+  }) => {
+    if (agent !== agentRef.current) {
+      return
+    }
 
-    const codeInfo = getElementCodeInfo(element)
-    const { fiber, name } = getElementInspect(element)
+    agent.removeIndicate()
+
+    const nameInfo = agent.getNameInfo(element)
+    const codeInfo = agent.findCodeInfo(element)
+    const fiber = (element instanceof HTMLElement)
+      ? domInspectAgent.getElementFiber(element)
+      : undefined
+
+    deactivate()
 
     onClickElement?.({
       element,
       fiber,
       codeInfo,
-      name,
+      name: nameInfo?.name,
     })
 
     if (fiber && codeInfo) {
@@ -257,35 +247,30 @@ export const Inspector = (props: InspectorProps) => {
         element,
         fiber,
         codeInfo,
-        name: name!,
+        name: nameInfo?.name ?? '',
       })
+    }
 
-      if (!onInspectElement && !disableLaunchEditor) {
-        gotoServerEditor(codeInfo)
-      }
+    if (codeInfo && !onInspectElement && !disableLaunchEditor) {
+      gotoServerEditor(codeInfo)
     }
   })
 
-  useEffect(() => {
-    const handleHotKeys = () => {
-      overlayRef.current
-        ? deactivate()
-        : activate()
-    }
+  const { activate, deactivate, activeRef } = useControlledActive({
+    controlledActive,
+    onActiveChange,
+    onActivate: startInspecting,
+    onDeactivate: stopInspecting,
+    disable,
+  })
 
-    const bindKey = (hotkey === null || disable)
-      ? null
-      : (hotkey || defaultHotkeys().join('+'))
-
-    if (bindKey) {
-      // https://github.com/jaywcjlove/hotkeys
-      hotkeys(bindKey, handleHotKeys)
-
-      return () => {
-        hotkeys.unbind(bindKey, handleHotKeys)
-      }
-    }
-  }, [hotkey, disable])
+  useHotkeyToggle({
+    keys,
+    disable,
+    activeRef,
+    deactivate,
+    activate,
+  })
 
   return (<>{children ?? null}</>)
 }

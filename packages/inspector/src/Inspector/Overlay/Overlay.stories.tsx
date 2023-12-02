@@ -20,7 +20,7 @@ import {
   Inspector,
 } from '../Inspector'
 import {
-  setupListener,
+  setupPointerListener,
   getElementCodeInfo,
   getElementInspect,
 } from '../utils'
@@ -442,8 +442,8 @@ export const OverlayHover = () => {
 
     const overlay = new Overlay()
 
-    const stopCallback = setupListener({
-      onPointerOver: (element) => {
+    const stopCallback = setupPointerListener({
+      onPointerOver: ({ element }) => {
         const codeInfo = getElementCodeInfo(element)
         const relativePath = codeInfo?.relativePath
         const absolutePath = codeInfo?.absolutePath

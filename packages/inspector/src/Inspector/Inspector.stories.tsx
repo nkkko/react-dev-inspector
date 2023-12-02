@@ -17,8 +17,8 @@ import {
 } from '../.stories/components'
 import {
   Inspector,
-  defaultHotkeys,
 } from './Inspector'
+import { defaultHotkeys } from './hooks'
 
 // https://storybook.js.org/docs/react/writing-stories/introduction#component-story-format
 export default {

@@ -205,6 +205,19 @@ Whether to disable all behavior include hotkeys listening or trigger.
 
 ---
 
+### `inspectAgents`
+
+<p className='mt-3 text-sm text-gray-500'>Added in: `v2.1.0`</p>
+
+- **Type:** `inspectAgents?: InspectAgent<Element>[]{:ts}`
+  > interface [`InspectAgent{:ts}`](https://github.com/zthxxx/react-dev-inspector/blob/dev/packages/inspector/src/Inspector/types.ts#L33)
+- **Default:** built-in `[new DomInspectAgent()]{:ts}`
+  > class [`DomInspectAgent{:ts}`](https://github.com/zthxxx/react-dev-inspector/blob/dev/packages/inspector/src/Inspector/DOMInspectAgent/DOMInspectAgent.ts#L17)
+
+Agent for get inspection info in different React renderer with user interaction.
+
+---
+
 ### `onInspectElement`
 
 <p className='mt-3 text-sm text-gray-500'>Added in: `v2.0.0`</p>
@@ -262,7 +275,7 @@ Callback when hovering on an element
 
 ### `onClickElement`
 
-**Type:** `onHoverElement?: (params: InspectParams) => void{:ts}`
+**Type:** `onClickElement?: (params: InspectParams) => void{:ts}`
 
 Callback when left-clicking on an element.
 

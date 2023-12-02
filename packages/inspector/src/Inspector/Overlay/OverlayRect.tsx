@@ -135,6 +135,7 @@ export class InspectorOverlayRect extends LitElement {
     :host {
       position: fixed;
       z-index: 10000000;
+      display: var(--inspector-overlay-rect-display, block);
       cursor: default;
       top: var(--inspector-overlay-rect-top, 0);
       left: var(--inspector-overlay-rect-left, 0);

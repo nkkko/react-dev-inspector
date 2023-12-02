@@ -24,7 +24,6 @@ export class InspectorOverlay extends LitElement {
     info?: string;
   }) {
     if (!element) return
-
     // ensure ref has set after render html
     if (!(this.boxRef.value && this.tipRef.value)) {
       await this.updateComplete
@@ -44,6 +43,10 @@ export class InspectorOverlay extends LitElement {
     })
   }
 
+  public hide() {
+    this.style.setProperty('--inspector-overlay-display', 'none')
+  }
+
   protected _inspect({
     element,
     title,
@@ -57,6 +60,8 @@ export class InspectorOverlay extends LitElement {
     overlayRect: InspectorOverlayRect;
     overlayTip: InspectorOverlayTip;
   }) {
+    this.style.setProperty('--inspector-overlay-display', 'block')
+
     const boxSizing = getElementDimensions(element)
     const boundingRect = getNestedBoundingBox(element)
 
@@ -89,6 +94,7 @@ export class InspectorOverlay extends LitElement {
   static styles = css`
     :host {
       pointer-events: none;
+      display: var(--inspector-overlay-display, block);
     }
   `
 }
@@ -112,10 +118,6 @@ export class Overlay {
     doc.body.appendChild(this.overlay)
   }
 
-  public remove() {
-    this.overlay.remove()
-  }
-
   public async inspect({ element, title, info }: {
     element: HTMLElement;
     title?: string;
@@ -126,5 +128,13 @@ export class Overlay {
       title,
       info,
     })
+  }
+
+  public hide() {
+    this.overlay.hide()
+  }
+
+  public remove() {
+    this.overlay.remove()
   }
 }

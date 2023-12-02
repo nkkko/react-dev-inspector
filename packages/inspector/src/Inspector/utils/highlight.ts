@@ -1,9 +1,9 @@
 export type StopFunction = () => void
 
-export function setupListener(
+export function setupPointerListener(
   handlers: {
-    onPointerOver?: (element: HTMLElement) => void;
-    onClick?: (element: HTMLElement) => void;
+    onPointerOver?: (params: { element: HTMLElement; pointer: PointerEvent }) => void;
+    onClick?: (params: { element: HTMLElement; pointer: PointerEvent }) => void;
   },
 ): StopFunction {
   function startInspectingNative() {
@@ -44,9 +44,11 @@ export function setupListener(
     event.preventDefault()
     event.stopPropagation()
 
-    stopInspectingNative()
-
-    handlers.onClick?.(event.target as HTMLElement)
+    const target = event.target as HTMLElement
+    handlers.onClick?.({
+      element: target,
+      pointer: event as PointerEvent,
+    })
   }
 
   function onMouseEvent(event: Event) {
@@ -65,7 +67,10 @@ export function setupListener(
 
     const target = event.target as HTMLElement
 
-    handlers.onPointerOver?.(target)
+    handlers.onPointerOver?.({
+      element: target,
+      pointer: event as PointerEvent,
+    })
   }
 
   function onPointerUp(event: Event) {
