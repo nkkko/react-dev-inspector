@@ -32,6 +32,7 @@ rules:
       - test
       - polish
       - hotfix
+      - release
 
   # https://commitlint.js.org/#/reference-rules?id=scope-case
   scope-case:

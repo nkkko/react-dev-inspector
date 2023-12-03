@@ -1,6 +1,6 @@
 {
   "name": "@react-dev-inspector/umi3-plugin",
-  "version": "2.0.1",
+  "version": "2.1.0-beta.0",
   "sideEffects": false,
   "description": "umi3 plugin for react-dev-inspector to add babel plugin and server middleware",
   "main": "lib",
