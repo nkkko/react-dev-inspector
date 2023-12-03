@@ -8,7 +8,7 @@ import {
 import { customElement, property, state } from 'lit/decorators.js'
 import { styleMap } from 'lit/directives/style-map.js'
 import {
-  getNestedBoundingBox,
+  getBoundingBox,
 } from './utils'
 import type {
   Box,
@@ -107,7 +107,7 @@ export class InspectorOverlayTip extends LitElement {
 
   static getViewSpaceBox(boundaryWindow?: Window): Box {
     const windowAgent = boundaryWindow ?? window.__REACT_DEVTOOLS_TARGET_WINDOW__ ?? window
-    const documentBox = getNestedBoundingBox(windowAgent.document.documentElement)
+    const documentBox = getBoundingBox(windowAgent.document.documentElement)
     return {
       top: documentBox.top + windowAgent.scrollY,
       left: documentBox.left + windowAgent.scrollX,

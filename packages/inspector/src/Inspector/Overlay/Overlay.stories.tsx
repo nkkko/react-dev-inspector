@@ -26,7 +26,7 @@ import {
 } from '../utils'
 import {
   getElementDimensions,
-  getNestedBoundingBox,
+  getBoundingBox,
 } from './utils'
 import {
   type InspectorOverlay,
@@ -206,7 +206,7 @@ export const MoveableDragItem: StoryFn<{ itemSize: 'normal' | 'full' | 'large' }
     if (!(element && overlayRect && overlayTip)) return
 
     const boxSizing = getElementDimensions(element)
-    const boundingRect = getNestedBoundingBox(element)
+    const boundingRect = getBoundingBox(element)
 
     overlayRect.updateBound({
       boundingRect,
@@ -314,7 +314,7 @@ export const OverlayRectAndTipItems = () => {
     if (!(element && overlayRect && overlayTip)) return
 
     const boxSizing = getElementDimensions(element)
-    const boundingRect = getNestedBoundingBox(element)
+    const boundingRect = getBoundingBox(element)
 
     overlayRect.updateBound({
       boundingRect,

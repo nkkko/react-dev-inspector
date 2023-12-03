@@ -4,7 +4,7 @@ import { ref, createRef, type Ref } from 'lit/directives/ref.js'
 import {
   registerElement,
   getElementDimensions,
-  getNestedBoundingBox,
+  getBoundingBox,
 } from './utils'
 import {
   InspectorOverlayRect,
@@ -12,18 +12,31 @@ import {
 import {
   InspectorOverlayTip,
 } from './OverlayTip'
+import type {
+  Box,
+  BoxSizing,
+} from './types'
 
 @customElement('inspector-overlay')
 export class InspectorOverlay extends LitElement {
   protected boxRef: Ref<InspectorOverlayRect> = createRef()
   protected tipRef: Ref<InspectorOverlayTip> = createRef()
 
-  public async inspect({ element, title = '', info = '' }: {
-    element?: HTMLElement;
+  public async inspect<Element = HTMLElement>({
+    element,
+    title = '',
+    info = '',
+    getBoxSizing = getElementDimensions,
+    getBoundingRect = getBoundingBox,
+  }: {
+    element?: Element;
     title?: string;
     info?: string;
+    getBoxSizing?: (element: Element) => BoxSizing;
+    getBoundingRect?: (element: Element) => Box;
   }) {
     if (!element) return
+
     // ensure ref has set after render html
     if (!(this.boxRef.value && this.tipRef.value)) {
       await this.updateComplete
@@ -34,12 +47,16 @@ export class InspectorOverlay extends LitElement {
 
     if (!(overlayRect && overlayTip)) return
 
+    const boxSizing = getBoxSizing(element)
+    const boundingRect = getBoundingRect(element)
+
     return this._inspect({
-      element,
       title,
       info,
       overlayRect,
       overlayTip,
+      boxSizing,
+      boundingRect,
     })
   }
 
@@ -48,22 +65,21 @@ export class InspectorOverlay extends LitElement {
   }
 
   protected _inspect({
-    element,
     title,
     info,
     overlayRect,
     overlayTip,
+    boxSizing,
+    boundingRect,
   }: {
-    element: HTMLElement;
     title: string;
     info: string;
     overlayRect: InspectorOverlayRect;
     overlayTip: InspectorOverlayTip;
+    boxSizing: BoxSizing;
+    boundingRect: Box;
   }) {
     this.style.setProperty('--inspector-overlay-display', 'block')
-
-    const boxSizing = getElementDimensions(element)
-    const boundingRect = getNestedBoundingBox(element)
 
     overlayRect.updateBound({
       boundingRect,
@@ -118,10 +134,12 @@ export class Overlay {
     doc.body.appendChild(this.overlay)
   }
 
-  public async inspect({ element, title, info }: {
-    element: HTMLElement;
+  public async inspect<Element = HTMLElement>({ element, title, info }: {
+    element: Element;
     title?: string;
     info?: string;
+    getBoxSizing?: (element: Element) => BoxSizing;
+    getBoundingRect?: (element: Element) => Box;
   }) {
     await this.overlay.inspect({
       element,

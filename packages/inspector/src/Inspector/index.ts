@@ -20,5 +20,6 @@ export {
   domInspectAgent,
 } from './DOMInspectAgent'
 
-export * from './Inspector'
 export * from './types'
+export * from './Overlay'
+export * from './Inspector'
