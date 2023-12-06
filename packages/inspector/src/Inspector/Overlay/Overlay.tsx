@@ -60,7 +60,8 @@ export class InspectorOverlay extends LitElement {
     })
   }
 
-  public hide() {
+  public async hide() {
+    await this.updateComplete
     this.style.setProperty('--inspector-overlay-display', 'none')
   }
 
@@ -109,8 +110,9 @@ export class InspectorOverlay extends LitElement {
 
   static styles = css`
     :host {
-      pointer-events: none;
+      position: fixed;
       display: var(--inspector-overlay-display, block);
+      pointer-events: none;
     }
   `
 }
@@ -148,8 +150,8 @@ export class Overlay {
     })
   }
 
-  public hide() {
-    this.overlay.hide()
+  public async hide() {
+    await this.overlay.hide()
   }
 
   public remove() {

@@ -23,8 +23,8 @@ export class DOMInspectAgent implements InspectAgent<HTMLElement> {
      * use to check whether hovered any element at initial
      */
     pointer?: PointerEvent;
-    onHover: (params: { element: any; pointer: PointerEvent }) => void;
-    onClick: (params: { element: any; pointer: PointerEvent }) => void;
+    onHover: (params: { element: HTMLElement; pointer: PointerEvent }) => void;
+    onClick: (params: { element: HTMLElement; pointer: PointerEvent }) => void;
   }) {
     this.overlay = new Overlay()
 

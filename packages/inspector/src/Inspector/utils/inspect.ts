@@ -29,9 +29,13 @@ import {
 export const getCodeInfoFromDebugSource = (fiber?: Fiber): CodeInfo | undefined => {
   if (!fiber) return undefined
 
+  /**
+   * only find forward with 2 level _debugOwner, otherwise to normal `fiber.return`
+   */
   const debugSource = (
     fiber._debugSource
     ?? fiber._debugOwner?._debugSource
+    ?? fiber._debugOwner?._debugOwner?._debugSource
   ) as Source & { columnNumber?: number }
 
   if (!debugSource) return undefined

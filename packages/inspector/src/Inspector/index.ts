@@ -8,6 +8,7 @@ export {
   gotoServerEditor as gotoEditor,
 
   getElementFiber,
+  getCodeInfoFromFiber,
   getElementCodeInfo,
 } from './utils'
 
