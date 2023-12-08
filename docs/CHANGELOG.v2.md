@@ -1,7 +1,7 @@
 # Changelog
 
 
-## [2.1.0-beta.2](https://github.com/zthxxx/react-dev-inspector/compare/v2.0.1...v2.1.0-beta.2)
+## [2.1.0-beta.3](https://github.com/zthxxx/react-dev-inspector/compare/v2.0.1...v2.1.0-beta.3)
 
 ### Refactor
 
