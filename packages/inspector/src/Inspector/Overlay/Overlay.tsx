@@ -26,14 +26,14 @@ export class InspectorOverlay extends LitElement {
     element,
     title = '',
     info = '',
-    getBoxSizing = getElementDimensions,
-    getBoundingRect = getBoundingBox,
+    getBoxSizing,
+    getBoundingRect,
   }: {
     element?: Element;
     title?: string;
     info?: string;
-    getBoxSizing?: (element: Element) => BoxSizing;
-    getBoundingRect?: (element: Element) => Box;
+    getBoxSizing: (element: Element) => BoxSizing;
+    getBoundingRect: (element: Element) => Box;
   }) {
     if (!element) return
 
@@ -136,17 +136,31 @@ export class Overlay {
     doc.body.appendChild(this.overlay)
   }
 
-  public async inspect<Element = HTMLElement>({ element, title, info }: {
-    element: Element;
+  public async inspect<Element = HTMLElement>({
+    element,
+    title,
+    info,
+    getBoxSizing = getElementDimensions,
+    getBoundingRect = getBoundingBox,
+  }: {
+    element?: Element;
     title?: string;
     info?: string;
+    /**
+     * default as `window.getComputedStyle(element)`
+     */
     getBoxSizing?: (element: Element) => BoxSizing;
+    /**
+     * default as `element.getBoundingClientRect()`
+     */
     getBoundingRect?: (element: Element) => Box;
   }) {
     await this.overlay.inspect({
       element,
       title,
       info,
+      getBoxSizing,
+      getBoundingRect,
     })
   }
 

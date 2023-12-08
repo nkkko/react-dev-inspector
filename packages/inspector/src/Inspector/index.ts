@@ -10,6 +10,8 @@ export {
   getElementFiber,
   getCodeInfoFromFiber,
   getElementCodeInfo,
+  getNamedFiber,
+  getFiberName,
 } from './utils'
 
 export {
