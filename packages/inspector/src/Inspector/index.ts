@@ -7,12 +7,12 @@ export {
   /** @deprecated Use `gotoServerEditor` instead. */
   gotoServerEditor as gotoEditor,
 
-  getElementFiber,
   getCodeInfoFromFiber,
   getElementCodeInfo,
   getNamedFiber,
-  getFiberName,
 } from './utils'
+
+export * from './utils/fiber'
 
 export {
   defaultHotkeys,

@@ -6,7 +6,6 @@ import {
   getElementCodeInfo,
   getElementFiberUpward,
   getElementInspect,
-  type HTMLElementWithFiber,
 } from '../utils'
 import type {
   InspectAgent,
@@ -17,19 +16,26 @@ export class DOMInspectAgent implements InspectAgent<HTMLElement> {
   protected overlay?: Overlay
   protected unsubscribeListener?: () => void
 
-  public activate({ pointer, onHover, onClick }: {
+  public activate({
+    pointer,
+    onHover,
+    onPointerDown,
+    onClick,
+  }: {
     /**
      * the last PointerMove event when activate inspector,
      * use to check whether hovered any element at initial
      */
     pointer?: PointerEvent;
     onHover: (params: { element: HTMLElement; pointer: PointerEvent }) => void;
-    onClick: (params: { element: HTMLElement; pointer: PointerEvent }) => void;
+    onPointerDown: (params: { element?: HTMLElement; pointer: PointerEvent }) => void;
+    onClick: (params: { element?: HTMLElement; pointer: PointerEvent }) => void;
   }) {
     this.overlay = new Overlay()
 
     this.unsubscribeListener = setupPointerListener({
       onPointerOver: onHover,
+      onPointerDown,
       onClick,
     })
 
@@ -54,7 +60,7 @@ export class DOMInspectAgent implements InspectAgent<HTMLElement> {
   }
 
   public getElementFiber(element?: HTMLElement): Fiber | undefined {
-    return getElementFiberUpward(element as HTMLElementWithFiber)
+    return getElementFiberUpward(element)
   }
 
   public *getAncestorChain(element: HTMLElement): Generator<HTMLElement, void, void> {

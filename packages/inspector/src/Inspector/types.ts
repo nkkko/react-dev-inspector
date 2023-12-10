@@ -28,26 +28,51 @@ export interface CodeDataAttribute {
 
 
 /**
- * Agent for collect inspection info from it's React renderer with user interaction (like PointerEvent)
+ *
+ * InspectAgent design different renderer binding (like React DOM, React Native, React Three.js etc.)
+ *
+ * An Agent need implement these functions:
+ * - setup event listener to collect user interaction operation  (like Pointer Down/Up/Move / Click etc.)
+ * - collect inspection info from its element  (like name, code source position etc.)
+ * - show/hide indicator UI on element  (like highlight, show name or code position etc.)
  */
 export interface InspectAgent<Element> {
   /**
    * trigger when user activate inspector in <Inspector/>
+   *
+   * Agent need setup event listeners to collect user interaction on their target renderer (like DOM, React Native, React Three.js etc.)
    */
   activate(params: {
     /**
-     * the last PointerMove event when activate inspector,
-     * use to check whether hovered any element then trigger hover it immediately at initialization
+     * the initial `PointerMove` event when activate inspector,
+     * use its position to check whether hovered any element immediately at initialization then trigger Inspector.
      */
     pointer?: PointerEvent;
+    /**
+     * when hovered a element
+     * trigger it like on PointerMove on PointerOver event.
+     */
     onHover: (params: { element: Element; pointer: PointerEvent }) => void;
-    onClick: (params: { element: Element; pointer: PointerEvent }) => void;
+    /**
+     * Just throw the `PointerDown` event to Inspector,
+     *   that's no need to stopPropagation or preventDefault in agent, Inspector will auto stop it when agent is in active.
+     * Normally, the `PointerDown` event will stop by Inspector to prevent the default behavior like text selection,
+     *   and the `Click` event will use to trigger the inspection and remove event listeners (by deactivate agent).
+     */
+    onPointerDown: (params: { element?: Element; pointer: PointerEvent }) => void;
+    /**
+     * just throw the `client` event to Inspector,
+     *   that's no need to stopPropagation or preventDefault in agent, Inspector will auto stop it when agent is in active.
+     * Normally, the `PointerDown` event will stop by Inspector to prevent the default behavior like text selection,
+     *   and the `Click` event will use to trigger the inspection and remove event listeners (by deactivate agent).
+     */
+    onClick: (params: { element?: Element; pointer: PointerEvent }) => void;
   }): void;
 
 
   /**
    * trigger when user deactivate inspector in <Inspector/>,
-   * to clear agent's indicators, release resources and reset states
+   * to clear agent's indicators, remove event listeners, release resources and reset states
    */
   deactivate(): void;
 
@@ -57,6 +82,9 @@ export interface InspectAgent<Element> {
    */
   getAncestorChain(element: Element): Generator<Element, void, void>;
 
+  /**
+   * get the element display name and title for show in indicator UI
+   */
   getNameInfo(element: Element): (
     | undefined
     | {
@@ -69,6 +97,9 @@ export interface InspectAgent<Element> {
 
   findCodeInfo(element: Element): CodeInfo | undefined;
 
+  /**
+   * show a indicator UI for the element on page
+   */
   indicate(params: {
     element: Element;
     pointer: PointerEvent;
@@ -76,5 +107,8 @@ export interface InspectAgent<Element> {
     title?: string;
   }): void;
 
+  /**
+   * hide agent's indicator UI
+   */
   removeIndicate(): void;
 }

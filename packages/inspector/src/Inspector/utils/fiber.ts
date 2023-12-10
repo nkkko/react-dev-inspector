@@ -17,7 +17,7 @@ export const isForwardRef = (fiber?: Fiber): boolean =>
   fiber?.type?.$$typeof === Symbol.for('react.forward_ref')
 
 
-export type HTMLElementWithFiber = HTMLElement & {
+type HTMLElementWithFiber = HTMLElement & {
   [fiberKey: string]: Fiber | undefined;
 }
 
@@ -27,7 +27,7 @@ const cachedFiberKeys: Set<string> = new Set()
  * get fiber via React renderer which registered by `reconciler.injectIntoDevTools()`
  * like: https://github.com/facebook/react/blob/v17.0.0/packages/react-dom/src/client/ReactDOM.js#L220
  */
-const getFiberWithDevtoolHook = (element: HTMLElementWithFiber): Fiber | undefined => {
+const getFiberWithDevtoolHook = (element: any): Fiber | undefined => {
   if (!window.__REACT_DEVTOOLS_GLOBAL_HOOK__?.renderers) return
 
   const { renderers } = window.__REACT_DEVTOOLS_GLOBAL_HOOK__
@@ -48,7 +48,8 @@ const getFiberWithDevtoolHook = (element: HTMLElementWithFiber): Fiber | undefin
 /**
  * https://stackoverflow.com/questions/29321742/react-getting-a-component-from-a-dom-element-for-debugging
  */
-export const getElementFiber = (element?: HTMLElementWithFiber): Fiber | undefined => {
+export const getElementFiber = (_element?: HTMLElement): Fiber | undefined => {
+  const element = _element as HTMLElementWithFiber
   if (!element) {
     return undefined
   }
@@ -85,9 +86,9 @@ export const getElementFiber = (element?: HTMLElementWithFiber): Fiber | undefin
   return undefined
 }
 
-export const getElementFiberUpward = (element: HTMLElement | null): Fiber | undefined => {
+export const getElementFiberUpward = (element: HTMLElement | null | undefined): Fiber | undefined => {
   if (!element) return undefined
-  const fiber = getElementFiber(element as HTMLElementWithFiber)
+  const fiber = getElementFiber(element)
   if (fiber) return fiber
   return getElementFiberUpward(element.parentElement)
 }

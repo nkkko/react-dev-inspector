@@ -164,21 +164,27 @@ export const Inspector = function<Element>(props: InspectorProps<Element>) {
       agent.activate({
         pointer: pointerRef.current,
         onHover: (params) => handleHoverElement({
-          agent,
           ...params,
+          agent,
+        }),
+        onPointerDown: (params) => handlePointerDown({
+          ...params,
+          agent,
         }),
         onClick: (params) => handleClickElement({
-          agent,
           ...params,
+          agent,
         }),
       })
     })
   })
 
   const stopInspecting = useEffectEvent(() => {
+    agentRef.current?.removeIndicate()
     inspectAgents.forEach(agent => {
       agent.deactivate()
     })
+    agentRef.current = undefined
   })
 
   const handleHoverElement = useEffectEvent(({ agent, element, pointer }: {
@@ -216,16 +222,48 @@ export const Inspector = function<Element>(props: InspectorProps<Element>) {
     })
   })
 
-  const handleClickElement = useEffectEvent(({ agent, element, pointer }: {
+  const handlePointerDown = useEffectEvent(({ agent, element, pointer }: {
     agent: InspectAgent<Element>;
-    element: Element;
+    element?: Element;
     pointer: PointerEvent;
   }) => {
     if (agent !== agentRef.current) {
       return
     }
 
+    // only need stop event when it trigger by current agent
+    pointer.preventDefault()
+    pointer.stopPropagation()
+    pointer.stopImmediatePropagation()
+
+    if (element) {
+      handleHoverElement({
+        agent,
+        element,
+        pointer,
+      })
+    }
+  })
+
+  const handleClickElement = useEffectEvent(({ agent, element, pointer }: {
+    agent: InspectAgent<Element>;
+    element?: Element;
+    pointer: PointerEvent;
+  }) => {
+    if (agent !== agentRef.current) {
+      return
+    }
+
+    // only need stop event when it trigger by current agent
+    pointer.preventDefault()
+    pointer.stopPropagation()
+    pointer.stopImmediatePropagation()
+
     agent.removeIndicate()
+
+    if (!element) {
+      return
+    }
 
     const nameInfo = agent.getNameInfo(element)
     const codeInfo = agent.findCodeInfo(element)
