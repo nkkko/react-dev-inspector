@@ -32,9 +32,10 @@ export interface CodeDataAttribute {
  * InspectAgent design different renderer binding (like React DOM, React Native, React Three.js etc.)
  *
  * An Agent need implement these functions:
- * - setup event listener to collect user interaction operation  (like Pointer Down/Up/Move / Click etc.)
+ * - setup event listener to collect user interaction operation  (like Pointer Down/Up/Over / Click etc.)
+ *   and its target element  (like DOM, Three.js etc.)
  * - collect inspection info from its element  (like name, code source position etc.)
- * - show/hide indicator UI on element  (like highlight, show name or code position etc.)
+ * - show/hide indicator UI on element  (like highlight element, show tooltip for name or code position etc.)
  */
 export interface InspectAgent<Element> {
   /**

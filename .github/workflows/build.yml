@@ -35,10 +35,9 @@ jobs:
         run: |
           pnpm build:packages
 
-      # - name: Build examples site
-      #   run: |
-      #     pnpm build:examples
-      #     pnpm build:site
+      - name: Build examples
+        run: |
+          pnpm build:examples
 
       - name: Build documentation site
         run: |
