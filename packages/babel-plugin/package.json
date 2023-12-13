@@ -1,6 +1,6 @@
 {
   "name": "@react-dev-inspector/babel-plugin",
-  "version": "2.1.0-beta.4",
+  "version": "2.1.0-beta.5",
   "sideEffects": false,
   "description": "babel plugin for react-dev-inspector to generate source code position info into jsx properties",
   "main": "lib",
