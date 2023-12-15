@@ -219,10 +219,13 @@ export const getElementInspect = (element: HTMLElement): {
 
   const namedFiber = getNamedFiber(referenceFiber)
 
-  const fiberName = getFiberName(namedFiber)
   const nodeName = element.nodeName.toLowerCase()
+  let fiberName = getFiberName(namedFiber)
+  if (fiberName === nodeName) {
+    fiberName = getFiberName(namedFiber?.return)
+  }
 
-  const title = fiberName
+  const title = (fiberName && !(fiberName === nodeName))
     ? `${nodeName} in <${fiberName}>`
     : nodeName
 

@@ -125,18 +125,18 @@ export const CornerItems = () => {
       }
 
       const boxSizing: BoxSizing = {
-        marginTop: 0,
-        marginLeft: 0,
-        marginRight: 0,
-        marginBottom: 0,
-        borderTop: 0,
-        borderLeft: 0,
-        borderRight: 0,
-        borderBottom: 0,
-        paddingTop: 0,
-        paddingLeft: 0,
-        paddingRight: 0,
-        paddingBottom: 0,
+        marginTop: 10,
+        marginLeft: 10,
+        marginRight: 10,
+        marginBottom: 10,
+        borderTop: 2,
+        borderLeft: 2,
+        borderRight: 2,
+        borderBottom: 2,
+        paddingTop: 20,
+        paddingLeft: 20,
+        paddingRight: 20,
+        paddingBottom: 20,
       }
 
       rect.updateBound({

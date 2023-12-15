@@ -120,9 +120,11 @@ export const getDirectParentFiber = (child: Fiber): Fiber | null => {
  *
  * https://github.com/facebook/react/blob/v17.0.0/packages/react-devtools-shared/src/utils.js#L90-L112
  */
-export const getFiberName = (fiber?: Fiber): string | undefined => {
+export const getFiberName = (fiber?: Fiber | null): string | undefined => {
   const fiberType = fiber?.type
   if (!fiberType) return undefined
+  if (typeof fiberType === 'string') return fiberType
+
   const { displayName, name } = fiberType
 
   if (typeof displayName === 'string') {

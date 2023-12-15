@@ -29,6 +29,10 @@ class ItemBox implements Box {
   get bottom() {
     return this.top + this.height
   }
+
+  get [Symbol.toStringTag]() {
+    return JSON.stringify(this)
+  }
 }
 
 
@@ -39,8 +43,9 @@ const spaceBox: Box = new ItemBox({
   height: 300,
 })
 
+const gap = 4
 
-test('common corners', () => {
+test('common corners', async () => {
   const tipSize = {
     width: 100,
     height: 48,
@@ -59,8 +64,8 @@ test('common corners', () => {
         left: 0,
       }),
       position: {
-        top: ItemBox.itemSize + 4,
-        left: 4,
+        top: ItemBox.itemSize + gap,
+        left: gap,
       },
     },
 
@@ -71,8 +76,8 @@ test('common corners', () => {
         left: spaceBox.width - ItemBox.itemSize,
       }),
       position: {
-        top: ItemBox.itemSize + 4,
-        left: spaceBox.right - tipSize.width - 4,
+        top: ItemBox.itemSize + gap,
+        left: spaceBox.right - tipSize.width - gap,
       },
     },
 
@@ -83,8 +88,8 @@ test('common corners', () => {
         left: 0,
       }),
       position: {
-        top: spaceBox.bottom - ItemBox.itemSize - tipSize.height - 4,
-        left: 4,
+        top: spaceBox.bottom - ItemBox.itemSize - tipSize.height - gap,
+        left: gap,
       },
     },
 
@@ -95,8 +100,8 @@ test('common corners', () => {
         left: spaceBox.width - ItemBox.itemSize,
       }),
       position: {
-        top: spaceBox.bottom - ItemBox.itemSize - tipSize.height - 4,
-        left: spaceBox.right - tipSize.width - 4,
+        top: spaceBox.bottom - ItemBox.itemSize - tipSize.height - gap,
+        left: spaceBox.right - tipSize.width - gap,
       },
     },
 
@@ -107,7 +112,7 @@ test('common corners', () => {
         left: (spaceBox.width - ItemBox.itemSize) / 2,
       }),
       position: {
-        top: (spaceBox.height - ItemBox.itemSize) / 2 + ItemBox.itemSize + 4,
+        top: (spaceBox.height - ItemBox.itemSize) / 2 + ItemBox.itemSize + gap,
         left: (spaceBox.width - ItemBox.itemSize) / 2,
       },
     },
@@ -119,28 +124,30 @@ test('common corners', () => {
         left: spaceBox.width - ItemBox.itemSize * 1.5,
       }),
       position: {
-        top: (spaceBox.height - ItemBox.itemSize) / 2 + ItemBox.itemSize + 4,
-        left: spaceBox.right - tipSize.width - 4,
+        top: (spaceBox.height - ItemBox.itemSize) / 2 + ItemBox.itemSize + gap,
+        left: spaceBox.right - tipSize.width - gap,
       },
     },
   ]
 
-  cases.forEach(({ elementBox, position }) => {
-    const result = restraintTipPosition({
+  for (let index = 0; index < cases.length; index++) {
+    const { elementBox, position } = cases[index]
+    const result = await restraintTipPosition({
       elementBox,
       spaceBox,
       tipSize,
     })
-    expect(result).toEqual(position)
-  })
+    expect(result, `Case[${index}] ${elementBox}`).toEqual(position)
+  }
 })
 
 
-test('outside space', () => {
+test('outside space', async () => {
   const tipSize = {
     width: 100,
     height: 48,
   }
+
 
   const cases: Array<{
     /** target element */
@@ -155,8 +162,8 @@ test('outside space', () => {
         left: 0,
       }),
       position: {
-        top: 0,
-        left: 4,
+        top: gap,
+        left: gap,
       },
     },
 
@@ -167,8 +174,8 @@ test('outside space', () => {
         left: spaceBox.width - ItemBox.itemSize,
       }),
       position: {
-        top: spaceBox.height - tipSize.height,
-        left: spaceBox.right - tipSize.width - 4,
+        top: spaceBox.height - tipSize.height - gap,
+        left: spaceBox.right - tipSize.width - gap,
       },
     },
 
@@ -179,8 +186,8 @@ test('outside space', () => {
         left: -2 * ItemBox.itemSize,
       }),
       position: {
-        top: spaceBox.bottom - ItemBox.itemSize - tipSize.height - 4,
-        left: 0,
+        top: spaceBox.bottom - ItemBox.itemSize - tipSize.height - gap,
+        left: gap,
       },
     },
 
@@ -191,24 +198,25 @@ test('outside space', () => {
         left: spaceBox.width + 2 * ItemBox.itemSize,
       }),
       position: {
-        top: spaceBox.bottom - ItemBox.itemSize - tipSize.height - 4,
-        left: spaceBox.right - tipSize.width,
+        top: spaceBox.bottom - ItemBox.itemSize - tipSize.height - gap,
+        left: spaceBox.right - tipSize.width - gap,
       },
     },
   ]
 
-  cases.forEach(({ elementBox, position }) => {
-    const result = restraintTipPosition({
+  for (let index = 0; index < cases.length; index++) {
+    const { elementBox, position } = cases[index]
+    const result = await restraintTipPosition({
       elementBox,
       spaceBox,
       tipSize,
     })
-    expect(result).toEqual(position)
-  })
+    expect(result, `Case[${index}] ${elementBox}`).toEqual(position)
+  }
 })
 
 
-test('tips more width than space', () => {
+test('tips more width than space', async () => {
   const tipSize = {
     width: 300,
     height: 48,
@@ -227,24 +235,25 @@ test('tips more width than space', () => {
         left: (spaceBox.width - ItemBox.itemSize) / 2,
       }),
       position: {
-        top: (spaceBox.height - ItemBox.itemSize) / 2 + ItemBox.itemSize + 4,
-        left: 0,
+        top: (spaceBox.height - ItemBox.itemSize) / 2 + ItemBox.itemSize + gap,
+        left: gap,
       },
     },
   ]
 
-  cases.forEach(({ elementBox, position }) => {
-    const result = restraintTipPosition({
+  for (let index = 0; index < cases.length; index++) {
+    const { elementBox, position } = cases[index]
+    const result = await restraintTipPosition({
       elementBox,
       spaceBox,
       tipSize,
     })
-    expect(result).toEqual(position)
-  })
+    expect(result, `Case[${index}] ${elementBox}`).toEqual(position)
+  }
 })
 
 
-test('element large than space', () => {
+test('element large than space', async () => {
   const tipSize = {
     width: 100,
     height: 48,
@@ -265,8 +274,8 @@ test('element large than space', () => {
         height: spaceBox.height,
       }),
       position: {
-        top: 4,
-        left: 4,
+        top: spaceBox.height - tipSize.height - gap,
+        left: gap,
       },
     },
 
@@ -279,18 +288,19 @@ test('element large than space', () => {
         height: spaceBox.height + 40,
       }),
       position: {
-        top: 4,
-        left: 4,
+        top: spaceBox.height - tipSize.height - gap,
+        left: gap,
       },
     },
   ]
 
-  cases.forEach(({ elementBox, position }) => {
-    const result = restraintTipPosition({
+  for (let index = 0; index < cases.length; index++) {
+    const { elementBox, position } = cases[index]
+    const result = await restraintTipPosition({
       elementBox,
       spaceBox,
       tipSize,
     })
-    expect(result).toEqual(position)
-  })
+    expect(result, `Case[${index}] ${elementBox}`).toEqual(position)
+  }
 })

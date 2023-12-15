@@ -27,7 +27,7 @@ export const launchEditorMiddleware: NextHandleFunction = (req: IncomingRequest,
     return next()
   }
 
-  if (!('REACT_EDITOR' in process.env)) {
+  if (!process.env.REACT_EDITOR) {
     /**
      * If not set `REACT_EDITOR` in environment variables, set default to `vscode`.
      * - (`code` is cli command installed by `vscode`:  `>Shell Command: Install 'code' command in PATH`)

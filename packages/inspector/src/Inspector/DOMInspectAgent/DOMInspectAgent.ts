@@ -31,6 +31,7 @@ export class DOMInspectAgent implements InspectAgent<HTMLElement> {
     onPointerDown: (params: { element?: HTMLElement; pointer: PointerEvent }) => void;
     onClick: (params: { element?: HTMLElement; pointer: PointerEvent }) => void;
   }) {
+    this.deactivate()
     this.overlay = new Overlay()
 
     this.unsubscribeListener = setupPointerListener({

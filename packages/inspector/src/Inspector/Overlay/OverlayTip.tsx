@@ -8,6 +8,14 @@ import {
 import { property, state } from 'lit/decorators.js'
 import { styleMap } from 'lit/directives/style-map.js'
 import {
+  computePosition,
+  offset,
+  flip,
+  shift,
+  type Rect as FloatingRect,
+  type Dimensions,
+} from '@floating-ui/core'
+import {
   customElement,
   getBoundingBox,
 } from './utils'
@@ -126,12 +134,14 @@ export class InspectorOverlayTip extends LitElement {
       && this.boxSizing
       && this.spaceBox
     ) {
-      this.position = restraintTipPosition({
+      restraintTipPosition({
         elementBox: this.outerBox,
         spaceBox: this.spaceBox,
-        tipSize: this.getBoundingClientRect(),
+        tipSize: this.getBoundingClientRect().toJSON(),
+      }).then(position => {
+        this.position = position
+        this.requestUpdate('position')
       })
-      this.requestUpdate('position')
     }
   }
 
@@ -235,54 +245,53 @@ export class InspectorOverlayTip extends LitElement {
   `
 }
 
-export const restraintTipPosition = ({ elementBox, spaceBox, tipSize }: {
+export const restraintTipPosition = async ({ elementBox, spaceBox, tipSize }: {
+  /** the `reference` of computePosition */
   elementBox: Box;
+  /** the `ClippingRect` of computePosition */
   spaceBox: Box;
-  tipSize: { width: number; height: number };
-}): { top: number; left: number } => {
-  const MIN_TIP_WIDTH = 100
-  const MIN_TIP_HEIGHT = 48
-  const gap = 4
-  const tipWidth = Math.max(tipSize.width, MIN_TIP_WIDTH)
-  const tipHeight = Math.max(tipSize.height, MIN_TIP_HEIGHT)
+  /** the `floating` of computePosition */
+  tipSize: Dimensions;
+}): Promise<{ top: number; left: number }> => {
+  const { x, y } = await computePosition(elementBox, tipSize, {
+    platform: {
+      getElementRects: ({ reference, floating }: { reference: Box; floating: Dimensions }) => {
+        return ({
+          reference: {
+            ...reference,
+            x: reference.left,
+            y: reference.top,
+          },
+          floating: floating as FloatingRect,
+        })
+      },
+      getDimensions: (element: Box) => element,
+      getClippingRect: () => {
+        return ({
+          ...spaceBox,
+          x: spaceBox.left,
+          y: spaceBox.top,
+        })
+      },
+    },
+    placement: 'bottom-start',
+    strategy: 'fixed',
+    middleware: [
+      offset(4),
+      flip({
+        crossAxis: false,
+        fallbackAxisSideDirection: 'start',
+      }),
+      shift({
+        padding: 4,
+        crossAxis: true,
+      }),
+    ],
+  })
 
-  const position = {
-    top: gap,
-    left: gap,
+  return {
+    left: x,
+    top: y,
   }
-
-  if (spaceBox.top >= elementBox.bottom) {
-    position.top = spaceBox.top
-  }
-  else if (elementBox.top >= spaceBox.bottom) {
-    position.top = spaceBox.bottom - tipHeight
-  }
-  else if (spaceBox.bottom - elementBox.bottom >= tipHeight + gap) {
-    position.top = elementBox.bottom + gap
-  }
-  else if (elementBox.top - spaceBox.top >= tipHeight + gap) {
-    position.top = elementBox.top - tipHeight - gap
-  }
-  else {
-    position.top = Math.max(elementBox.top, spaceBox.top) + gap
-  }
-
-  if (tipSize.width >= spaceBox.width) {
-    position.left = spaceBox.left
-  }
-  else if (spaceBox.left >= elementBox.right) {
-    position.left = spaceBox.left
-  }
-  else if (elementBox.left >= spaceBox.right) {
-    position.left = spaceBox.right - tipWidth
-  }
-  else if (spaceBox.right - elementBox.left >= tipWidth + gap) {
-    position.left = Math.max(elementBox.left, spaceBox.left, gap)
-  }
-  else {
-    position.left = spaceBox.right - tipWidth - gap
-  }
-
-  return position
 }
 

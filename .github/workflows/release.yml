@@ -10,6 +10,11 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    permissions:
+      # needed for npm provenance data generation
+      # https://docs.npmjs.com/generating-provenance-statements#publishing-packages-with-provenance-via-github-actions
+      id-token: write
+
     env:
       # https://github.com/chalk/supports-color/blob/main/index.js#L21
       # https://github.com/chalk/supports-color/blob/main/index.js#L54
@@ -36,6 +41,8 @@ jobs:
         env:
           # need set in GitHub repo - settings - secrets
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # https://docs.npmjs.com/generating-provenance-statements#using-third-party-package-publishing-tools
+          NPM_CONFIG_PROVENANCE: true
         run: |
           echo 'Show .npmrc'
           cat ./.npmrc

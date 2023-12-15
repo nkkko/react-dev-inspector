@@ -12,7 +12,11 @@
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "build": "npm-run-all clean --parallel build:esm build:cjs"
   },
-  "repository": "https://github.com/zthxxx/react-dev-inspector/tree/master/packages/umi3-plugin",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zthxxx/react-dev-inspector.git",
+    "directory": "packages/umi3-plugin"
+  },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
