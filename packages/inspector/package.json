@@ -27,7 +27,8 @@
     "build:storybook": "storybook build",
     "build:esm": "tsc -p tsconfig.esm.json",
     "build:cjs": "tsc -p tsconfig.cjs.json",
-    "build": "npm-run-all clean --parallel sync:readme build:esm build:cjs"
+    "build:test": "tsc -p tsconfig.test.json",
+    "build": "npm-run-all clean --parallel sync:readme build:esm build:cjs build:test"
   },
   "repository": {
     "type": "git",

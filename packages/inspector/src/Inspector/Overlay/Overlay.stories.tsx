@@ -26,7 +26,7 @@ import {
 } from '../utils'
 import {
   getElementDimensions,
-  getBoundingBox,
+  getBoundingRect,
 } from './utils'
 import {
   type InspectorOverlay,
@@ -61,52 +61,52 @@ export const CornerItems = () => {
     const positions = [
       // Top left corner
       {
-        top: 0,
-        left: 0,
+        y: 0,
+        x: 0,
       },
       // Top right corner
       {
-        top: 0,
-        left: screenWidth - itemSize,
+        y: 0,
+        x: screenWidth - itemSize,
       },
       // Bottom left corner
       {
-        top: screenHeight - itemSize,
-        left: 0,
+        y: screenHeight - itemSize,
+        x: 0,
       },
       // Bottom right corner
       {
-        top: screenHeight - itemSize,
-        left: screenWidth - itemSize,
+        y: screenHeight - itemSize,
+        x: screenWidth - itemSize,
       },
       // Center
       {
-        top: (screenHeight - itemSize) / 2,
-        left: (screenWidth - itemSize) / 2,
+        y: (screenHeight - itemSize) / 2,
+        x: (screenWidth - itemSize) / 2,
       },
 
       // Top-Center but outside the space
       {
-        top: -2 * itemSize,
-        left: (screenWidth - itemSize) / 2,
+        y: -2 * itemSize,
+        x: (screenWidth - itemSize) / 2,
       },
 
       // Bottom-Center but outside the space
       {
-        top: screenHeight + 2 * itemSize,
-        left: (screenWidth - itemSize) / 2,
+        y: screenHeight + 2 * itemSize,
+        x: (screenWidth - itemSize) / 2,
       },
 
       // Left-Center but outside the space
       {
-        top: (screenHeight - itemSize) / 2,
-        left: -2 * itemSize,
+        y: (screenHeight - itemSize) / 2,
+        x: -2 * itemSize,
       },
 
       // Right-Center but outside the space
       {
-        top: (screenHeight - itemSize) / 2,
-        left: screenWidth + 2 * itemSize,
+        y: (screenHeight - itemSize) / 2,
+        x: screenWidth + 2 * itemSize,
       },
     ]
 
@@ -206,7 +206,7 @@ export const MoveableDragItem: StoryFn<{ itemSize: 'normal' | 'full' | 'large' }
     if (!(element && overlayRect && overlayTip)) return
 
     const boxSizing = getElementDimensions(element)
-    const boundingRect = getBoundingBox(element)
+    const boundingRect = getBoundingRect(element)
 
     overlayRect.updateBound({
       boundingRect,
@@ -314,7 +314,7 @@ export const OverlayRectAndTipItems = () => {
     if (!(element && overlayRect && overlayTip)) return
 
     const boxSizing = getElementDimensions(element)
-    const boundingRect = getBoundingBox(element)
+    const boundingRect = getBoundingRect(element)
 
     overlayRect.updateBound({
       boundingRect,
@@ -390,7 +390,7 @@ export const OverlayWithEntryElement = () => {
       title: 'div in <Card>',
       info: '/absolute/path/of/packages/inspector/src/Inspector/Overlays/Overlay.stories.tsx',
       getBoxSizing: getElementDimensions,
-      getBoundingRect: getBoundingBox,
+      getBoundingRect,
     })
   }, [])
 

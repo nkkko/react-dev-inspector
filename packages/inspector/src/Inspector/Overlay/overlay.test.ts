@@ -18,12 +18,12 @@ class ItemBox implements ClientRectObject {
   static itemSize = 50
 
   constructor({
-    top, left, width, height,
+    x, y, width, height,
   }: Partial<Rect>) {
-    this.x = left ?? 0
-    this.y = top ?? 0
-    this.top = top ?? 0
-    this.left = left ?? 0
+    this.x = x ?? 0
+    this.y = y ?? 0
+    this.top = y ?? 0
+    this.left = x ?? 0
     this.width = width ?? ItemBox.itemSize
     this.height = height ?? ItemBox.itemSize
   }
@@ -43,8 +43,8 @@ class ItemBox implements ClientRectObject {
 
 
 const spaceBox = new ItemBox({
-  top: 0,
-  left: 0,
+  x: 0,
+  y: 0,
   width: 200,
   height: 300,
 })
@@ -66,8 +66,8 @@ test('common corners', async () => {
     // Top-Left corner
     {
       elementBox: new ItemBox({
-        top: 0,
-        left: 0,
+        y: 0,
+        x: 0,
       }),
       position: {
         top: ItemBox.itemSize + gap,
@@ -78,8 +78,8 @@ test('common corners', async () => {
     // Top-Right corner
     {
       elementBox: new ItemBox({
-        top: 0,
-        left: spaceBox.width - ItemBox.itemSize,
+        y: 0,
+        x: spaceBox.width - ItemBox.itemSize,
       }),
       position: {
         top: ItemBox.itemSize + gap,
@@ -90,8 +90,8 @@ test('common corners', async () => {
     // Bottom-Left corner
     {
       elementBox: new ItemBox({
-        top: spaceBox.height - ItemBox.itemSize,
-        left: 0,
+        y: spaceBox.height - ItemBox.itemSize,
+        x: 0,
       }),
       position: {
         top: spaceBox.bottom - ItemBox.itemSize - tipSize.height - gap,
@@ -102,8 +102,8 @@ test('common corners', async () => {
     // Bottom-Right corner
     {
       elementBox: new ItemBox({
-        top: spaceBox.height - ItemBox.itemSize,
-        left: spaceBox.width - ItemBox.itemSize,
+        y: spaceBox.height - ItemBox.itemSize,
+        x: spaceBox.width - ItemBox.itemSize,
       }),
       position: {
         top: spaceBox.bottom - ItemBox.itemSize - tipSize.height - gap,
@@ -114,8 +114,8 @@ test('common corners', async () => {
     // Center
     {
       elementBox: new ItemBox({
-        top: (spaceBox.height - ItemBox.itemSize) / 2,
-        left: (spaceBox.width - ItemBox.itemSize) / 2,
+        y: (spaceBox.height - ItemBox.itemSize) / 2,
+        x: (spaceBox.width - ItemBox.itemSize) / 2,
       }),
       position: {
         top: (spaceBox.height - ItemBox.itemSize) / 2 + ItemBox.itemSize + gap,
@@ -126,8 +126,8 @@ test('common corners', async () => {
     // Right-Center but not close to space right
     {
       elementBox: new ItemBox({
-        top: (spaceBox.height - ItemBox.itemSize) / 2,
-        left: spaceBox.width - ItemBox.itemSize * 1.5,
+        y: (spaceBox.height - ItemBox.itemSize) / 2,
+        x: spaceBox.width - ItemBox.itemSize * 1.5,
       }),
       position: {
         top: (spaceBox.height - ItemBox.itemSize) / 2 + ItemBox.itemSize + gap,
@@ -164,8 +164,8 @@ test('outside space', async () => {
     // Top but outside the space
     {
       elementBox: new ItemBox({
-        top: -2 * ItemBox.itemSize,
-        left: 0,
+        y: -2 * ItemBox.itemSize,
+        x: 0,
       }),
       position: {
         top: gap,
@@ -176,8 +176,8 @@ test('outside space', async () => {
     // Bottom but outside the space
     {
       elementBox: new ItemBox({
-        top: spaceBox.height + 2 * ItemBox.itemSize,
-        left: spaceBox.width - ItemBox.itemSize,
+        y: spaceBox.height + 2 * ItemBox.itemSize,
+        x: spaceBox.width - ItemBox.itemSize,
       }),
       position: {
         top: spaceBox.height - tipSize.height - gap,
@@ -188,8 +188,8 @@ test('outside space', async () => {
     // Left but outside the space
     {
       elementBox: new ItemBox({
-        top: spaceBox.height - ItemBox.itemSize,
-        left: -2 * ItemBox.itemSize,
+        y: spaceBox.height - ItemBox.itemSize,
+        x: -2 * ItemBox.itemSize,
       }),
       position: {
         top: spaceBox.bottom - ItemBox.itemSize - tipSize.height - gap,
@@ -200,8 +200,8 @@ test('outside space', async () => {
     // Right but outside the space
     {
       elementBox: new ItemBox({
-        top: spaceBox.height - ItemBox.itemSize,
-        left: spaceBox.width + 2 * ItemBox.itemSize,
+        y: spaceBox.height - ItemBox.itemSize,
+        x: spaceBox.width + 2 * ItemBox.itemSize,
       }),
       position: {
         top: spaceBox.bottom - ItemBox.itemSize - tipSize.height - gap,
@@ -237,8 +237,8 @@ test('tips more width than space', async () => {
     // Center
     {
       elementBox: new ItemBox({
-        top: (spaceBox.height - ItemBox.itemSize) / 2,
-        left: (spaceBox.width - ItemBox.itemSize) / 2,
+        y: (spaceBox.height - ItemBox.itemSize) / 2,
+        x: (spaceBox.width - ItemBox.itemSize) / 2,
       }),
       position: {
         top: (spaceBox.height - ItemBox.itemSize) / 2 + ItemBox.itemSize + gap,
@@ -274,8 +274,8 @@ test('element large than space', async () => {
     // Full Center
     {
       elementBox: new ItemBox({
-        top: 0,
-        left: 0,
+        y: 0,
+        x: 0,
         width: spaceBox.width,
         height: spaceBox.height,
       }),
@@ -288,8 +288,8 @@ test('element large than space', async () => {
     // Overflow Cover
     {
       elementBox: new ItemBox({
-        top: -20,
-        left: -20,
+        y: -20,
+        x: -20,
         width: spaceBox.width + 40,
         height: spaceBox.height + 40,
       }),

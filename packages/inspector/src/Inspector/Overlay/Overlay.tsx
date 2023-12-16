@@ -4,7 +4,7 @@ import {
   customElement,
   registerElement,
   getElementDimensions,
-  getBoundingBox,
+  getBoundingRect,
 } from './utils'
 import {
   InspectorOverlayRect,
@@ -13,7 +13,7 @@ import {
   InspectorOverlayTip,
 } from './OverlayTip'
 import type {
-  Box,
+  Rect,
   BoxSizing,
 } from './types'
 
@@ -33,7 +33,7 @@ export class InspectorOverlay extends LitElement {
     title?: string;
     info?: string;
     getBoxSizing: (element: Element) => BoxSizing;
-    getBoundingRect: (element: Element) => Box;
+    getBoundingRect: (element: Element) => Rect;
   }) {
     if (!element) return
 
@@ -78,7 +78,7 @@ export class InspectorOverlay extends LitElement {
     overlayRect: InspectorOverlayRect;
     overlayTip: InspectorOverlayTip;
     boxSizing: BoxSizing;
-    boundingRect: Box;
+    boundingRect: Rect;
   }) {
     this.style.setProperty('--inspector-overlay-display', 'block')
 
@@ -142,7 +142,7 @@ export class Overlay {
     title,
     info,
     getBoxSizing = getElementDimensions,
-    getBoundingRect = getBoundingBox,
+    getBoundingRect: _getBoundingRect = getBoundingRect,
   }: {
     element?: Element;
     title?: string;
@@ -154,14 +154,14 @@ export class Overlay {
     /**
      * default as `element.getBoundingClientRect()`
      */
-    getBoundingRect?: (element: Element) => Box;
+    getBoundingRect?: (element: Element) => Rect;
   }) {
     await this.overlay.inspect({
       element,
       title,
       info,
       getBoxSizing,
-      getBoundingRect,
+      getBoundingRect: _getBoundingRect,
     })
   }
 

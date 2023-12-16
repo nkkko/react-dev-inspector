@@ -8,8 +8,8 @@ export interface Box {
 }
 
 export interface Rect {
-  top: number;
-  left: number;
+  x: number;
+  y: number;
   width: number;
   height: number;
 }

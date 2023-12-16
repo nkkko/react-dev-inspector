@@ -43,8 +43,8 @@ export class InspectorOverlayRect extends LitElement {
 
     this.styles = {
       hostStyle: {
-        top: (this.boundingRect?.top ?? 0) - Math.max(this.boxSizing?.marginTop ?? 0, 0),
-        left: (this.boundingRect?.left ?? 0) - Math.max(this.boxSizing?.marginLeft ?? 0, 0),
+        top: (this.boundingRect?.y ?? 0) - Math.max(this.boxSizing?.marginTop ?? 0, 0),
+        left: (this.boundingRect?.x ?? 0) - Math.max(this.boxSizing?.marginLeft ?? 0, 0),
       },
 
       marginStyle: styleMap(this.getBoxStyle(this.boxSizing, 'margin') as StyleInfo),
@@ -142,6 +142,7 @@ export class InspectorOverlayRect extends LitElement {
       cursor: default;
       top: var(--inspector-overlay-rect-top, 0);
       left: var(--inspector-overlay-rect-left, 0);
+      box-sizing: border-box;
     }
 
     .inspector-overlay-margin {

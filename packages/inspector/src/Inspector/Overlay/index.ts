@@ -1,7 +1,8 @@
 export * from './types'
 export {
-  getBoundingBox,
+  getBoundingRect,
   getElementDimensions,
+  getBoundingBox,
 } from './utils'
 export * from './OverlayRect'
 export * from './OverlayTip'

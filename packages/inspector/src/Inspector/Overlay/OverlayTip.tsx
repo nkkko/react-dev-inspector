@@ -12,15 +12,13 @@ import {
   offset,
   flip,
   shift,
-  type Rect as FloatingRect,
   type Dimensions,
 } from '@floating-ui/core'
 import {
   customElement,
-  getBoundingBox,
+  getBoundingRect,
 } from './utils'
 import type {
-  Box,
   Rect,
   BoxSizing,
 } from './types'
@@ -34,14 +32,17 @@ export class InspectorOverlayTip extends LitElement {
   @property()
   public info = ''
 
+  /** target's bounding Rect */
   @property({ attribute: false })
-  public boundingRect?: FloatingRect
+  public boundingRect?: Rect
 
+  /** target's margin/border/padding sizing */
   @property({ attribute: false })
   public boxSizing?: Pick<BoxSizing, `margin${'Top' | 'Left' | 'Right' | 'Bottom'}`>
 
+  /** viewport space box relative of client */
   @property({ attribute: false })
-  public spaceBox?: FloatingRect
+  public spaceBox?: Rect
 
   @state()
   protected position: Pick<CSSProperties, 'top' | 'left'> = {}
@@ -58,27 +59,18 @@ export class InspectorOverlayTip extends LitElement {
   }: {
     title: string;
     info: string;
+    /** target element bounding Rect */
     boundingRect: Rect;
+    /** target element margin/border/padding */
     boxSizing: BoxSizing;
-    spaceBox?: Box;
+    /** viewport space box relative of client */
+    spaceBox?: Rect;
   }) {
     this.title = title
     this.info = info
-    this.boundingRect = {
-      x: boundingRect.left,
-      y: boundingRect.top,
-      width: boundingRect.width,
-      height: boundingRect.height,
-    }
+    this.boundingRect = boundingRect
     this.boxSizing = boxSizing
-    this.spaceBox = spaceBox
-      ? {
-        x: spaceBox.left,
-        y: spaceBox.top,
-        width: spaceBox.width,
-        height: spaceBox.height,
-      }
-      : InspectorOverlayTip.getViewSpaceBox()
+    this.spaceBox = spaceBox ?? InspectorOverlayTip.getViewSpaceBox()
     this.infoStyle = styleMap({
       display: this.info ? 'block' : 'none',
     })
@@ -87,7 +79,7 @@ export class InspectorOverlayTip extends LitElement {
   /**
    * element outer box with margin
    */
-  protected get outerBox(): FloatingRect {
+  protected get outerBox(): Rect {
     const { boundingRect, boxSizing } = this
     if (!boundingRect || !boxSizing) {
       return {
@@ -119,12 +111,12 @@ export class InspectorOverlayTip extends LitElement {
     return Math.round(this.boundingRect?.height ?? 0)
   }
 
-  static getViewSpaceBox(boundaryWindow?: Window): FloatingRect {
+  static getViewSpaceBox(boundaryWindow?: Window): Rect {
     const windowAgent = boundaryWindow ?? window.__REACT_DEVTOOLS_TARGET_WINDOW__ ?? window
-    const documentBox = getBoundingBox(windowAgent.document.documentElement)
+    const documentBox = getBoundingRect(windowAgent.document.documentElement)
     return {
-      x: documentBox.left + windowAgent.scrollX,
-      y: documentBox.top + windowAgent.scrollY,
+      x: documentBox.x + windowAgent.scrollX,
+      y: documentBox.y + windowAgent.scrollY,
       width: windowAgent.innerWidth,
       height: windowAgent.innerHeight,
     }
@@ -203,6 +195,7 @@ export class InspectorOverlayTip extends LitElement {
       line-height: 1;
       white-space: nowrap;
       max-width: 97vw;
+      box-sizing: border-box;
     }
 
     .inspector-tip-name {
@@ -250,9 +243,9 @@ export class InspectorOverlayTip extends LitElement {
 
 export const restraintTipPosition = async ({ elementBox, spaceBox, tipSize }: {
   /** the `reference` of computePosition */
-  elementBox: FloatingRect;
+  elementBox: Rect;
   /** the `ClippingRect` of computePosition */
-  spaceBox: FloatingRect;
+  spaceBox: Rect;
   /** the `floating` of computePosition */
   tipSize: Dimensions;
 }): Promise<{ top: number; left: number }> => {
