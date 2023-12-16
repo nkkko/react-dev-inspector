@@ -43,8 +43,8 @@ export class InspectorOverlayRect extends LitElement {
 
     this.styles = {
       hostStyle: {
-        top: (this.boundingRect?.top ?? 0) - (this.boxSizing?.marginTop ?? 0),
-        left: (this.boundingRect?.left ?? 0) - (this.boxSizing?.marginLeft ?? 0),
+        top: (this.boundingRect?.top ?? 0) - Math.max(this.boxSizing?.marginTop ?? 0, 0),
+        left: (this.boundingRect?.left ?? 0) - Math.max(this.boxSizing?.marginLeft ?? 0, 0),
       },
 
       marginStyle: styleMap(this.getBoxStyle(this.boxSizing, 'margin') as StyleInfo),
@@ -80,10 +80,10 @@ export class InspectorOverlayRect extends LitElement {
     }
 
     return {
-      borderTopWidth: `${boxSizing[`${type}Top`]}px`,
-      borderLeftWidth: `${boxSizing[`${type}Left`]}px`,
-      borderRightWidth: `${boxSizing[`${type}Right`]}px`,
-      borderBottomWidth: `${boxSizing[`${type}Bottom`]}px`,
+      borderTopWidth: `${Math.max(boxSizing[`${type}Top`], 0)}px`,
+      borderLeftWidth: `${Math.max(boxSizing[`${type}Left`], 0)}px`,
+      borderRightWidth: `${Math.max(boxSizing[`${type}Right`], 0)}px`,
+      borderBottomWidth: `${Math.max(boxSizing[`${type}Bottom`], 0)}px`,
       borderStyle: 'solid',
     }
   }

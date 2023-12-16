@@ -389,6 +389,8 @@ export const OverlayWithEntryElement = () => {
       element: contentElement!,
       title: 'div in <Card>',
       info: '/absolute/path/of/packages/inspector/src/Inspector/Overlays/Overlay.stories.tsx',
+      getBoxSizing: getElementDimensions,
+      getBoundingRect: getBoundingBox,
     })
   }, [])
 

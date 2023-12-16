@@ -113,6 +113,7 @@ export class InspectorOverlay extends LitElement {
       position: fixed;
       display: var(--inspector-overlay-display, block);
       pointer-events: none;
+      z-index: 10000000;
     }
   `
 }

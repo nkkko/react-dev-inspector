@@ -1,11 +1,15 @@
+import {
+  type ClientRectObject,
+} from '@floating-ui/core'
 import { restraintTipPosition } from './OverlayTip'
 import type {
-  Box,
   Rect,
 } from './types'
 
 
-class ItemBox implements Box {
+class ItemBox implements ClientRectObject {
+  x: number
+  y: number
   top: number
   left: number
   width: number
@@ -16,6 +20,8 @@ class ItemBox implements Box {
   constructor({
     top, left, width, height,
   }: Partial<Rect>) {
+    this.x = left ?? 0
+    this.y = top ?? 0
     this.top = top ?? 0
     this.left = left ?? 0
     this.width = width ?? ItemBox.itemSize
@@ -36,7 +42,7 @@ class ItemBox implements Box {
 }
 
 
-const spaceBox: Box = new ItemBox({
+const spaceBox = new ItemBox({
   top: 0,
   left: 0,
   width: 200,
@@ -53,7 +59,7 @@ test('common corners', async () => {
 
   const cases: Array<{
     /** target element */
-    elementBox: Box;
+    elementBox: ClientRectObject;
     /** tip element position */
     position: { top: number; left: number };
   }> = [
@@ -151,7 +157,7 @@ test('outside space', async () => {
 
   const cases: Array<{
     /** target element */
-    elementBox: Box;
+    elementBox: ClientRectObject;
     /** tip element position */
     position: { top: number; left: number };
   }> = [
@@ -224,7 +230,7 @@ test('tips more width than space', async () => {
 
   const cases: Array<{
     /** target element */
-    elementBox: Box;
+    elementBox: ClientRectObject;
     /** tip element position */
     position: { top: number; left: number };
   }> = [
@@ -261,7 +267,7 @@ test('element large than space', async () => {
 
   const cases: Array<{
     /** target element */
-    elementBox: Box;
+    elementBox: ClientRectObject;
     /** tip element position */
     position: { top: number; left: number };
   }> = [
