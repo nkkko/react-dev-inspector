@@ -202,6 +202,48 @@ No additional plugins are required when using [`SWC`](https://swc.rs), since `SW
 through the [`jsc.transform.react.development`](https://swc.rs/docs/configuration/compilation#jsctransformreactdevelopment) configuration,
 which is usually set automatically in most frameworks.
 
+If in your project scaffold it's not automatic set, you need to manually make sure to enable it in your `swc` configuration (like `.swcrc`):
+
+```json showLineNumbers {5}
+{
+  "jsc": {
+    "transform": {
+      "react": {
+        "development": true
+      }
+    }
+  }
+}
+```
+
 ## esbuild
 
-No additional plugins are required when using [`esbuild`](https://esbuild.github.io).
+No additional plugins are required when using [`esbuild`](https://esbuild.github.io),
+since `esbuild` can indeed generate the `debugSource` when transforming `JSX` via [`jsx-dev` option](https://esbuild.github.io/api/#jsx-dev), which is usually set automatically in most frameworks.
+
+If in your project scaffold, it's not automatic set,
+you need to manually make sure your esbuild has run unber `jsx` option with `'automatic'` and `jsx-dev` option with `true`:
+
+### esbuild-loader
+
+Example for configurate [`esbuild-loader`](https://github.com/privatenumber/esbuild-loader) in webpack's [`module.rules`](https://webpack.js.org/concepts/loaders/):
+
+```js showLineNumbers {10-11}
+{
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        loader: 'esbuild-loader',
+        options: {
+          loader: 'tsx',
+          // https://github.com/evanw/esbuild/blob/v0.20.0/lib/shared/types.ts#L58-L67
+          jsx: 'automatic',
+          jsxDev: process.env.NODE_ENV === 'development',
+          ...
+        },
+      },
+    ],
+  },
+}
+```
