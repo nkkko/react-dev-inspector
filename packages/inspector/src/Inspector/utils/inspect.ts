@@ -169,7 +169,7 @@ export const getReferenceFiber = (baseFiber?: Fiber): Fiber | undefined => {
   return originReferenceFiber
 }
 
-export const getElementCodeInfo = (element: HTMLElement): CodeInfo | undefined => {
+export const getElementCodeInfo = (element: Element): CodeInfo | undefined => {
   const fiber: Fiber | undefined = getElementFiberUpward(element)
 
   const referenceFiber = getReferenceFiber(fiber)
@@ -209,7 +209,7 @@ export const getNamedFiber = (baseFiber?: Fiber): Fiber | undefined => {
   return originNamedFiber
 }
 
-export const getElementInspect = (element: HTMLElement): {
+export const getElementInspect = (element: Element): {
   fiber?: Fiber;
   name: string;
   title: string;
