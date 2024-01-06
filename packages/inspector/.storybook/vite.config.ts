@@ -21,7 +21,6 @@ export default defineConfig({
     react({
       babel: {
         plugins: [
-          ['@babel/plugin-syntax-decorators', { version: '2023-05' }],
           '@react-dev-inspector/babel-plugin',
         ],
       },

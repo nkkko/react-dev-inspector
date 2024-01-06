@@ -1,0 +1,21 @@
+/**
+ * for only check types in stories and tests
+ */
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "noEmit": true,
+  },
+  "include": [
+    "src/**/*.d.ts",
+    "src/**/*.test.ts",
+    "src/**/*.test.tsx",
+    "src/**/*.stories.tsx",
+    "src/**/*.mock.ts",
+    "src/**/tests",
+    "src/**/mocks",
+    "src/**/.stories",
+  ],
+}

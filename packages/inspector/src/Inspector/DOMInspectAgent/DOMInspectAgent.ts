@@ -1,6 +1,8 @@
 
 import type { Fiber } from 'react-reconciler'
-import { Overlay } from '../Overlay'
+import {
+  Overlay,
+} from '@react-dev-inspector/components'
 import {
   setupPointerListener,
   getElementCodeInfo,

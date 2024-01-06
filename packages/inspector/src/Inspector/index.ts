@@ -1,3 +1,5 @@
+export * from '@react-dev-inspector/components'
+
 export {
   gotoVSCode,
   gotoVSCodeInsiders,
@@ -24,5 +26,4 @@ export {
 } from './DOMInspectAgent'
 
 export * from './types'
-export * from './Overlay'
 export * from './Inspector'
