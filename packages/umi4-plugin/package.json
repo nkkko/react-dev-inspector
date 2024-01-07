@@ -1,6 +1,6 @@
 {
   "name": "@react-dev-inspector/umi4-plugin",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "sideEffects": false,
   "description": "umi4 plugin for react-dev-inspector to add babel plugin and server middleware",
   "main": "lib",

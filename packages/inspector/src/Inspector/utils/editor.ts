@@ -6,11 +6,22 @@
 import launchEditorEndpoint from 'react-dev-utils/launchEditorEndpoint'
 import type { CodeInfo } from './inspect'
 
+
+type CodeInfoLike = CodeInfo | { codeInfo: CodeInfo }
+
+const getCodeInfo = (_codeInfo: CodeInfoLike): CodeInfo => (
+  'codeInfo' in _codeInfo
+    ? _codeInfo.codeInfo
+    : _codeInfo
+)
+
+
 /**
  * fetch server api to open the code editor
  */
-export const gotoServerEditor = (codeInfo?: CodeInfo) => {
-  if (!codeInfo) return
+export const gotoServerEditor = (_codeInfo?: CodeInfoLike) => {
+  if (!_codeInfo) return
+  const codeInfo = getCodeInfo(_codeInfo)
 
   const {
     lineNumber,
@@ -48,7 +59,9 @@ export const gotoServerEditor = (codeInfo?: CodeInfo) => {
  *
  * https://code.visualstudio.com/docs/editor/command-line#_opening-vs-code-with-urls
  */
-export const gotoVSCode = (codeInfo: CodeInfo, options?: { insiders?: boolean }) => {
+export const gotoVSCode = (_codeInfo: CodeInfoLike, options?: { insiders?: boolean }) => {
+  const codeInfo = getCodeInfo(_codeInfo)
+
   if (!codeInfo.absolutePath) {
     console.error(`[react-dev-inspector] Cannot open editor without source fileName`, codeInfo)
     return
@@ -61,7 +74,7 @@ export const gotoVSCode = (codeInfo: CodeInfo, options?: { insiders?: boolean })
 /**
  * open source file in VSCode via it's url schema
  */
-export const gotoVSCodeInsiders = (codeInfo: CodeInfo) => {
+export const gotoVSCodeInsiders = (codeInfo: CodeInfoLike) => {
   return gotoVSCode(codeInfo, { insiders: true })
 }
 
@@ -69,7 +82,9 @@ export const gotoVSCodeInsiders = (codeInfo: CodeInfo) => {
 /**
  * open source file in WebStorm via it's url schema
  */
-export const gotoWebStorm = (codeInfo: CodeInfo) => {
+export const gotoWebStorm = (_codeInfo: CodeInfoLike) => {
+  const codeInfo = getCodeInfo(_codeInfo)
+
   if (!codeInfo.absolutePath) {
     console.error(`[react-dev-inspector] Cannot open editor without source fileName`, codeInfo)
     return

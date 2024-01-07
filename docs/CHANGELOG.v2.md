@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.1](https://github.com/zthxxx/react-dev-inspector/compare/v1.9.0...v2.0.1)
+
+### Bug Fixes
+
+- fix: fix utils `gotoVSCode` `gotoWebStorm` was not export as [documentation](https://react-dev-inspector.zthxxx.me/docs/inspector-component#oninspectelement) with its params.
+
+
 ## [2.0.0](https://github.com/zthxxx/react-dev-inspector/compare/v1.9.0...v2.0.0) (2023-09-04)
 
 ### Features

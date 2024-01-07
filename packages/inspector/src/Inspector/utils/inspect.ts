@@ -50,13 +50,20 @@ export interface CodeDataAttribute {
  *     https://github.com/facebook/react/blob/v18.0.0/packages/react-reconciler/src/ReactFiber.new.js#L648-L649
  */
 export const getCodeInfoFromDebugSource = (fiber?: Fiber): CodeInfo | undefined => {
-  if (!fiber?._debugSource) return undefined
+  if (!fiber) return undefined
+
+  const debugSource = (
+    fiber._debugSource
+    ?? fiber._debugOwner?._debugSource
+  ) as Source & { columnNumber?: number }
+
+  if (!debugSource) return undefined
 
   const {
     fileName,
     lineNumber,
     columnNumber,
-  } = fiber._debugSource as Source & { columnNumber?: number }
+  } = debugSource
 
   if (fileName && lineNumber) {
     return {
@@ -101,10 +108,15 @@ export const getCodeInfoFromProps = (fiber?: Fiber): CodeInfo | undefined => {
   return undefined
 }
 
-export const getCodeInfoFromFiber = (fiber?: Fiber): CodeInfo | undefined => (
-  getCodeInfoFromProps(fiber)
-  ?? getCodeInfoFromDebugSource(fiber)
-)
+export const getCodeInfoFromFiber = (fiber?: Fiber): CodeInfo | undefined => {
+  const codeInfos = [
+    getCodeInfoFromDebugSource(fiber),
+    getCodeInfoFromProps(fiber),
+  ].filter(Boolean) as CodeInfo[]
+
+  if (!codeInfos.length) return undefined
+  return Object.assign({}, ...codeInfos)
+}
 
 /**
  * give a `base` dom fiber,
