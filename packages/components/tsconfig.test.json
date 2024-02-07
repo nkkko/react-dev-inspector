@@ -8,14 +8,4 @@
     "module": "ESNext",
     "noEmit": true,
   },
-  "include": [
-    "src/**/*.d.ts",
-    "src/**/*.test.ts",
-    "src/**/*.test.tsx",
-    "src/**/*.stories.tsx",
-    "src/**/*.mock.ts",
-    "src/**/tests",
-    "src/**/mocks",
-    "src/**/.stories",
-  ],
 }

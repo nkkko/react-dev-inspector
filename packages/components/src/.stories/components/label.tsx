@@ -1,13 +1,13 @@
 import type { Component, ComponentProps } from "solid-js"
 import { splitProps } from "solid-js"
 
-import { clsx } from 'clsx'
+import { cn } from '@stories/lib/utils'
 
 const Label: Component<ComponentProps<"label">> = (props) => {
   const [local, others] = splitProps(props, ["class"])
   return (
     <label
-      class={clsx(
+      class={cn(
         "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
         local.class
       )}

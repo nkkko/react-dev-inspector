@@ -3,7 +3,7 @@ import { Show, splitProps } from "solid-js"
 
 import * as SwitchPrimitive from "@kobalte/core/switch"
 
-import { clsx } from 'clsx'
+import { cn } from '@stories/lib/utils'
 
 type RootProps = SwitchPrimitive.SwitchRootProps & {
   label?: string
@@ -18,7 +18,7 @@ const Switch: Component<RootProps> = (props) => {
       <div class="items-top flex space-x-2">
         <SwitchPrimitive.Control class="peer inline-flex h-[24px] w-[44px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent bg-input transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[checked]:bg-primary">
           <SwitchPrimitive.Thumb
-            class={clsx(
+            class={cn(
               "pointer-events-none block size-5 translate-x-0 rounded-full bg-background shadow-lg ring-0 transition-transform data-[checked]:translate-x-5"
             )}
           />
