@@ -1,7 +1,7 @@
 # Changelog
 
 
-## [2.1.0-beta.5](https://github.com/zthxxx/react-dev-inspector/compare/v2.0.1...v2.1.0-beta.5)
+## [2.1.0-beta.6](https://github.com/zthxxx/react-dev-inspector/compare/v2.0.1...v2.1.0-beta.6)
 
 ### Features
 
@@ -12,6 +12,7 @@
 
 - refactor Inspector implementation to `DOMInspectAgent`, support setting custom `InspectAgent`
 - rewrite Overlay to WebComponent with [LitElement](https://lit.dev)
+- using `@floating-ui/core` for OverlayTip
 - move `package.json` v1 compatible plugins from `dependencies` to `peerDependencies` with mark as optional
 - add `exports` field into `package.json`
 
