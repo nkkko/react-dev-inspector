@@ -1,3 +1,4 @@
+import type { Fiber } from 'react-reconciler'
 
 export interface CodeInfo {
   lineNumber: string;
@@ -77,11 +78,12 @@ export interface InspectAgent<Element> {
    */
   deactivate(): void;
 
+  isAgentElement(element: unknown): element is Element;
+
   /**
-   * use for filter valid elements from input element upward to render root.
-   * a "valid" element considered have a valid name and you want show it in the inspected list.
+   * find the nearest react fiber from the element
    */
-  getAncestorChain(element: Element): Generator<Element, void, void>;
+  findElementFiber(element?: Element): Fiber | undefined;
 
   /**
    * get the element display name and title for show in indicator UI

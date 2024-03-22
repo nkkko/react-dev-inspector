@@ -15,21 +15,21 @@ import {
   useRecordPointer,
   useControlledActive,
 } from './hooks'
-import { domInspectAgent } from './DOMInspectAgent'
+import { domInspectAgent, type DOMElement } from './DOMInspectAgent'
 import type {
   CodeInfo,
   InspectAgent,
 } from './types'
 
 
-const defaultInspectAgents: InspectAgent<HTMLElement>[] = [
+const defaultInspectAgents: InspectAgent<DOMElement>[] = [
   domInspectAgent,
 ]
 
 /**
  * the inspect meta info that is sent to the callback when an element is hovered over or clicked.
  */
-export interface InspectParams<Element = HTMLElement> {
+export interface InspectParams<Element = DOMElement> {
   /** hover / click event target dom element */
   element: Element;
   /** nearest named react component fiber for dom element */
@@ -79,6 +79,7 @@ export interface InspectorProps<Element> {
    * will automatically disable in production environment by default.
    *
    * @default `true` if `NODE_ENV` is 'production', otherwise is `false`.
+   *
    * > add in version `v2.0.0`
    */
   disable?: boolean;
@@ -86,6 +87,8 @@ export interface InspectorProps<Element> {
   /**
    * Agent for get inspection info in different React renderer with user interaction
    * @default [domInspectAgent]
+   *
+   * > add in version `v2.1.0`
    */
   inspectAgents?: InspectAgent<Element>[];
 
@@ -129,6 +132,8 @@ export interface InspectorProps<Element> {
    *
    * @default `true` if setting `onInspectElement` callback, otherwise is `false`.
    * @deprecated please use `onInspectElement` callback instead for fully custom controlling.
+   *
+   * > deprecated in version `v2.0.0`
    */
   disableLaunchEditor?: boolean;
 }
@@ -210,9 +215,7 @@ export const Inspector = function<Element>(props: InspectorProps<Element>) {
     }
 
     const codeInfo = agent.findCodeInfo(element)
-    const fiber = (element instanceof HTMLElement)
-      ? domInspectAgent.getElementFiber(element)
-      : undefined
+    const fiber = agent.findElementFiber(element)
 
     onHoverElement({
       element,
@@ -267,9 +270,7 @@ export const Inspector = function<Element>(props: InspectorProps<Element>) {
 
     const nameInfo = agent.getNameInfo(element)
     const codeInfo = agent.findCodeInfo(element)
-    const fiber = (element instanceof HTMLElement)
-      ? domInspectAgent.getElementFiber(element)
-      : undefined
+    const fiber = agent.findElementFiber(element)
 
     deactivate()
 

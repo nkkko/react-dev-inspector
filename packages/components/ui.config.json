@@ -1,0 +1,11 @@
+{
+  "tsx": true,
+  "componentDir": "./src/.stories/components",
+  "aliases": {
+    "path": "@stories/*"
+  },
+  "tailwind": {
+    "config": "tailwind.config.ts",
+    "css": ".storybook/tailwind.css"
+  }
+}

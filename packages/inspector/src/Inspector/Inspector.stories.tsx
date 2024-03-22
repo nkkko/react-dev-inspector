@@ -77,6 +77,7 @@ export const ControlState = () => {
             Count: {count}
           </div>
           <Button
+            className='z-50'
             onClick={() => setCount(count => count + 1)}
             size={'sm'}
             variant={'secondary'}

@@ -1,0 +1,25 @@
+{
+  "extends": "@zthxxx/tsconfig/tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "baseUrl": ".",
+
+    "types": [
+      "node",
+      "vitest/globals",
+    ],
+
+    // https://docs.solidjs.com/configuration/typescript
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+
+    "paths": {
+      "@stories/*": ["src/.stories/*"],
+    },
+  },
+  "include": [
+    "src",
+    "src/.stories/**/*",
+    ".storybook",
+  ],
+}

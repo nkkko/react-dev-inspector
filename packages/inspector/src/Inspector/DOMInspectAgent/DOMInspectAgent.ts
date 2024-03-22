@@ -1,6 +1,8 @@
 
 import type { Fiber } from 'react-reconciler'
-import { Overlay } from '../Overlay'
+import {
+  Overlay,
+} from '@react-dev-inspector/components'
 import {
   setupPointerListener,
   getElementCodeInfo,
@@ -12,7 +14,9 @@ import type {
 } from '../types'
 
 
-export class DOMInspectAgent implements InspectAgent<HTMLElement> {
+export type DOMElement = HTMLElement | SVGElement
+
+export class DOMInspectAgent implements InspectAgent<DOMElement> {
   protected overlay?: Overlay
   protected unsubscribeListener?: () => void
 
@@ -27,9 +31,9 @@ export class DOMInspectAgent implements InspectAgent<HTMLElement> {
      * use to check whether hovered any element at initial
      */
     pointer?: PointerEvent;
-    onHover: (params: { element: HTMLElement; pointer: PointerEvent }) => void;
-    onPointerDown: (params: { element?: HTMLElement; pointer: PointerEvent }) => void;
-    onClick: (params: { element?: HTMLElement; pointer: PointerEvent }) => void;
+    onHover: (params: { element: DOMElement; pointer: PointerEvent }) => void;
+    onPointerDown: (params: { element?: DOMElement; pointer: PointerEvent }) => void;
+    onClick: (params: { element?: DOMElement; pointer: PointerEvent }) => void;
   }) {
     this.deactivate()
     this.overlay = new Overlay()
@@ -43,7 +47,7 @@ export class DOMInspectAgent implements InspectAgent<HTMLElement> {
     if (!pointer) {
       return
     }
-    const element = document.elementFromPoint(pointer.clientX, pointer.clientY) as HTMLElement | undefined
+    const element = document.elementFromPoint(pointer.clientX, pointer.clientY) as DOMElement | undefined
     if (element) {
       onHover({
         element,
@@ -60,34 +64,27 @@ export class DOMInspectAgent implements InspectAgent<HTMLElement> {
     this.unsubscribeListener = undefined
   }
 
-  public getElementFiber(element?: HTMLElement): Fiber | undefined {
+  public isAgentElement(element: unknown): element is DOMElement {
+    return element instanceof HTMLElement || element instanceof SVGElement
+  }
+
+  public findElementFiber(element?: DOMElement): Fiber | undefined {
     return getElementFiberUpward(element)
   }
 
-  public *getAncestorChain(element: HTMLElement): Generator<HTMLElement, void, void> {
-    let current: HTMLElement | null = element
-    while (current) {
-      if (this.getElementFiber(current)) {
-        yield current
-      }
-
-      current = current.parentElement
-    }
-  }
-
-  public getNameInfo(element: HTMLElement): {
+  public getNameInfo(element: DOMElement): {
     name: string;
     title: string;
   } {
     return getElementInspect(element)
   }
 
-  public findCodeInfo(element: HTMLElement) {
+  public findCodeInfo(element: DOMElement) {
     return getElementCodeInfo(element)
   }
 
   public indicate({ element, title }: {
-    element: HTMLElement;
+    element: DOMElement;
     title?: string;
   }) {
     const codeInfo = this.findCodeInfo(element)

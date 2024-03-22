@@ -17,7 +17,7 @@ export const isForwardRef = (fiber?: Fiber): boolean =>
   fiber?.type?.$$typeof === Symbol.for('react.forward_ref')
 
 
-type HTMLElementWithFiber = HTMLElement & {
+type ElementWithFiber = Element & {
   [fiberKey: string]: Fiber | undefined;
 }
 
@@ -48,8 +48,8 @@ const getFiberWithDevtoolHook = (element: any): Fiber | undefined => {
 /**
  * https://stackoverflow.com/questions/29321742/react-getting-a-component-from-a-dom-element-for-debugging
  */
-export const getElementFiber = (_element?: HTMLElement): Fiber | undefined => {
-  const element = _element as HTMLElementWithFiber
+export const getElementFiber = (_element?: Element): Fiber | undefined => {
+  const element = _element as ElementWithFiber
   if (!element) {
     return undefined
   }
@@ -86,7 +86,7 @@ export const getElementFiber = (_element?: HTMLElement): Fiber | undefined => {
   return undefined
 }
 
-export const getElementFiberUpward = (element: HTMLElement | null | undefined): Fiber | undefined => {
+export const getElementFiberUpward = (element: Element | null | undefined): Fiber | undefined => {
   if (!element) return undefined
   const fiber = getElementFiber(element)
   if (fiber) return fiber

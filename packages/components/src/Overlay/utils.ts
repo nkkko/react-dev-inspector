@@ -5,60 +5,6 @@ import type {
 } from './types'
 
 /**
- * Allow for custom element classes with private constructors
- */
-type CustomElementClass = Omit<typeof HTMLElement, 'new'>
-
-
-interface Constructor<T> { new (...args: any[]): T }
-
-type CustomElementDecorator = (
-  target: CustomElementClass,
-  context?: ClassDecoratorContext<Constructor<HTMLElement>>
-) => void
-
-/**
- * Class decorator factory that defines the decorated class as a custom element.
- * It's safe to re-register the same tag name multiple times (will not override or throw error).
- *
- * ```js
- * @customElement('my-element')
- * class MyElement extends LitElement {
- *   render() {
- *     return html``;
- *   }
- * }
- * ```
- * @category Decorator
- * @param tagName The tag name of the custom element to define.
- */
-export const customElement = (tagName: string): CustomElementDecorator =>
-  (
-    classOrTarget: CustomElementClass | Constructor<HTMLElement>,
-    context?: ClassDecoratorContext<Constructor<HTMLElement>>,
-  ) => {
-    if (context !== undefined) {
-      context.addInitializer(() => {
-        registerElement(
-          tagName,
-          classOrTarget as CustomElementConstructor,
-        )
-      })
-    }
-    else {
-      registerElement(tagName, classOrTarget as CustomElementConstructor)
-    }
-  }
-
-
-// useful for tree-shaking
-export const registerElement = (tagName: string, elementClass: CustomElementConstructor) => {
-  if (!customElements.get(tagName)) {
-    customElements.define(tagName, elementClass)
-  }
-}
-
-/**
  * @deprecated now use `getBoundingRect` instead
  */
 export function getBoundingBox(element: HTMLElement | any): Box {
