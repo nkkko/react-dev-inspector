@@ -3,6 +3,7 @@ import type { Fiber, Source } from 'react-reconciler'
 import type {
   CodeInfo,
   CodeDataAttribute,
+  InspectChainItem,
 } from '../types'
 import {
   isNativeTagFiber,
@@ -11,6 +12,8 @@ import {
   getDirectParentFiber,
   getFiberName,
   getElementFiberUpward,
+  getDisplayNameForFiber,
+  getTagTextFromFiber,
 } from './fiber'
 
 
@@ -233,5 +236,43 @@ export const getElementInspect = (element: Element): {
     fiber: referenceFiber,
     name: fiberName || nodeName,
     title,
+  }
+}
+
+export function *genInspectChainFromFibers<Element>({ fibers, isAgentElement }: {
+  fibers: Generator<Fiber, void, void>;
+  isAgentElement: (element: unknown) => element is Element;
+}): Generator<InspectChainItem<Element>, unknown, void> {
+  let lastElement: Element | null = null
+  let fiber: Fiber | undefined
+
+  for (fiber of fibers) {
+    const displayName = getDisplayNameForFiber(fiber)
+    const tagName = getTagTextFromFiber(fiber)
+    const codeInfo = getCodeInfoFromFiber(fiber)
+    const node = isAgentElement(fiber.stateNode)
+      ? fiber.stateNode
+      : undefined
+
+    const element = node ?? lastElement
+    lastElement = node ?? lastElement
+
+    if (displayName || tagName) {
+      yield {
+        element,
+        title: displayName || '',
+        subtitle: codeInfo?.relativePath ?? codeInfo?.absolutePath,
+        tags: [tagName],
+        codeInfo,
+      }
+    }
+  }
+
+  if (fiber) {
+    const root: any = fiber.stateNode
+    if (root && root.constructor?.name === 'FiberRootNode') {
+      return root.containerInfo
+    }
+    return root
   }
 }

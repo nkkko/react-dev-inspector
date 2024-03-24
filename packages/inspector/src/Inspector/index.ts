@@ -12,6 +12,7 @@ export {
   getCodeInfoFromFiber,
   getElementCodeInfo,
   getNamedFiber,
+  genInspectChainFromFibers,
 } from './utils'
 
 export * from './utils/fiber'

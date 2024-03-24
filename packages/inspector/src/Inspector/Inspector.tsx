@@ -22,7 +22,7 @@ import type {
 } from './types'
 
 
-const defaultInspectAgents: InspectAgent<DOMElement>[] = [
+const defaultInspectAgents = [
   domInspectAgent,
 ]
 
@@ -138,7 +138,7 @@ export interface InspectorProps<Element> {
   disableLaunchEditor?: boolean;
 }
 
-export const Inspector = function<Element>(props: InspectorProps<Element>) {
+export const Inspector = function<Element = unknown>(props: InspectorProps<Element>) {
   const {
     keys,
     onHoverElement,
@@ -167,7 +167,6 @@ export const Inspector = function<Element>(props: InspectorProps<Element>) {
   const startInspecting = useEffectEvent(() => {
     inspectAgents.forEach(agent => {
       agent.activate({
-        pointer: pointerRef.current,
         onHover: (params) => handleHoverElement({
           ...params,
           agent,
@@ -182,6 +181,24 @@ export const Inspector = function<Element>(props: InspectorProps<Element>) {
         }),
       })
     })
+
+    if (!pointerRef.current) {
+      return
+    }
+
+    Promise.all(inspectAgents.map(agent => agent.getTopElementFromPointer?.(pointerRef.current!)))
+      .then(elements => {
+        for (const [index, element] of elements.entries()) {
+          if (element) {
+            handleHoverElement({
+              agent: inspectAgents[index],
+              element,
+              pointer: pointerRef.current!,
+            })
+            return
+          }
+        }
+      })
   })
 
   const stopInspecting = useEffectEvent(() => {
@@ -215,7 +232,7 @@ export const Inspector = function<Element>(props: InspectorProps<Element>) {
     }
 
     const codeInfo = agent.findCodeInfo(element)
-    const fiber = agent.findElementFiber(element)
+    const fiber = agent.findElementFiber?.(element)
 
     onHoverElement({
       element,
@@ -270,7 +287,7 @@ export const Inspector = function<Element>(props: InspectorProps<Element>) {
 
     const nameInfo = agent.getNameInfo(element)
     const codeInfo = agent.findCodeInfo(element)
-    const fiber = agent.findElementFiber(element)
+    const fiber = agent.findElementFiber?.(element)
 
     deactivate()
 
