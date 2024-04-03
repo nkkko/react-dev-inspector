@@ -2,7 +2,7 @@
 import type { Fiber } from 'react-reconciler'
 import {
   Overlay,
-} from '@react-dev-inspector/components'
+} from '@react-dev-inspector/web-components'
 import {
   setupPointerListener,
   getElementCodeInfo,

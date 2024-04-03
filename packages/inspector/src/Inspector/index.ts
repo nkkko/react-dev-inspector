@@ -1,5 +1,3 @@
-export * from '@react-dev-inspector/components'
-
 export {
   gotoVSCode,
   gotoVSCodeInsiders,

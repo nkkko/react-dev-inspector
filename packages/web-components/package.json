@@ -1,12 +1,12 @@
 {
-  "name": "@react-dev-inspector/components",
+  "name": "@react-dev-inspector/web-components",
   "version": "2.1.0-beta.5",
   "sideEffects": false,
   "description": "Web UI components for react-dev-inspector, build as Web Components via solid-js.",
   "repository": {
     "type": "git",
     "url": "https://github.com/zthxxx/react-dev-inspector.git",
-    "directory": "packages/components"
+    "directory": "packages/web-components"
   },
   "publishConfig": {
     "access": "public",
