@@ -1,5 +1,9 @@
 import type { Fiber, Source } from 'react-reconciler'
 
+import type {
+  CodeInfo,
+  CodeDataAttribute,
+} from '../types'
 import {
   isNativeTagFiber,
   isReactSymbolFiber,
@@ -9,33 +13,6 @@ import {
   getElementFiberUpward,
 } from './fiber'
 
-
-export interface CodeInfo {
-  lineNumber: string;
-  columnNumber: string;
-  /**
-   * code source file relative path to dev-server cwd(current working directory)
-   * need use with `react-dev-inspector/plugins/babel`
-   */
-  relativePath?: string;
-  /**
-   * code source file absolute path
-   * just need use with `@babel/plugin-transform-react-jsx-source` which auto set by most framework
-   */
-  absolutePath?: string;
-}
-
-/**
- * props that injected into react nodes
- *
- * like <div data-inspector-line="2" data-inspector-column="3" data-inspector-relative-path="xxx/ooo" />
- * this props will be record in fiber
- */
-export interface CodeDataAttribute {
-  'data-inspector-line': string;
-  'data-inspector-column': string;
-  'data-inspector-relative-path': string;
-}
 
 /**
  * react fiber property `_debugSource` created by `@babel/plugin-transform-react-jsx-source`
@@ -52,9 +29,13 @@ export interface CodeDataAttribute {
 export const getCodeInfoFromDebugSource = (fiber?: Fiber): CodeInfo | undefined => {
   if (!fiber) return undefined
 
+  /**
+   * only find forward with 2 level _debugOwner, otherwise to normal `fiber.return`
+   */
   const debugSource = (
     fiber._debugSource
     ?? fiber._debugOwner?._debugSource
+    ?? fiber._debugOwner?._debugOwner?._debugSource
   ) as Source & { columnNumber?: number }
 
   if (!debugSource) return undefined
@@ -86,7 +67,7 @@ export const getCodeInfoFromDebugSource = (fiber?: Fiber): CodeInfo | undefined 
 }
 
 /**
- * code location data-attribute props inject by `react-dev-inspector/plugins/babel`
+ * code location data-attribute props inject by `@react-dev-inspector/babel-plugin`
  */
 export const getCodeInfoFromProps = (fiber?: Fiber): CodeInfo | undefined => {
   if (!fiber?.pendingProps) return undefined
@@ -230,7 +211,7 @@ export const getNamedFiber = (baseFiber?: Fiber): Fiber | undefined => {
 
 export const getElementInspect = (element: HTMLElement): {
   fiber?: Fiber;
-  name?: string;
+  name: string;
   title: string;
 } => {
   const fiber = getElementFiberUpward(element)
@@ -238,16 +219,19 @@ export const getElementInspect = (element: HTMLElement): {
 
   const namedFiber = getNamedFiber(referenceFiber)
 
-  const fiberName = getFiberName(namedFiber)
   const nodeName = element.nodeName.toLowerCase()
+  let fiberName = getFiberName(namedFiber)
+  if (fiberName === nodeName) {
+    fiberName = getFiberName(namedFiber?.return)
+  }
 
-  const title = fiberName
+  const title = (fiberName && !(fiberName === nodeName))
     ? `${nodeName} in <${fiberName}>`
     : nodeName
 
   return {
     fiber: referenceFiber,
-    name: fiberName,
+    name: fiberName || nodeName,
     title,
   }
 }

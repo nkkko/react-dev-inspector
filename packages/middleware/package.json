@@ -1,6 +1,6 @@
 {
   "name": "@react-dev-inspector/middleware",
-  "version": "2.0.1",
+  "version": "2.1.0-beta.5",
   "sideEffects": false,
   "description": "express middleware for react-dev-inspector to launch local IDE",
   "main": "lib",
@@ -12,7 +12,11 @@
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "build": "npm-run-all clean --parallel build:esm build:cjs"
   },
-  "repository": "https://github.com/zthxxx/react-dev-inspector/tree/master/packages/middleware",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zthxxx/react-dev-inspector.git",
+    "directory": "packages/middleware"
+  },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"

@@ -1,6 +1,6 @@
 {
   "name": "@react-dev-inspector/umi4-plugin",
-  "version": "2.0.1",
+  "version": "2.1.0-beta.5",
   "sideEffects": false,
   "description": "umi4 plugin for react-dev-inspector to add babel plugin and server middleware",
   "main": "lib",
@@ -12,7 +12,11 @@
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "build": "npm-run-all clean --parallel build:esm build:cjs"
   },
-  "repository": "https://github.com/zthxxx/react-dev-inspector/tree/master/packages/umi4-plugin",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zthxxx/react-dev-inspector.git",
+    "directory": "packages/umi4-plugin"
+  },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"

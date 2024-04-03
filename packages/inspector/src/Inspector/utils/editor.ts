@@ -4,7 +4,7 @@
  */
 // @ts-expect-error import from deep path for reduce load files
 import launchEditorEndpoint from 'react-dev-utils/launchEditorEndpoint'
-import type { CodeInfo } from './inspect'
+import type { CodeInfo } from '../types'
 
 
 type CodeInfoLike = CodeInfo | { codeInfo: CodeInfo }

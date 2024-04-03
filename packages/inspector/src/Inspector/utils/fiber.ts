@@ -17,37 +17,78 @@ export const isForwardRef = (fiber?: Fiber): boolean =>
   fiber?.type?.$$typeof === Symbol.for('react.forward_ref')
 
 
-type FiberHTMLElement = HTMLElement & {
+type HTMLElementWithFiber = HTMLElement & {
   [fiberKey: string]: Fiber | undefined;
 }
+
+const cachedFiberKeys: Set<string> = new Set()
+
+/**
+ * get fiber via React renderer which registered by `reconciler.injectIntoDevTools()`
+ * like: https://github.com/facebook/react/blob/v17.0.0/packages/react-dom/src/client/ReactDOM.js#L220
+ */
+const getFiberWithDevtoolHook = (element: any): Fiber | undefined => {
+  if (!window.__REACT_DEVTOOLS_GLOBAL_HOOK__?.renderers) return
+
+  const { renderers } = window.__REACT_DEVTOOLS_GLOBAL_HOOK__
+
+  for (const renderer of renderers.values()) {
+    try {
+      const fiber = renderer.findFiberByHostInstance?.(element)
+
+      if (fiber) {
+        return fiber
+      }
+    }
+    catch {}
+  }
+}
+
 
 /**
  * https://stackoverflow.com/questions/29321742/react-getting-a-component-from-a-dom-element-for-debugging
  */
-export const getElementFiber = (element: FiberHTMLElement): Fiber | undefined => {
+export const getElementFiber = (_element?: HTMLElement): Fiber | undefined => {
+  const element = _element as HTMLElementWithFiber
+  if (!element) {
+    return undefined
+  }
+
+  const fiberByDevtoolHook = getFiberWithDevtoolHook(element)
+  if (fiberByDevtoolHook) {
+    return fiberByDevtoolHook
+  }
+
+  for (const cachedFiberKey of cachedFiberKeys) {
+    if (element[cachedFiberKey]) {
+      return element[cachedFiberKey] as Fiber
+    }
+  }
+
   const fiberKey = Object.keys(element).find(key => (
-    /**
-     * for react <= v16.13.1
-     * https://github.com/facebook/react/blob/v16.13.1/packages/react-dom/src/client/ReactDOMComponentTree.js#L21
-     */
-    key.startsWith('__reactInternalInstance$')
     /**
      * for react >= v16.14.0
      * https://github.com/facebook/react/blob/v16.14.0/packages/react-dom/src/client/ReactDOMComponentTree.js#L39
      */
-    || key.startsWith('__reactFiber$')
+    key.startsWith('__reactFiber$')
+    /**
+     * for react <= v16.14.0
+     * https://github.com/facebook/react/blob/v16.14.0/packages/react-dom/src/client/ReactDOMComponentTree.js#L21
+     */
+    || key.startsWith('__reactInternalInstance$')
   ))
 
   if (fiberKey) {
+    cachedFiberKeys.add(fiberKey)
     return element[fiberKey] as Fiber
   }
 
   return undefined
 }
 
-export const getElementFiberUpward = (element: HTMLElement | null): Fiber | undefined => {
+export const getElementFiberUpward = (element: HTMLElement | null | undefined): Fiber | undefined => {
   if (!element) return undefined
-  const fiber = getElementFiber(element as FiberHTMLElement)
+  const fiber = getElementFiber(element)
   if (fiber) return fiber
   return getElementFiberUpward(element.parentElement)
 }
@@ -79,9 +120,11 @@ export const getDirectParentFiber = (child: Fiber): Fiber | null => {
  *
  * https://github.com/facebook/react/blob/v17.0.0/packages/react-devtools-shared/src/utils.js#L90-L112
  */
-export const getFiberName = (fiber?: Fiber): string | undefined => {
+export const getFiberName = (fiber?: Fiber | null): string | undefined => {
   const fiberType = fiber?.type
   if (!fiberType) return undefined
+  if (typeof fiberType === 'string') return fiberType
+
   const { displayName, name } = fiberType
 
   if (typeof displayName === 'string') {

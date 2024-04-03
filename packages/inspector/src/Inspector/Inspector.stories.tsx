@@ -9,6 +9,7 @@ import {
 import { Card } from '../.stories/Card'
 import {
   Switch,
+  Button,
   Label,
   Card as CardContainer,
   CardHeader,
@@ -17,8 +18,8 @@ import {
 } from '../.stories/components'
 import {
   Inspector,
-  defaultHotkeys,
 } from './Inspector'
+import { defaultHotkeys } from './hooks'
 
 // https://storybook.js.org/docs/react/writing-stories/introduction#component-story-format
 export default {
@@ -54,6 +55,7 @@ export const CustomHotkeys = () => {
 
 export const ControlState = () => {
   const [active, setActive] = useState(false)
+  const [count, setCount] = useState(0)
 
   return (
     <Inspector
@@ -67,7 +69,22 @@ export const ControlState = () => {
         onCancel={() => setActive(false)}
         confirmText='Activate'
         onConfirm={() => setActive(true)}
-      />
+      >
+        <div
+          className='flex justify-between items-center'
+        >
+          <div>
+            Count: {count}
+          </div>
+          <Button
+            onClick={() => setCount(count => count + 1)}
+            size={'sm'}
+            variant={'secondary'}
+          >
+            Increase
+          </Button>
+        </div>
+      </Card>
     </Inspector>
   )
 }
@@ -160,7 +177,7 @@ export const Disabled = () => {
             }}
           />
           <Label htmlFor='inspector-switch'>
-            {!available ? `Disabled` : `Enabled`}
+            Now {!available ? `Disabled` : `Enabled`}
           </Label>
         </div>
       </Card>

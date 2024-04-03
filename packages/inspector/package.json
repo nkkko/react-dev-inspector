@@ -1,6 +1,6 @@
 {
   "name": "react-dev-inspector",
-  "version": "2.0.1",
+  "version": "2.1.0-beta.5",
   "sideEffects": false,
   "description": "dev-tool for inspect react components and jump to local IDE for component code.",
   "main": "lib",
@@ -29,8 +29,13 @@
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "build": "npm-run-all clean --parallel sync:readme build:esm build:cjs"
   },
-  "repository": "https://github.com/zthxxx/react-dev-inspector/tree/master/packages/inspector",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zthxxx/react-dev-inspector.git",
+    "directory": "packages/inspector"
+  },
   "publishConfig": {
+    "access": "public",
     "registry": "https://registry.npmjs.org"
   },
   "keywords": [
@@ -54,6 +59,7 @@
     "node": ">=12.0.0"
   },
   "dependencies": {
+    "@floating-ui/core": "^1.6.0",
     "@types/react-reconciler": "^0.28.8",
     "hotkeys-js": "^3.12.2",
     "lit": "^2.8.0",

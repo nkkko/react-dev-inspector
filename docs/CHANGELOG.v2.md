@@ -1,5 +1,21 @@
 # Changelog
 
+
+## [2.1.0-beta.5](https://github.com/zthxxx/react-dev-inspector/compare/v2.0.1...v2.1.0-beta.5)
+
+### Features
+
+- add export `Overlay` (inspector indicating UI), support custom to get boxSizing and bounding
+- add export fiber access utils
+
+### Refactor
+
+- refactor Inspector implementation to `DOMInspectAgent`, support setting custom `InspectAgent`
+- rewrite Overlay to WebComponent with [LitElement](https://lit.dev)
+- move `package.json` v1 compatible plugins from `dependencies` to `peerDependencies` with mark as optional
+- add `exports` field into `package.json`
+
+
 ## [2.0.1](https://github.com/zthxxx/react-dev-inspector/compare/v1.9.0...v2.0.1)
 
 ### Bug Fixes

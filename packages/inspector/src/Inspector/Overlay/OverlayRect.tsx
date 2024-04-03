@@ -1,7 +1,10 @@
 import { type CSSProperties } from 'react'
 import { html, css, LitElement } from 'lit'
-import { customElement, property } from 'lit/decorators.js'
+import { property } from 'lit/decorators.js'
 import { styleMap, type StyleInfo } from 'lit/directives/style-map.js'
+import {
+  customElement,
+} from './utils'
 import type {
   Rect,
   BoxSizing,
@@ -135,6 +138,7 @@ export class InspectorOverlayRect extends LitElement {
     :host {
       position: fixed;
       z-index: 10000000;
+      display: var(--inspector-overlay-rect-display, block);
       cursor: default;
       top: var(--inspector-overlay-rect-top, 0);
       left: var(--inspector-overlay-rect-left, 0);

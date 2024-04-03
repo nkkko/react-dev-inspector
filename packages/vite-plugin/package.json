@@ -1,6 +1,6 @@
 {
   "name": "@react-dev-inspector/vite-plugin",
-  "version": "2.0.1",
+  "version": "2.1.0-beta.5",
   "sideEffects": false,
   "description": "vite plugin for react-dev-inspector to add server middleware. support vite2/vite3/vite4",
   "main": "lib",
@@ -12,7 +12,11 @@
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "build": "npm-run-all clean --parallel build:esm build:cjs"
   },
-  "repository": "https://github.com/zthxxx/react-dev-inspector/tree/master/packages/vite-plugin",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zthxxx/react-dev-inspector.git",
+    "directory": "packages/vite-plugin"
+  },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"

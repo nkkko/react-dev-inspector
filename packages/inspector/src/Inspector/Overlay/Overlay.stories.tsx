@@ -20,13 +20,13 @@ import {
   Inspector,
 } from '../Inspector'
 import {
-  setupListener,
+  setupPointerListener,
   getElementCodeInfo,
   getElementInspect,
 } from '../utils'
 import {
   getElementDimensions,
-  getNestedBoundingBox,
+  getBoundingBox,
 } from './utils'
 import {
   type InspectorOverlay,
@@ -125,18 +125,18 @@ export const CornerItems = () => {
       }
 
       const boxSizing: BoxSizing = {
-        marginTop: 0,
-        marginLeft: 0,
-        marginRight: 0,
-        marginBottom: 0,
-        borderTop: 0,
-        borderLeft: 0,
-        borderRight: 0,
-        borderBottom: 0,
-        paddingTop: 0,
-        paddingLeft: 0,
-        paddingRight: 0,
-        paddingBottom: 0,
+        marginTop: 10,
+        marginLeft: 10,
+        marginRight: 10,
+        marginBottom: 10,
+        borderTop: 2,
+        borderLeft: 2,
+        borderRight: 2,
+        borderBottom: 2,
+        paddingTop: 20,
+        paddingLeft: 20,
+        paddingRight: 20,
+        paddingBottom: 20,
       }
 
       rect.updateBound({
@@ -206,7 +206,7 @@ export const MoveableDragItem: StoryFn<{ itemSize: 'normal' | 'full' | 'large' }
     if (!(element && overlayRect && overlayTip)) return
 
     const boxSizing = getElementDimensions(element)
-    const boundingRect = getNestedBoundingBox(element)
+    const boundingRect = getBoundingBox(element)
 
     overlayRect.updateBound({
       boundingRect,
@@ -314,7 +314,7 @@ export const OverlayRectAndTipItems = () => {
     if (!(element && overlayRect && overlayTip)) return
 
     const boxSizing = getElementDimensions(element)
-    const boundingRect = getNestedBoundingBox(element)
+    const boundingRect = getBoundingBox(element)
 
     overlayRect.updateBound({
       boundingRect,
@@ -442,8 +442,8 @@ export const OverlayHover = () => {
 
     const overlay = new Overlay()
 
-    const stopCallback = setupListener({
-      onPointerOver: (element) => {
+    const stopCallback = setupPointerListener({
+      onPointerOver: ({ element }) => {
         const codeInfo = getElementCodeInfo(element)
         const relativePath = codeInfo?.relativePath
         const absolutePath = codeInfo?.absolutePath

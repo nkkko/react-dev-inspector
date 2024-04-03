@@ -1,10 +1,10 @@
 import { html, css, LitElement } from 'lit'
-import { customElement } from 'lit/decorators.js'
 import { ref, createRef, type Ref } from 'lit/directives/ref.js'
 import {
+  customElement,
   registerElement,
   getElementDimensions,
-  getNestedBoundingBox,
+  getBoundingBox,
 } from './utils'
 import {
   InspectorOverlayRect,
@@ -12,16 +12,28 @@ import {
 import {
   InspectorOverlayTip,
 } from './OverlayTip'
+import type {
+  Box,
+  BoxSizing,
+} from './types'
 
 @customElement('inspector-overlay')
 export class InspectorOverlay extends LitElement {
   protected boxRef: Ref<InspectorOverlayRect> = createRef()
   protected tipRef: Ref<InspectorOverlayTip> = createRef()
 
-  public async inspect({ element, title = '', info = '' }: {
-    element?: HTMLElement;
+  public async inspect<Element = HTMLElement>({
+    element,
+    title = '',
+    info = '',
+    getBoxSizing,
+    getBoundingRect,
+  }: {
+    element?: Element;
     title?: string;
     info?: string;
+    getBoxSizing: (element: Element) => BoxSizing;
+    getBoundingRect: (element: Element) => Box;
   }) {
     if (!element) return
 
@@ -35,30 +47,40 @@ export class InspectorOverlay extends LitElement {
 
     if (!(overlayRect && overlayTip)) return
 
+    const boxSizing = getBoxSizing(element)
+    const boundingRect = getBoundingRect(element)
+
     return this._inspect({
-      element,
       title,
       info,
       overlayRect,
       overlayTip,
+      boxSizing,
+      boundingRect,
     })
   }
 
+  public async hide() {
+    await this.updateComplete
+    this.style.setProperty('--inspector-overlay-display', 'none')
+  }
+
   protected _inspect({
-    element,
     title,
     info,
     overlayRect,
     overlayTip,
+    boxSizing,
+    boundingRect,
   }: {
-    element: HTMLElement;
     title: string;
     info: string;
     overlayRect: InspectorOverlayRect;
     overlayTip: InspectorOverlayTip;
+    boxSizing: BoxSizing;
+    boundingRect: Box;
   }) {
-    const boxSizing = getElementDimensions(element)
-    const boundingRect = getNestedBoundingBox(element)
+    this.style.setProperty('--inspector-overlay-display', 'block')
 
     overlayRect.updateBound({
       boundingRect,
@@ -88,6 +110,8 @@ export class InspectorOverlay extends LitElement {
 
   static styles = css`
     :host {
+      position: fixed;
+      display: var(--inspector-overlay-display, block);
       pointer-events: none;
     }
   `
@@ -112,19 +136,39 @@ export class Overlay {
     doc.body.appendChild(this.overlay)
   }
 
-  public remove() {
-    this.overlay.remove()
-  }
-
-  public async inspect({ element, title, info }: {
-    element: HTMLElement;
+  public async inspect<Element = HTMLElement>({
+    element,
+    title,
+    info,
+    getBoxSizing = getElementDimensions,
+    getBoundingRect = getBoundingBox,
+  }: {
+    element?: Element;
     title?: string;
     info?: string;
+    /**
+     * default as `window.getComputedStyle(element)`
+     */
+    getBoxSizing?: (element: Element) => BoxSizing;
+    /**
+     * default as `element.getBoundingClientRect()`
+     */
+    getBoundingRect?: (element: Element) => Box;
   }) {
     await this.overlay.inspect({
       element,
       title,
       info,
+      getBoxSizing,
+      getBoundingRect,
     })
+  }
+
+  public async hide() {
+    await this.overlay.hide()
+  }
+
+  public remove() {
+    this.overlay.remove()
   }
 }
