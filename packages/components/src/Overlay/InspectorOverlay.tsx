@@ -6,6 +6,7 @@ import {
   customElement,
   type ComponentType,
 } from 'solid-element'
+import { css } from '#utils'
 import {
   InspectorOverlayRect,
 } from './OverlayRect'
@@ -110,7 +111,7 @@ export const InspectorOverlay: ComponentType<Record<string, never>> = (_props, {
         boxSizing={inspectInfo().boxSizing}
       />
       <style>
-        {`
+        {css`
           :host {
             position: fixed;
             display: ${inspectInfo().display};

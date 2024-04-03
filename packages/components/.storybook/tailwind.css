@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 /* https://tailwindcss.com/docs/customizing-colors#using-css-variables */
+/* https://www.solid-ui.com/docs/installation/manual */
 
 @layer base {
   :root {
@@ -48,6 +49,28 @@
     --ring: 240 5.9% 10%;
 
     --radius: 0.5rem;
+
+    --color-text-0: #1f2329;
+    --color-text-1: #35383e;
+    --color-text-2: #626569;
+    --color-text-3: #bbbfc4;
+    --color-bg-0: #fff;
+    --color-bg-1: #fff;
+    --color-bg-2: #fff;
+    --color-bg-3: #fff;
+    --color-shadow-1: rgba(0,0,0,0.02);
+    --color-shadow-2: rgba(0,0,0,0.03);
+    --color-shadow-3: rgba(0,0,0,0.04);
+    --color-shadow-4: rgba(0,0,0,0.05);
+    --color-shadow-5: rgba(0,0,0,0.06);
+    --shadow-S1-down: 0px 2px 8px 2px var(--color-shadow-1), 0px 2px 4px 0px var(--color-shadow-1), 0px 1px 2px -2px var(--color-shadow-1);
+    --shadow-S2-down: 0px 2px 4px -4px var(--color-shadow-1), 0px 4px 8px 0px var(--color-shadow-1), 0px 4px 16px 4px var(--color-shadow-2);
+    --shadow-S3-down: 0px 6px 18px 6px var(--color-shadow-2), 0px 3px 6px -6px var(--color-shadow-4), 0px 4px 8px 0px var(--color-shadow-2);
+    --shadow-S4-down: 0px 8px 24px 8px var(--color-shadow-3), 0px 6px 12px 0px var(--color-shadow-3), 0px 4px 8px -8px var(--color-shadow-5);
+    --shadow-S5-down: 0px 10px 36px 10px var(--color-shadow-3), 0px 8px 24px 0px var(--color-shadow-3), 0px 6px 12px -10px var(--color-shadow-5);
+
+    --color-scrollbar: #646a7344;
+    --color-scrollbar-hover: #646a7366;
   }
 
   .dark,
@@ -94,6 +117,16 @@
     --ring: 240 4.9% 83.9%;
 
     --radius: 0.5rem;
+    --color-text-0: #f9f9f9;
+    --color-text-1: #f9f9f9cc;
+    --color-text-2: #f9f9f999;
+    --color-text-3: #f9f9f966;
+    --color-bg-0: #232429;
+    --color-bg-1: #2f3037;
+    --color-bg-2: #3a3c47;
+    --color-bg-3: #464852;
+    --color-scrollbar: #888d9233;
+    --color-scrollbar-hover: #888d9266;
   }
 }
 
@@ -101,23 +134,31 @@
   * {
     @apply border-border;
   }
-  body {
+
+  body,
+  :host {
     @apply bg-background text-foreground;
-    font-feature-settings:
-      "rlig" 1,
-      "calt" 1;
+    font-feature-settings: "rlig" 1, "calt" 1;
+
+    scrollbar-color: var(--color-scrollbar) transparent;
   }
+
   :focus-visible {
     outline: none;
   }
-}
 
-@media (max-width: 640px) {
-  .container {
-    @apply px-4;
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-scrollbar-hover);
   }
 }
 
-#storybook-root {
-  padding: 0 !important;
+@layer utilities {
+  /* Chrome, Safari, Edge */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    /* Firefox */
+    scrollbar-width: none;
+  }
 }

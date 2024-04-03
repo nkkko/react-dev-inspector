@@ -5,6 +5,7 @@ import {
 import type {
   PropertiesHyphen,
 } from 'csstype'
+import { css } from '#utils'
 import type {
   Rect,
   BoxSizing,
@@ -113,7 +114,7 @@ export const InspectorOverlayRect = (props: {
         </div>
       </div>
       <style>
-        {`
+        {css`
           .inspector-overlay-rect-container {
             position: fixed;
             display: block;

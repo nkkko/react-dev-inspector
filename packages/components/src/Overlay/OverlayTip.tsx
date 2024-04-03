@@ -12,6 +12,7 @@ import {
   shift,
   type Dimensions,
 } from '@floating-ui/core'
+import { css } from '#utils'
 import {
   getBoundingRect,
 } from './utils'
@@ -113,7 +114,7 @@ export const InspectorOverlayTip = (props: {
       </div>
 
       <style>
-        {`
+        {css`
           .inspector-tip-container {
             position: fixed;
 

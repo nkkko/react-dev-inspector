@@ -1,5 +1,6 @@
 import type { Preview } from 'storybook-solidjs'
 import './tailwind.css'
+import './storybook.css'
 
 const preview: Preview = {
   parameters: {

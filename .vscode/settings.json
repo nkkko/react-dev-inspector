@@ -1,0 +1,17 @@
+{
+  "cSpell.words": [
+    "Nextra",
+    "clsx",
+    "solidjs",
+    "kobalte",
+    "lucide",
+    "iconbox",
+  ],
+  "svg.preview.background": "transparent",
+
+  "tailwindCSS.experimental.classRegex": [
+    "\\b(?:class|className): *`(.*?)`",
+    "\\b(?:class|className): *\"(.*?)\"",
+    "\\b(?:class|className): *'(.*?)'",
+  ],
+}

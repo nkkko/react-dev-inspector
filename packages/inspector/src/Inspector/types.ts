@@ -127,7 +127,7 @@ export interface InspectAgent<Element> {
    *
    * @TODO chain list will show in the Inspector's context-menu when right-click on the element.
    */
-  getRenderChain(element: Element): Generator<InspectChainItem<Element>, (UpperRootElement | undefined | null), void>;
+  getRenderChain(element: Element): InspectChainGenerator;
 
   /**
    * like {@link getRenderChain}, get elements from input element upward to render root,
@@ -136,7 +136,7 @@ export interface InspectAgent<Element> {
    *
    * @TODO chain list will show in the Inspector's context-menu when right-click on the element.
    */
-  getSourceChain(element: Element): Generator<InspectChainItem<Element>, (UpperRootElement | undefined | null), void>;
+  getSourceChain(element: Element): InspectChainGenerator;
 
   /**
    * get the element display name and title for show in indicator UI
@@ -175,6 +175,8 @@ export interface InspectAgent<Element> {
   removeIndicate(): void;
 }
 
+
+type InspectChainGenerator = Generator<InspectChainItem<Element>, (UpperRootElement | undefined | null), void>
 
 type UpperRootElement = any
 

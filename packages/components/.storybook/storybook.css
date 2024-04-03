@@ -1,0 +1,13 @@
+
+
+
+@media (max-width: 640px) {
+  .container {
+    @apply px-4;
+  }
+}
+
+#storybook-root {
+  padding: 0 !important;
+}
+

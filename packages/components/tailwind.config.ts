@@ -20,6 +20,14 @@ export default {
     },
     extend: {
       colors: {
+        'text-0': 'var(--color-text-0)',
+        'text-1': 'var(--color-text-1)',
+        'text-2': 'var(--color-text-2)',
+        'text-3': 'var(--color-text-3)',
+        'bg-0': 'var(--color-bg-0)',
+        'bg-1': 'var(--color-bg-1)',
+        'bg-2': 'var(--color-bg-2)',
+        'bg-3': 'var(--color-bg-3)',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
@@ -70,11 +78,12 @@ export default {
           foreground: 'hsl(var(--card-foreground))',
         },
       },
-      borderRadius: {
-        xl: 'calc(var(--radius) + 4px)',
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)',
+      boxShadow: {
+        sm: 'var(--shadow-S1-down)',
+        '': 'var(--shadow-S2-down)',
+        md: 'var(--shadow-S3-down)',
+        lg: 'var(--shadow-S4-down)',
+        xl: 'var(--shadow-S5-down)',
       },
       keyframes: {
         'accordion-down': {
