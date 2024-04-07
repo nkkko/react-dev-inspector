@@ -1,14 +1,6 @@
 import { action } from '@storybook/addon-actions'
-import { withActions } from '@storybook/addon-actions/decorator'
 import { createSignal, Show, Switch, Match, For } from "solid-js"
 import type { StoryFn, Meta } from 'storybook-solidjs'
-// import { Tabs } from "@kobalte/core/tabs"
-// import {
-//   Tabs,
-//   TabsList,
-//   TabsTrigger,
-//   TabsContent,
-// } from '@stories/components'
 import {
   Settings,
   Layers,
@@ -25,22 +17,16 @@ import {
 } from './PanelHeader'
 import {
   IconBox,
-} from './IconBox'
-import {
-  List,
-  type ItemGenerator,
-} from './List'
-import {
+  LazyList,
+  Layer,
+  Tabs,
   ElementItem,
   type ElementItemProps,
-} from './ElementItem'
-import * as Tabs from './Tabs'
-import * as Layer from './LayerSide'
+} from '#components'
 
 // https://storybook.js.org/docs/react/writing-stories/introduction#component-story-format
 export default {
   title: 'ContextPanel',
-  decorators: [withActions],
 } satisfies Meta
 
 
@@ -83,7 +69,7 @@ const demoItems: ElementItemProps['item'][] = [
   },
 ]
 
-export const PanelDemo: StoryFn = () => {
+export const ContextPanelDemo: StoryFn = () => {
 	const [selectedTab, setSelectedTab] = createSignal(ChainMode.Render)
   const [selectedLayer, setSelectedLayer] = createSignal(0)
 
@@ -93,7 +79,7 @@ export const PanelDemo: StoryFn = () => {
   const onHoverItem = action('ElementItem.onHoverItem')
   const onLayerChange = action('LayerItem.onChange')
 
-  function *generator(): ItemGenerator<ElementItemProps> {
+  function *generator(): LazyList.ItemGenerator<ElementItemProps> {
     for (let i = 0; i < 100; i++) {
       const index = i + 1
       yield {
@@ -196,7 +182,7 @@ export const PanelDemo: StoryFn = () => {
                 </Layer.LayerList>
               </Layer.LayerSide>
 
-              <List
+              <LazyList.List
                 generator={items}
                 ElementItem={ElementItem}
                 onPointerLeave={() => onHoverItem(null)}

@@ -1,23 +1,13 @@
 import type { Component, ComponentProps, JSX, ValidComponent } from 'solid-js'
 import { cn } from '#utils'
 
-import {
-  Trigger as ContextMenuTrigger,
-  Portal as ContextMenuPortal,
-  Sub as ContextMenuSub,
-  Group as ContextMenuGroup,
-  RadioGroup as ContextMenuRadioGroup,
-} from '@kobalte/core/context-menu'
 
-
-// import {} from './styles'
-
-export interface ContextPanelProps {
+export interface InspectPanelProps {
   class?: string | undefined;
   children?: JSX.Element;
 }
 
-export const ContextPanel = (props: ContextPanelProps) => {
+export const InspectPanel = (props: InspectPanelProps) => {
 
   return (
     <>
