@@ -9,3 +9,4 @@ build
 **/src/tests/outputs/
 
 **/.stories/components/
+**/components/logos/

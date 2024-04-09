@@ -1,4 +1,4 @@
-import { styled } from '#utils';
+import { styled } from '#utils'
 
 
 export const LayerSide = styled.div({
@@ -36,7 +36,7 @@ export const LayerItem = styled.div({
     flex flex-none items-center justify-center
     overflow-hidden whitespace-nowrap text-ellipsis
     aria-selected:sticky aria-selected:top-0 aria-selected:bottom-0 aria-selected:z-10
-    h-8 text-text-2 bg-bg-0
+    h-8 bg-bg-1 text-text-2 font-mono
   `,
 })
 

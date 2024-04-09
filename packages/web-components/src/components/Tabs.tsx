@@ -3,8 +3,8 @@ import { splitProps } from 'solid-js'
 
 import { type PolymorphicProps } from '@kobalte/core/polymorphic'
 import * as TabsPrimitive from '@kobalte/core/tabs'
-
 import { cn } from '#utils'
+
 
 export const Tabs = TabsPrimitive.Root
 
@@ -42,8 +42,8 @@ export const Trigger = <T extends ValidComponent = 'button'>(
     <TabsPrimitive.Trigger
       class={cn(
         `
-        inline-flex flex-initial items-center justify-center whitespace-nowrap rounded
-        w-[98px] px-1 py-1 text-sm text-text-3 font-normal
+        inline-flex flex-initial items-center justify-start whitespace-nowrap rounded
+        w-[100px] px-1 py-1 text-sm text-text-3 font-normal
         disabled:pointer-events-none select-none
         hover:text-text-2 hover:opacity-80 hover:font-medium
         data-[selected]:text-text-0 data-[selected]:font-medium

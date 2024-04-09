@@ -58,6 +58,15 @@
     --color-bg-1: #fff;
     --color-bg-2: #fff;
     --color-bg-3: #fff;
+
+    --color-bg-hover-0: rgb(209 213 219);
+    --color-bg-hover-1: rgb(229 231 235);
+    --color-bg-hover-2: rgb(243 244 246);
+    --color-bg-hover-3: rgb(254 254 254);
+    --color-bg-active-0: rgb(209 213 219);
+    --color-bg-active-1: rgb(229 231 235);
+    --color-bg-active-2: rgb(243 244 246);
+    --color-bg-active-3: rgb(254 254 254);
     --color-shadow-1: rgba(0,0,0,0.02);
     --color-shadow-2: rgba(0,0,0,0.03);
     --color-shadow-3: rgba(0,0,0,0.04);
@@ -74,6 +83,9 @@
   }
 
   .dark,
+  .dark-theme,
+  [theme-mode="dark"],
+  [data-theme="dark"],
   [data-kb-theme="dark"] {
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
@@ -87,7 +99,7 @@
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
 
-    --border: 240 3.7% 15.9%;
+    --border: 240 3.7% 30%;
     --input: 240 3.7% 15.9%;
 
     --card: 240 10% 3.9%;
@@ -125,6 +137,15 @@
     --color-bg-1: #2f3037;
     --color-bg-2: #3a3c47;
     --color-bg-3: #464852;
+    --color-bg-hover-0: rgb(161 161 170);
+    --color-bg-hover-1: rgb(113 113 122);
+    --color-bg-hover-2: rgb(82 82 91);
+    --color-bg-hover-3: rgb(63 63 70);
+    --color-bg-active-0: rgb(161 161 170);
+    --color-bg-active-1: rgb(113 113 122);
+    --color-bg-active-2: rgb(82 82 91);
+    --color-bg-active-3: rgb(63 63 70);
+
     --color-scrollbar: #888d9233;
     --color-scrollbar-hover: #888d9266;
   }

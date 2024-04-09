@@ -1,5 +1,4 @@
 import {
-  mergeProps,
   type JSX,
 } from 'solid-js'
 import { cn } from '#utils'
@@ -26,7 +25,7 @@ export const IconBox = (props: IconBoxProps) => {
           iconbox flex flex-none items-center justify-center rounded
           size-7 text-sm leading-none
         `,
-        props.onClick && 'cursor-pointer hover:bg-gray-100 active:bg-gray-200',
+        props.onClick && 'cursor-pointer hover:bg-bg-hover-2 active:bg-bg-active-1',
         props.class,
       )}
       style={{

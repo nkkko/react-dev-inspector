@@ -3,7 +3,9 @@ import {
   type JSX,
   For,
   batch,
-  Component,
+  type Component,
+  Switch,
+  Match,
 } from 'solid-js'
 import { createStore, produce } from 'solid-js/store'
 import { cn, css } from '#utils'
@@ -15,17 +17,19 @@ export interface ElementItemInfo<Data> {
 }
 
 export type ItemGenerator<ItemData> = Generator<ElementItemInfo<ItemData>, void, unknown>
+type PureObject = Record<string, any>
 
-export interface ListProps<ItemData extends {}>  {
+
+export interface ListProps<ItemData extends PureObject> {
   class?: string | undefined;
   style?: JSX.CSSProperties;
   forwardProps?: JSX.HTMLAttributes<HTMLDivElement>;
   onPointerLeave?: JSX.EventHandler<HTMLDivElement, PointerEvent>;
-  generator: ItemGenerator<ItemData> ;
   ElementItem: Component<ItemData>;
+  generator: ItemGenerator<ItemData>;
 }
 
-export const List = <ItemData extends {}>(props: ListProps<ItemData>): JSX.Element => {
+export const List = <ItemData extends PureObject>(props: ListProps<ItemData>): JSX.Element => {
   const [store, setStore] = createStore({
     items: [] as ElementItemInfo<ItemData>[],
     loadDone: false,
@@ -85,7 +89,10 @@ export const List = <ItemData extends {}>(props: ListProps<ItemData>): JSX.Eleme
       batch(() => {
         do {
           loadItems()
-        } while (itemsHeight < (2 * initialHeight) && !store.loadDone)
+        } while (
+          // eslint-disable-next-line no-unmodified-loop-condition
+          itemsHeight < (2 * initialHeight) && !store.loadDone
+        )
       })
     }
   })
@@ -106,13 +113,25 @@ export const List = <ItemData extends {}>(props: ListProps<ItemData>): JSX.Eleme
       onScroll={onScroll}
       onPointerLeave={props.onPointerLeave}
     >
-      <For each={store.items}>
-        {(item) => (
-          <ListItem>
-            <props.ElementItem {...item.props} />
-          </ListItem>
-        )}
-      </For>
+      <Switch>
+        <Match when={store.items.length}>
+          <For each={store.items}>
+            {(item) => (
+              <ListItem>
+                <props.ElementItem {...item.props} />
+              </ListItem>
+            )}
+          </For>
+        </Match>
+
+        <Match when={store.loadDone && !store.items.length}>
+          <div
+            class={`flex items-center justify-center h-full text-text-3 select-none`}
+          >
+            Empty
+          </div>
+        </Match>
+      </Switch>
     </div>
   )
 }

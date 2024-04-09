@@ -1,10 +1,25 @@
-import { action } from '@storybook/addon-actions'
-import { createSignal, Show, Switch, Match, For } from "solid-js"
+import {
+  createSignal,
+  Switch,
+  Match,
+  For,
+} from 'solid-js'
 import type { StoryFn, Meta } from 'storybook-solidjs'
+import { action } from '@storybook/addon-actions'
 import {
   Settings,
   Layers,
 } from 'lucide-solid'
+import {
+  IconBox,
+  LazyList,
+  Layer,
+  Tabs,
+  ElementItem,
+  ELEMENT_ITEM_HEIGHT,
+  type ElementItemProps,
+} from '#components'
+import { styled } from '#utils'
 import {
   ContextPanel,
 } from './ContextPanel'
@@ -15,14 +30,6 @@ import {
 import {
   PanelHeader,
 } from './PanelHeader'
-import {
-  IconBox,
-  LazyList,
-  Layer,
-  Tabs,
-  ElementItem,
-  type ElementItemProps,
-} from '#components'
 
 // https://storybook.js.org/docs/react/writing-stories/introduction#component-story-format
 export default {
@@ -30,7 +37,7 @@ export default {
 } satisfies Meta
 
 
-export enum ChainMode {
+export enum ElementChainMode {
   Render = 'Render',
   Source = 'Source',
 }
@@ -70,7 +77,7 @@ const demoItems: ElementItemProps['item'][] = [
 ]
 
 export const ContextPanelDemo: StoryFn = () => {
-	const [selectedTab, setSelectedTab] = createSignal(ChainMode.Render)
+  const [selectedTab, setSelectedTab] = createSignal(ElementChainMode.Render)
   const [selectedLayer, setSelectedLayer] = createSignal(0)
 
   const onTabChange = action('TabChange')
@@ -91,7 +98,7 @@ export const ContextPanelDemo: StoryFn = () => {
           onHoverItem,
         },
         // `h-12` in ElementItem
-        height: 48,
+        height: ELEMENT_ITEM_HEIGHT,
       }
     }
   }
@@ -105,19 +112,19 @@ export const ContextPanelDemo: StoryFn = () => {
           <Tabs.Tabs
             value={selectedTab()}
             onChange={(tab) => {
-              setSelectedTab(tab as ChainMode)
+              setSelectedTab(tab as ElementChainMode)
               onTabChange(tab)
             }}
             class={`flex flex-col flex-grow items-stretch justify-stretch h-full`}
           >
             <Tabs.List>
               <Tabs.Trigger
-                value={ChainMode.Render}
+                value={ElementChainMode.Render}
               >
                 Render Chain
               </Tabs.Trigger>
               <Tabs.Trigger
-                value={ChainMode.Source}
+                value={ElementChainMode.Source}
               >
                 Source Chain
               </Tabs.Trigger>
@@ -125,7 +132,7 @@ export const ContextPanelDemo: StoryFn = () => {
 
           </Tabs.Tabs>
 
-          <div class={`w-[1px] h-5 bg-border flex-none`} />
+          <S.VerticalDivider />
 
           <IconBox
             onClick={action('Settings.onClick')}
@@ -137,7 +144,7 @@ export const ContextPanelDemo: StoryFn = () => {
         <PanelBody>
           <Switch>
             <Match
-              when={selectedTab() === ChainMode.Render}
+              when={selectedTab() === ElementChainMode.Render}
             >
               <Layer.LayerSide
                 class={`pb-1`}
@@ -146,39 +153,35 @@ export const ContextPanelDemo: StoryFn = () => {
                   <Layers size={16} strokeWidth={1} />
                 </Layer.Title>
                 <Layer.Divider />
-                  <Layer.LayerList>
-                    <For each={Array.from({ length: 20 }, (_,i) => i)}>
-                      {index => {
-                        const isSelected = () => selectedLayer() === index
-                        return (
-                          <Layer.LayerItem
-                            aria-selected={isSelected()}
+                <Layer.LayerList>
+                  <For each={Array.from({ length: 20 }, (_, i) => i)}>
+                    {index => {
+                      const isSelected = () => selectedLayer() === index
+                      return (
+                        <Layer.LayerItem
+                          aria-selected={isSelected()}
+                        >
+                          <S.LayerButton
+                            forwardProps={{
+                              'aria-selected': isSelected(),
+                            }}
+                            onClick={() => {
+                              if (isSelected()) return
+                              setSelectedLayer(index)
+                              onLayerChange(index)
+                            }}
                           >
-                            <IconBox
-                              class={`
-                                aria-selected:text-text-0 aria-selected:bg-gray-100
-                                [&:hover>*]:opacity-100 [&>*]:aria-selected:opacity-100
-                              `}
-                              forwardProps={{
-                                'aria-selected': isSelected(),
-                              }}
-                              onClick={() => {
-                                if (isSelected()) return
-                                setSelectedLayer(index)
-                                onLayerChange(index)
-                              }}
-                            >
-                              <Layer.LayerItemText>
+                            <Layer.LayerItemText>
                                 #{index}
-                              </Layer.LayerItemText>
-                            </IconBox>
-                          </Layer.LayerItem>
-                        )
-                      }}
-                    </For>
-                    <Layer.LayerItem
-                      class={`h-10`}
-                    />
+                            </Layer.LayerItemText>
+                          </S.LayerButton>
+                        </Layer.LayerItem>
+                      )
+                    }}
+                  </For>
+                  <Layer.LayerItem
+                    class={`h-10`}
+                  />
                 </Layer.LayerList>
               </Layer.LayerSide>
 
@@ -195,3 +198,16 @@ export const ContextPanelDemo: StoryFn = () => {
   )
 }
 
+
+const S = {
+  VerticalDivider: styled.div({
+    class: `w-[1px] h-5 bg-border flex-none`,
+  }),
+
+  LayerButton: styled(IconBox, {
+    class: `
+      aria-selected:text-text-0 aria-selected:bg-gray-100
+      [&:hover>*]:opacity-100 [&>*]:aria-selected:opacity-100
+    `,
+  }),
+}

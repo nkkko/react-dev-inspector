@@ -1,20 +1,12 @@
+
 import {
-  createSignal,
-  onMount,
-  onCleanup,
-  type JSX,
-  For,
-  Show,
-  Component
-} from 'solid-js'
+  Copy,
+} from 'lucide-solid'
 import {
   cn,
   styled,
   css,
 } from '#utils'
-import {
-  Copy,
-} from 'lucide-solid'
 import {
   IconBox,
 } from './IconBox'
@@ -23,6 +15,10 @@ import {
   WebStorm,
 } from './logos'
 
+/**
+ * `h-12` in ElementItem component
+ */
+export const ELEMENT_ITEM_HEIGHT = 48
 
 export interface ElementItemProps<Item extends ItemInfo = ItemInfo> {
   class?: string | undefined;
@@ -31,13 +27,13 @@ export interface ElementItemProps<Item extends ItemInfo = ItemInfo> {
   index: number;
   onClickItem?: (item: Item) => void;
   onClickEditor?: (params: {
+    editor: EditorType;
     item: Item;
-    editor: Editor;
   }) => void | Promise<void>;
   onHoverItem?: (item: Item) => void;
 }
 
-export const ElementItem = <Item extends ItemInfo>(props: ElementItemProps<Item>) => {
+export const ElementItem = <Item extends ItemInfo = ItemInfo>(props: ElementItemProps<Item>) => {
   const onClickItem = () => props.onClickItem?.(props.item)
   const onHoverItem = () => props.onHoverItem?.(props.item)
 
@@ -69,28 +65,28 @@ export const ElementItem = <Item extends ItemInfo>(props: ElementItemProps<Item>
         </S.TitleLabelRow>
 
 
-          <S.TitleLabelRow>
-            <S.Text
-              class={cn(
-                `text-[11px] text-text-2`,
-                !props.item.subtitle && 'text-text-3',
-              )}
-              dir='rtl'
-            >
-              &lrm;{props.item.subtitle || '—'}&lrm;
-            </S.Text>
-            {Boolean(props.item.subtitle) && (
-              <S.CopyIcon
-                onClick={(event) => {
-                  event.stopPropagation()
-                  event.preventDefault()
-                  copyText(props.item.subtitle!)
-                }}
-              >
-                <Copy class={`w-3 stroke-1 transition-all duration-100`} />
-              </S.CopyIcon>
+        <S.TitleLabelRow>
+          <S.Text
+            class={cn(
+              `text-[11px] text-text-2`,
+              !props.item.subtitle && 'text-text-3',
             )}
-          </S.TitleLabelRow>
+            dir='rtl'
+          >
+              &lrm;{props.item.subtitle || '—'}&lrm;
+          </S.Text>
+          {Boolean(props.item.subtitle) && (
+            <S.CopyIcon
+              onClick={(event) => {
+                event.stopPropagation()
+                event.preventDefault()
+                copyText(props.item.subtitle!)
+              }}
+            >
+              <Copy class={`w-3 stroke-1 transition-all duration-100`} />
+            </S.CopyIcon>
+          )}
+        </S.TitleLabelRow>
       </S.MajorInfo>
 
       <aside
@@ -125,7 +121,7 @@ export const ElementItem = <Item extends ItemInfo>(props: ElementItemProps<Item>
               })
             }}
           >
-            <WebStorm class={`w-3 transition-all duration-100`}  />
+            <WebStorm class={`w-3 transition-all duration-100`} />
           </S.EditorIcon>
         </S.RowInRight>
       </aside>
@@ -138,12 +134,11 @@ const S = {
     class: `
       flex flex-auto items-center justify-stretch rounded
       h-12 whitespace-nowrap
-      cursor-default hover:bg-gray-100 active:bg-gray-200
-      max-w-full text-text-1 px-2 gap-1
+      cursor-default hover:bg-bg-hover-2 active:bg-bg-active-1
+      max-w-full px-2 gap-1 text-text-1 font-mono
       [&:hover>aside]:flex
     `,
     style: css`
-      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
       flex-flow: row nowrap;
     `,
   }),
@@ -169,13 +164,13 @@ const S = {
 
   CopyIcon: styled(IconBox, {
     class: `
-      hidden size-5 text-text-1 hover:bg-white hover:text-text-1
+      hidden size-5 text-text-1 hover:bg-bg-hover-3 hover:text-text-1
       [&:hover>svg]:w-3.5 [&:hover>svg]:[stroke-width:1.5px]
     `,
   }),
 
   EditorIcon: styled(IconBox, {
-    class: `size-5 hover:bg-white [&:hover>*]:w-4`,
+    class: `size-5 hover:bg-bg-hover-3 [&:hover>*]:w-4`,
   }),
 
   RowInRight: styled.div({
@@ -184,7 +179,7 @@ const S = {
 }
 
 
-interface ItemInfo {
+export interface ItemInfo {
   title: string;
   subtitle?: string;
   tags?: (string | undefined | null)[];
@@ -206,7 +201,7 @@ interface CodeInfo {
   absolutePath?: string;
 }
 
-type Editor = 'VSCode' | 'WebStorm'
+type EditorType = 'VSCode' | 'WebStorm'
 
 const copyText = (text: string) => {
   return navigator.clipboard.writeText(text)

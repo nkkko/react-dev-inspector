@@ -41,6 +41,23 @@ module.exports = {
         allowSeparatedGroups: false,
       },
     ],
+
+    // https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/order.md
+    // https://github.com/antfu/eslint-config/blob/v0.39.7/packages/eslint-config-basic/index.js#L212
+    'import/order': [
+      'error',
+      {
+        groups: [
+          'builtin',
+          'external',
+          'unknown',
+          'internal',
+          'parent',
+          'sibling',
+        ],
+      },
+    ],
+
     // https://eslint.org/docs/latest/rules/no-multiple-empty-lines
     'no-multiple-empty-lines': [
       'error',

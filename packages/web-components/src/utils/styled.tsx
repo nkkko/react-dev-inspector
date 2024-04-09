@@ -221,9 +221,10 @@ tags.forEach(tag => {
 /** only use for syntax highlighting by styled-components extension in IDE */
 export const css = String.raw
 
+// eslint-disable-next-line unused-imports/no-unused-vars
 type RestrictPropsStyle<Props, ParamsStyle> = Omit<Props, 'style'> & {
   style?: IntrinsicStyle<ParamsStyle>;
-} & {}
+}
 
 type IntrinsicStyle<ParamsStyle> = (
   ParamsStyle extends string
