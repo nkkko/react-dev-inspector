@@ -7,8 +7,15 @@ import {
   Switch,
   Match,
 } from 'solid-js'
-import { createStore, produce } from 'solid-js/store'
-import { cn, css } from '#utils'
+import {
+  createStore,
+  produce,
+} from 'solid-js/store'
+import {
+  cn,
+  css,
+  styled,
+} from '#utils'
 
 
 export interface ElementItemInfo<Data> {
@@ -105,8 +112,7 @@ export const List = <ItemData extends PureObject>(props: ListProps<ItemData>): J
       ref={containerRef}
       class={cn(
         `
-          h-full overflow-y-auto flex flex-col items-stretch justify-start
-          gap-1 p-1.5 pb-10
+          h-full gap-1 p-1.5 overflow-y-auto flex flex-col items-stretch justify-start
           [content-visibility:auto] [contain-intrinsic-size:auto_none] [flex:1_1_100%]
         `,
         props.class,
@@ -124,6 +130,9 @@ export const List = <ItemData extends PureObject>(props: ListProps<ItemData>): J
               </ListItem>
             )}
           </For>
+          <EndingPadding
+            onPointerEnter={props.onPointerLeave}
+          />
         </Match>
 
         <Match when={store.loadDone && !store.items.length}>
@@ -145,21 +154,12 @@ export interface ListItemProps {
   style?: string;
 }
 
-export const ListItem = (props: ListItemProps) => {
-  return (
-    <div
-      class={cn(
-        props.class,
-      )}
-      style={css`
-        ${props.style || ''}
-        contain: layout paint;
-        display: flex;
-        align-items: stretch;
-        justify-content: stretch;
-      `}
-    >
-      {props.children}
-    </div>
-  )
-}
+
+const ListItem = styled.div({
+  class: `flex items-stretch justify-stretch`,
+  style: css`contain: layout paint;`,
+})
+
+const EndingPadding = styled.div({
+  class: `h-10 flex-[1_0_auto]`,
+})

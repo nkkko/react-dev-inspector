@@ -1,4 +1,8 @@
-
+import {
+  For,
+  Show,
+} from 'solid-js'
+import { unwrap } from 'solid-js/store'
 import {
   Copy,
 } from 'lucide-solid'
@@ -10,6 +14,10 @@ import {
 import {
   IconBox,
 } from './IconBox'
+import {
+  Tag,
+  type TagItem,
+} from './Tag'
 import {
   VSCode,
   WebStorm,
@@ -34,8 +42,8 @@ export interface ElementItemProps<Item extends ItemInfo = ItemInfo> {
 }
 
 export const ElementItem = <Item extends ItemInfo = ItemInfo>(props: ElementItemProps<Item>) => {
-  const onClickItem = () => props.onClickItem?.(props.item)
-  const onHoverItem = () => props.onHoverItem?.(props.item)
+  const onClickItem = () => props.onClickItem?.(unwrap(props.item))
+  const onHoverItem = () => props.onHoverItem?.(unwrap(props.item))
 
   return (
     <S.ItemContainerRow
@@ -46,35 +54,67 @@ export const ElementItem = <Item extends ItemInfo = ItemInfo>(props: ElementItem
     >
       <S.MajorInfo>
         <S.TitleLabelRow>
-          <S.Text
-            class={`text-[13px] font-bold`}
-            dir='rtl'
+          <div
+            class={`
+            flex flex-auto items-center justify-start gap-2 no-scrollbar overflow-x-auto hover:basis-[content]
+            [&>*]:hover:shrink-0 [&>*]:hover:overflow-visible [&>*]:hover:basis-[content]
+          `}
           >
-            &lrm;{props.item.title}&lrm;
-          </S.Text>
 
-          <S.CopyIcon
-            onClick={(event) => {
-              event.stopPropagation()
-              event.preventDefault()
-              copyText(props.item.title)
-            }}
+            <Show
+              when={props.item.title || !props.item.tags?.length}
+            >
+              <S.TitleText
+                class={props.item.title ? undefined : 'font-normal text-text-3'}
+              >
+                {props.item.title || '(anonymous)'}
+              </S.TitleText>
+            </Show>
+
+            <Show
+              when={props.item.tags?.length}
+            >
+              <div
+                class={`
+                flex flex-grow-0 flex-shrink-[3] basis-[content] items-center justify-start gap-1
+                min-w-10 overflow-x-auto no-scrollbar
+              `}
+              >
+                <For each={props.item.tags}>
+                  {tag => (
+                    <Tag
+                      tag={tag}
+                    />
+                  )}
+                </For>
+              </div>
+            </Show>
+          </div>
+
+          <Show
+            when={props.item.title}
           >
-            <Copy class={`w-3 stroke-1 transition-all duration-100`} />
-          </S.CopyIcon>
+            <S.CopyIcon
+              onClick={(event) => {
+                event.stopPropagation()
+                event.preventDefault()
+                copyText(props.item.title)
+              }}
+            >
+              <Copy class={`w-3 stroke-1 transition-all duration-100`} />
+            </S.CopyIcon>
+          </Show>
         </S.TitleLabelRow>
 
-
         <S.TitleLabelRow>
-          <S.Text
+          <S.SubtitleText
             class={cn(
-              `text-[11px] text-text-2`,
               !props.item.subtitle && 'text-text-3',
             )}
             dir='rtl'
           >
-              &lrm;{props.item.subtitle || '—'}&lrm;
-          </S.Text>
+            <span>&lrm;{props.item.subtitle || '—'}&lrm;</span>
+          </S.SubtitleText>
           {Boolean(props.item.subtitle) && (
             <S.CopyIcon
               onClick={(event) => {
@@ -104,7 +144,7 @@ export const ElementItem = <Item extends ItemInfo = ItemInfo>(props: ElementItem
               event.stopPropagation()
               event.preventDefault()
               props.onClickEditor?.({
-                item: props.item,
+                item: unwrap(props.item),
                 editor: 'VSCode',
               })
             }}
@@ -116,7 +156,7 @@ export const ElementItem = <Item extends ItemInfo = ItemInfo>(props: ElementItem
               event.stopPropagation()
               event.preventDefault()
               props.onClickEditor?.({
-                item: props.item,
+                item: unwrap(props.item),
                 editor: 'WebStorm',
               })
             }}
@@ -147,8 +187,7 @@ const S = {
   MajorInfo: styled.div({
     class: `
       flex [flex:1_1_100%] flex-col justify-stretch items-stretch
-      overflow-hidden whitespace-nowrap text-ellipsis
-      max-w-full h-10
+      truncate max-w-full h-10
     `,
   }),
 
@@ -159,8 +198,20 @@ const S = {
     `,
   }),
 
-  Text: styled.span({
-    class: `text-left flex-auto overflow-hidden whitespace-nowrap text-ellipsis`,
+  TitleText: styled.span({
+    class: `min-w-12 flex-grow-0 flex-shrink-1 basis-[content] text-left truncate no-scrollbar text-[13px] font-bold`,
+  }),
+
+  SubtitleText: styled.span({
+    class: `
+      flex flex-initial items-center justify-start
+      text-left text-[11px] text-text-2 overflow-x-auto no-scrollbar
+      [&>*]:truncate [&>*]:hover:shrink-0 [&>*]:hover:overflow-visible [&>*]:hover:basis-[content]
+    `,
+  }),
+
+  Tag: styled.span({
+    class: `bg-[hsl(var(--info))] rounded px-1.5 py-0.5 select-none text-xs`,
   }),
 
   CopyIcon: styled(IconBox, {
@@ -183,9 +234,10 @@ const S = {
 export interface ItemInfo {
   title: string;
   subtitle?: string;
-  tags?: (string | undefined | null)[];
+  tags?: TagItem[];
   codeInfo?: CodeInfo;
 }
+
 
 interface CodeInfo {
   lineNumber: string;

@@ -119,12 +119,12 @@ export const InspectorOverlay: ComponentType<Record<string, never>> = (_props, {
 }
 
 const hostStyles = css`
-:host {
-  position: fixed;
-  display: none;
-  pointer-events: none;
-  z-index: 10000000;
-}
+  :host {
+    position: fixed;
+    display: none;
+    pointer-events: none;
+    z-index: 10000000;
+  }
 `
 
 /**

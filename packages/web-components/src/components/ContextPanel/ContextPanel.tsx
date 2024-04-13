@@ -29,7 +29,7 @@ export const ContextPanel = (props: ContextPanelProps) => {
       class={cn(
         `
         inspector-context-panel
-        relative top-0 left-0 z-[10001000]
+        relative top-0 left-0
         flex items-stretch justify-stretch
         overflow-hidden rounded-md border bg-card shadow-xl
         *:data-[dragging]:pointer-events-none data-[dragging]:cursor-move

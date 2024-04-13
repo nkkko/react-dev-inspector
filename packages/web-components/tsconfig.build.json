@@ -16,12 +16,13 @@
     "jsxImportSource": "solid-js",
 
     "paths": {
-      "@stories/*": ["src/.stories/*"],
+      "#utils": ["dist/types/utils/index.ts"],
+      "#floating": ["dist/types/floating/index.ts"],
+      "#components": ["dist/types/components/index.ts"],
     },
   },
   "include": [
     "src",
-    "src/.stories/**/*",
-    ".storybook",
+    "packages/web-components/dist/types",
   ],
 }

@@ -8,6 +8,7 @@ import {
 } from 'solid-element'
 import {
   PopupContext,
+  type ItemInfo,
   type DragPanelParams,
 } from '#components'
 import {
@@ -21,15 +22,15 @@ import {
 } from './InspectPanel'
 
 
-export interface InspectContextPanelExpose {
-  show: (params: InspectContextPanelShowParams) => void;
+export interface InspectContextPanelExpose<Item extends ItemInfo = ItemInfo> {
+  show: (params: InspectContextPanelShowParams<Item>) => void;
   hide: () => void;
 }
 
-export interface InspectContextPanelElement extends HTMLElement, InspectContextPanelExpose {}
+export interface InspectContextPanelElement<Item extends ItemInfo> extends HTMLElement, InspectContextPanelExpose<Item> {}
 
-export interface InspectContextPanelShowParams extends DragPanelParams {
-  panelParams: InspectPanelProps;
+export interface InspectContextPanelShowParams<Item extends ItemInfo = ItemInfo> extends DragPanelParams {
+  panelParams: InspectPanelProps<Item>;
 }
 
 type HostElement = HTMLElement & {
@@ -118,6 +119,7 @@ const hostStyles = css`
     position: fixed;
     bottom: 0;
     right: 0;
+    z-index: 10001000;
   }
 `
 

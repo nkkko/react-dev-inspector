@@ -4,16 +4,16 @@ import { nodeResolve } from '@rollup/plugin-node-resolve'
 import terser from '@rollup/plugin-terser'
 import postcss from 'rollup-plugin-postcss'
 import { babel, type RollupBabelInputPluginOptions } from '@rollup/plugin-babel'
-
-// import { dts } from 'rollup-plugin-dts'
+import { dts } from 'rollup-plugin-dts'
 
 import pkg from './package.json'
 
+// https://rollupjs.org/configuration-options/
 // https://github.com/solidjs-community/rollup-preset-solid/blob/master/src/index.ts
 export default defineConfig(() => {
   const input = 'src/index.ts'
   const sourcemap = false
-  const minify = true
+  const minify = false
 
   const extensions = ['.js', '.ts', '.jsx', '.tsx']
 
@@ -32,86 +32,107 @@ export default defineConfig(() => {
     ? pkg.browserslist
     : 'last 2 years'
 
-  return {
-    input,
-    targets: ['esm', 'cjs'],
-    external: [
-      'solid-js',
-      'solid-js/web',
-      'solid-js/store',
-      ...Object.keys(pkg.dependencies || {}),
-      ...Object.keys('peerDependencies' in pkg
-        ? pkg.peerDependencies as object
-        : {},
-      ),
-    ],
-    output: [
-      {
-        dir: 'dist/esm',
-        format: 'esm',
-        sourcemap,
-      },
-      {
-        dir: 'dist/cjs',
-        format: 'cjs',
-        sourcemap,
-      },
-    ],
-    plugins: [
-      minify && terser(),
-      babel({
-        extensions,
-        babelHelpers: 'bundled',
-        presets: [
-          ['babel-preset-solid', solidOptions || {}],
-          '@babel/preset-typescript',
-          ['@babel/preset-env', {
-            bugfixes: true,
-            targets: babelTargets,
-          }],
-        ],
-        ...babelOptions,
-      }),
-      nodeResolve({ extensions }),
-      {
-        name: 'ts',
-        buildEnd() {
-          const program = ts.createProgram(
-            [
-              'src/index.ts',
-              'src/utils/index.ts',
-            ],
-            {
-              ...readCompilerOptions(),
-              noEmit: false,
-              outDir: `dist/source`,
-              sourceMap: sourcemap,
-              declaration: true,
-              declarationDir: `dist/types`,
-              declarationMap: sourcemap,
-              emitDeclarationOnly: true,
-            },
-          )
+  const external = [
+    // regexp for match subpath import
+    /^solid-js/,
+    /^@kobalte\/core/,
 
-          program.emit()
+    ...Object.keys(pkg.dependencies || {}),
+    ...Object.keys('peerDependencies' in pkg
+      ? pkg.peerDependencies as object
+      : {},
+    ),
+  ]
+
+  return [
+    {
+      input,
+      external,
+      treeshake: true,
+      output: [
+        {
+          dir: 'dist/esm',
+          format: 'esm',
+          sourcemap,
         },
-      },
+        {
+          dir: 'dist/cjs',
+          format: 'cjs',
+          sourcemap,
+        },
+      ],
+      plugins: [
+        minify && terser(),
 
-      postcss({
-        inject: false,
-      }),
-      // dts({
-      //   respectExternal: true,
-      //   compilerOptions: {
-      //     noEmit: false,
-      //     declaration: true,
-      //     declarationDir: `dist/types`,
-      //     emitDeclarationOnly: true,
-      //     declarationMap: sourcemap,
-      //   },
-      // }),
-    ],
-  }
+        babel({
+          extensions,
+          babelHelpers: 'bundled',
+          presets: [
+            ['babel-preset-solid', solidOptions || {}],
+            '@babel/preset-typescript',
+            ['@babel/preset-env', {
+              bugfixes: true,
+              targets: babelTargets,
+            }],
+          ],
+          ...babelOptions,
+        }),
+
+        nodeResolve({ extensions }),
+
+        postcss({
+          inject: false,
+        }),
+
+        {
+          name: 'types',
+          buildEnd() {
+            const program = ts.createProgram(
+              [input],
+              {
+                ...readCompilerOptions(),
+                noEmit: false,
+                outDir: `dist/source`,
+                sourceMap: sourcemap,
+                declaration: true,
+                declarationDir: `build/types`,
+                declarationMap: sourcemap,
+                emitDeclarationOnly: true,
+              },
+            )
+
+            program.emit()
+          },
+        },
+      ],
+    },
+
+    {
+      input: `build/types/index.d.ts`,
+      external,
+      output: {
+        file: `dist/types/index.d.ts`,
+        format: 'esm',
+      },
+      plugins: [
+        dts({
+          respectExternal: true,
+          compilerOptions: {
+            noEmit: false,
+            declaration: true,
+            declarationDir: `dist/bundle-types`,
+            emitDeclarationOnly: true,
+            declarationMap: sourcemap,
+            paths: {
+              '#utils': ['build/types/utils/index.d.ts'],
+              '#floating': ['build/types/floating/index.d.ts'],
+              '#components': ['build/types/components/index.d.ts'],
+            },
+          },
+        }),
+      ],
+    },
+  ]
 })
 
 

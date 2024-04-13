@@ -47,8 +47,10 @@ export interface ElementInspectPanelProps<Item extends ItemInfo = ItemInfo> {
 }
 
 export const ElementInspectPanel = <Item extends ItemInfo = ItemInfo>(props: ElementInspectPanelProps<Item>) => {
-  const [selectedLayer, setSelectedLayer] = createSignal(0)
+  const [selectedLayers, setSelectedLayers] = createSignal<Partial<Record<ElementChainMode, number>>>({})
   const [listElement, setListElement] = createSignal<JSX.Element | null>(null)
+
+  const selectedLayer = () => selectedLayers()[props.elementChainMode] ?? 0
 
   const elementChainGenerator = () => {
     const layer = props.layers[selectedLayer()]
@@ -186,7 +188,10 @@ export const ElementInspectPanel = <Item extends ItemInfo = ItemInfo>(props: Ele
                         }}
                         onClick={() => {
                           if (isSelected()) return
-                          setSelectedLayer(index())
+                          setSelectedLayers(selects => ({
+                            ...selects,
+                            [props.elementChainMode]: index(),
+                          }))
                         }}
                       >
                         <Layer.LayerItemText>

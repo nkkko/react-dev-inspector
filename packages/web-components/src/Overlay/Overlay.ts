@@ -29,6 +29,7 @@ export class Overlay {
 
     const doc = currentWindow.document
     this.overlay = document.createElement('inspector-overlay')
+    this.overlay.setAttribute('popover', '')
     doc.body.appendChild(this.overlay)
   }
 
@@ -51,6 +52,7 @@ export class Overlay {
      */
     getBoundingRect?: (element: Element) => Rect;
   }) {
+    // @TODO: open with [Popover API](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API)
     await this.overlay.inspect({
       element,
       title,

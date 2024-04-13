@@ -21,7 +21,7 @@ export const List = <T extends ValidComponent = 'div'>(
       class={cn(
         `
         flex items-center justify-start
-        w-full h-10 py-1 gap-2 whitespace-nowrap text-ellipsis
+        w-full h-10 py-1 gap-2
         `,
         local.class,
       )}

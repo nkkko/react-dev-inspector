@@ -42,7 +42,7 @@ export const Tooltip = (props: TooltipProps) => {
           {...props.contentProps}
           class={cn(
             `
-            z-[10001050] origin-[var(--kb-popover-content-transform-origin)] overflow-hidden rounded-md border bg-popover
+            z-30 origin-[var(--kb-popover-content-transform-origin)] overflow-hidden rounded-md border bg-popover
             px-3 py-1.5 text-sm text-popover-foreground shadow-xl animate-in fade-in-0 zoom-in-95
             `,
             props.contentProps?.class,

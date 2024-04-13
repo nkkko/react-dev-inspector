@@ -25,7 +25,7 @@
   "homepage": "https://github.com/zthxxx/react-dev-inspector",
   "main": "dist/cjs",
   "module": "dist/esm",
-  "types": "src",
+  "types": "dist/types",
   "exports": {
     ".": {
       "import": "./dist/esm/index.js",
@@ -35,25 +35,12 @@
     }
   },
   "imports": {
-    "#utils": {
-      "import": "./src/utils/index.ts",
-      "solid": "./src/utils/index.ts",
-      "types": "./dist/utils/index.d.ts"
-    },
-    "#floating": {
-      "import": "./src/floating/index.ts",
-      "solid": "./src/floating/index.ts",
-      "types": "./dist/floating/index.d.ts"
-    },
-    "#components": {
-      "import": "./src/components/index.ts",
-      "solid": "./src/components/index.ts",
-      "types": "./dist/components/index.d.ts"
-    }
+    "#utils": "./src/utils/index.ts",
+    "#floating": "./src/floating/index.ts",
+    "#components": "./src/components/index.ts"
   },
   "files": [
     "README.md",
-    "src",
     "dist"
   ],
   "scripts": {
@@ -71,12 +58,14 @@
   },
   "dependencies": {
     "@floating-ui/core": "^1.6.0",
+    "@kobalte/core": "^0.13.2",
+    "rxjs": "^8.0.0-alpha.14",
     "solid-element": "^1.8.0",
-    "solid-js": "^1.8.17"
+    "solid-js": "^1.8.17",
+    "tailwind-merge": "^2.3.0"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "1.5.0",
-    "@kobalte/core": "0.13.2",
     "@rollup/plugin-babel": "6.0.4",
     "@rollup/plugin-node-resolve": "15.2.3",
     "@rollup/plugin-terser": "0.4.4",
@@ -104,12 +93,10 @@
     "rollup": "4.17.2",
     "rollup-plugin-dts": "6.1.1",
     "rollup-plugin-postcss": "4.0.2",
-    "rxjs": "8.0.0-alpha.14",
     "solidui-cli": "0.6.6",
     "storybook": "8.1.5",
     "storybook-solidjs": "1.0.0-beta.2",
     "storybook-solidjs-vite": "1.0.0-beta.2",
-    "tailwind-merge": "2.3.0",
     "tailwindcss": "3.4.4",
     "tailwindcss-animate": "1.0.7",
     "ts-node": "10.9.1",

@@ -20,6 +20,7 @@ export default {
 const demoItems: ElementItemProps['item'][] = [
   {
     title: `ComponentName`,
+    tags: [],
   },
   {
     title: `ComponentName`,
@@ -33,6 +34,13 @@ const demoItems: ElementItemProps['item'][] = [
   },
   {
     title: `div`,
+    subtitle: 'relative/short/path',
+    tags: ['Memo', 'Forward', 'Lazy', 'Lazzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzy'],
+  },
+  {
+    title: '',
+    subtitle: 'relative/short/path',
+    tags: ['Memo', 'Forward', 'Lazy', 'Lazzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzy'],
   },
   {
     title: `div`,
@@ -40,14 +48,43 @@ const demoItems: ElementItemProps['item'][] = [
     tags: ['Memo'],
   },
   {
-    title: `LoooooooooooooooongComponentName`,
+    title: `LoooooooooooooooooooooooooooooooooooooooooongComponentName`,
     subtitle: 'loooooooong/relative/path/to/packages/component.tsx',
     tags: ['Memo'],
+  },
+  {
+    title: `LoooooooooooooooooooooooooooooooooooooooooongComponentName`,
+    subtitle: 'loooooooong/relative/path/to/packages/component.tsx',
+    tags: [],
+  },
+  {
+    title: `LoooooooooooooooooooooooooooooooooooooooooongComponentName`,
+    subtitle: 'loooooooong/relative/path/to/packages/component.tsx',
+    tags: ['Memo', 'Forward', 'Lazy', 'Lazzzzzzzzzzzzzzzzzzy'],
   },
   {
     title: `div in <Card>`,
     subtitle: 'relative/path/to/packages/component.tsx',
     tags: ['Memo'],
+  },
+  {
+    title: `div`,
+  },
+  {
+    title: '',
+  },
+  {
+    title: '',
+    tags: [
+      {
+        label: 'Tag1',
+        background: 'hsl(var(--error))',
+      },
+      {
+        label: 'Tag2',
+        background: 'hsl(var(--error))',
+      },
+    ],
   },
 ]
 
@@ -60,8 +97,7 @@ export const _InspectPanel: StoryFn<{
 
   function *generator(): ElementInfoGenerator {
     for (let i = 0; i < 100; i++) {
-      const index = i + 1
-      yield demoItems[index % demoItems.length]
+      yield demoItems[i % demoItems.length]
     }
   }
 

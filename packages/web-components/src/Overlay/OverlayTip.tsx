@@ -86,7 +86,7 @@ export const InspectorOverlayTip = (props: {
     >
       <div class='inspector-tip-name'>
         <div class='inspector-tip-title'>
-          &lrm;${props.title}&lrm;
+          &lrm;{props.title}&lrm;
         </div>
 
         <div
@@ -95,7 +95,7 @@ export const InspectorOverlayTip = (props: {
             display: infoDisplay(),
           }}
         >
-          &lrm;${props.info}&lrm;
+          &lrm;{props.info}&lrm;
         </div>
       </div>
       <div class='inspector-tip-separator' />

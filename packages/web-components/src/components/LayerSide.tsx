@@ -11,8 +11,7 @@ export const LayerSide = styled.div({
 export const Title = styled.div({
   class: `
     flex flex-none items-center justify-center text-sm
-    overflow-hidden whitespace-nowrap text-ellipsis
-    h-8 text-text-0
+    h-8 text-text-0 truncate
   `,
 })
 
@@ -34,9 +33,8 @@ export const LayerList = styled.div({
 export const LayerItem = styled.div({
   class: `
     flex flex-none items-center justify-center
-    overflow-hidden whitespace-nowrap text-ellipsis
     aria-selected:sticky aria-selected:top-0 aria-selected:bottom-0 aria-selected:z-10
-    h-8 bg-bg-1 text-text-2 font-mono
+    h-8 bg-bg-1 text-text-2 font-mono truncate
   `,
 })
 
