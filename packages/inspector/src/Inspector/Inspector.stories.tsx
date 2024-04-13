@@ -1,4 +1,7 @@
-import { useState, useRef } from 'react'
+import {
+  useState,
+  useRef,
+} from 'react'
 import type { Meta } from '@storybook/react'
 import {
   type Subscription,
@@ -77,7 +80,7 @@ export const ControlState = () => {
             Count: {count}
           </div>
           <Button
-            className='z-50'
+            className='z-[1000]'
             onClick={() => setCount(count => count + 1)}
             size={'sm'}
             variant={'secondary'}

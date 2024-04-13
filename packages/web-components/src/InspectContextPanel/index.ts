@@ -7,3 +7,6 @@ export {
 export {
   InspectContextPanel,
 } from './InspectContextPanel'
+export type {
+  ElementInfoGenerator,
+} from './types'

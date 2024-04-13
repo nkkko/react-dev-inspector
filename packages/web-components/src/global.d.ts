@@ -5,3 +5,9 @@ declare module 'global' {
     }
   }
 }
+
+
+declare module '*/tailwind.css' {
+  const stylesheet: string;
+  export default stylesheet;
+}

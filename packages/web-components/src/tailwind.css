@@ -6,7 +6,8 @@
 /* https://www.solid-ui.com/docs/installation/manual */
 
 @layer base {
-  :root {
+  :root,
+  :host {
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
 
@@ -65,7 +66,7 @@
     --color-bg-hover-3: rgb(254 254 254);
     --color-bg-active-0: rgb(209 213 219);
     --color-bg-active-1: rgb(229 231 235);
-    --color-bg-active-2: rgb(243 244 246);
+    --color-bg-active-2: rgb(239 239 240);
     --color-bg-active-3: rgb(254 254 254);
     --color-shadow-1: rgba(0,0,0,0.02);
     --color-shadow-2: rgba(0,0,0,0.03);

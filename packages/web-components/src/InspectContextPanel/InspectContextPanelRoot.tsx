@@ -14,6 +14,7 @@ import {
   css,
   createStore,
 } from '#utils'
+import tailwindRoot from '../tailwind.css'
 import {
   InspectPanel,
   type InspectPanelProps,
@@ -31,16 +32,24 @@ export interface InspectContextPanelShowParams extends DragPanelParams {
   panelParams: InspectPanelProps;
 }
 
+type HostElement = HTMLElement & {
+  style: CSSStyleDeclaration;
+} & InspectContextPanelExpose
+
 export const InspectContextPanelRoot: ComponentType<Record<string, never>> = (_props, { element }) => {
   type Store = Partial<InspectContextPanelShowParams> & {
     host?: HTMLElement;
-    setHost: (host: HTMLElement) => void;
+    shadowRoot?: ShadowRoot;
+    setHost: (roots: {
+      host: HTMLElement;
+      shadowRoot: ShadowRoot;
+    }) => void;
     initWithParams: (params: InspectContextPanelShowParams) => void;
     removePanel: () => void;
   }
 
   const store = createStore<Store>(({ set }) => ({
-    setHost: (host) => set({ host }),
+    setHost: (roots) => set(roots),
     initWithParams: (params) => set(params),
     removePanel: () => set({
       panelParams: undefined,
@@ -56,16 +65,17 @@ export const InspectContextPanelRoot: ComponentType<Record<string, never>> = (_p
     store.removePanel()
   }
 
-  const getHost = () => (element.renderRoot as ShadowRoot)?.host as HTMLElement & {
-    style: CSSStyleDeclaration;
-  } & InspectContextPanelExpose | undefined
-
   onMount(() => {
-    const host = getHost()
-    if (host) {
+    const shadowRoot = element.renderRoot as ShadowRoot | undefined
+    const host = shadowRoot?.host as HostElement | undefined
+
+    if (shadowRoot && host) {
       host.show = show
       host.hide = hide
-      store.setHost(host)
+      store.setHost({
+        shadowRoot,
+        host,
+      })
     }
   })
 
@@ -73,23 +83,24 @@ export const InspectContextPanelRoot: ComponentType<Record<string, never>> = (_p
     <>
       {/**
         * - when render in storybook, tailwind.css is build in storybook
-        * - when build the package, tailwind.css is compile and extract to here by postcss
+        * - when build the package, tailwind.css is compile and extract to here by rollup & postcss
         */
       }
       <style>
-        {css`@import './tailwind.css';`}
+        {tailwindRoot}
+        {hostStyles}
       </style>
 
       <Show
         when={(
-          store.host
+          store.shadowRoot
           && store.initialPosition
           && store.panelParams
         )}
       >
         <PopupContext.Provider
           value={{
-            popupRoot: store.host!,
+            popupRoot: store.shadowRoot!,
           }}
         >
           <InspectPanel
@@ -101,6 +112,14 @@ export const InspectContextPanelRoot: ComponentType<Record<string, never>> = (_p
     </>
   )
 }
+
+const hostStyles = css`
+  :host {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+  }
+`
 
 /**
  * that's also no-side-effect for tree-shaking,

@@ -7,14 +7,15 @@ import {
 import {
   InspectPanel,
 } from './InspectPanel'
+import {
+  type ElementInfoGenerator,
+} from './types'
 
 
 // https://storybook.js.org/docs/react/writing-stories/introduction#component-story-format
 export default {
   title: 'InspectPanel',
 } satisfies Meta
-
-type ElementInfoGenerator = Generator<ElementItemProps['item'], void, void>
 
 const demoItems: ElementItemProps['item'][] = [
   {

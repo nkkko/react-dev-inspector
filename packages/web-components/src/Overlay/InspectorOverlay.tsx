@@ -111,18 +111,21 @@ export const InspectorOverlay: ComponentType<Record<string, never>> = (_props, {
         boxSizing={inspectInfo().boxSizing}
       />
       <style>
-        {css`
-          :host {
-            position: fixed;
-            display: ${inspectInfo().display};
-            pointer-events: none;
-            z-index: 10000000;
-          }
-        `}
+        {hostStyles}
+        {css`:host { display: ${inspectInfo().display}; }`}
       </style>
     </>
   )
 }
+
+const hostStyles = css`
+:host {
+  position: fixed;
+  display: none;
+  pointer-events: none;
+  z-index: 10000000;
+}
+`
 
 /**
  * that's also no-side-effect for tree-shaking,

@@ -4,8 +4,17 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    "rootDir": ".",
+
     "target": "ESNext",
     "module": "ESNext",
     "noEmit": true,
   },
+  "include": [
+    "src",
+    "src/.stories/**/*",
+    ".storybook",
+    "rollup.config.ts",
+    "tailwind.config.ts",
+  ],
 }

@@ -5,7 +5,7 @@ import {
 
 
 export const PopupContext = createContext<{
-  popupRoot: HTMLElement | undefined;
+  popupRoot: ParentNode | undefined;
 }>({
   popupRoot: document.body,
 })

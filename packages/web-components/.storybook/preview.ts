@@ -1,6 +1,6 @@
 import type { Preview } from 'storybook-solidjs'
 import { withThemeByClassName } from '@storybook/addon-themes'
-import './tailwind.css'
+import '../src/tailwind.css'
 import './storybook.css'
 
 const preview: Preview = {

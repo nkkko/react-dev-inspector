@@ -29,7 +29,7 @@
     "eslint-formatter-codeframe": "7.32.1",
     "husky": "^8.0.3",
     "lint-staged": "13.2.3",
-    "tsx": "3.12.7",
+    "tsx": "4.16.0",
     "typescript": "5.2.2"
   },
   "pnpm": {

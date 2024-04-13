@@ -229,6 +229,8 @@ export const useDragContainer = (params: {
           })),
           takeUntil(
             merge(
+              fromEvent(window, 'pointerdown', { capture: true }),
+              fromEvent(window, 'contextmenu', { capture: true }),
               fromEvent(window, 'pointerup', { capture: true }),
               fromEvent(window, 'blur', { capture: true }),
             ).pipe(
@@ -324,6 +326,8 @@ export const useResizeContainer = (params: {
           })),
           takeUntil(
             merge(
+              fromEvent(window, 'pointerdown', { capture: true }),
+              fromEvent(window, 'contextmenu', { capture: true }),
               fromEvent(window, 'pointerup', { capture: true }),
               fromEvent(window, 'blur', { capture: true }),
             ).pipe(

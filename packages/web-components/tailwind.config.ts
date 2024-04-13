@@ -1,15 +1,23 @@
 import type { Config } from 'tailwindcss'
 import tailwindAnimate from 'tailwindcss-animate'
 
+const isBuild = Boolean(process.env.TAILWIND_BUILD)
+
 /**
  * https://www.solid-ui.com/docs/installation/manual#configure-tailwindconfigjs
  */
 export default {
   darkMode: ['class', '[data-kb-theme="dark"]'],
-  content: [
-    './src/**/*.{ts,tsx}',
-    './src/.stories/**/*.{ts,tsx}',
-  ],
+  content: isBuild
+    ? [
+      './src/**/*.{ts,tsx}',
+      '!**/.stories/**/*',
+      '!**/*.stories.tsx',
+    ]
+    : [
+      './src/**/*.{ts,tsx}',
+      './src/.stories/**/*.{ts,tsx}',
+    ],
   theme: {
     container: {
       center: true,
@@ -32,10 +40,10 @@ export default {
         'bg-hover-1': 'var(--color-bg-hover-1)',
         'bg-hover-2': 'var(--color-bg-hover-2)',
         'bg-hover-3': 'var(--color-bg-hover-3)',
-        'bg-active-0': 'var(--color-bg-hover-0)',
-        'bg-active-1': 'var(--color-bg-hover-1)',
-        'bg-active-2': 'var(--color-bg-hover-2)',
-        'bg-active-3': 'var(--color-bg-hover-3)',
+        'bg-active-0': 'var(--color-bg-active-0)',
+        'bg-active-1': 'var(--color-bg-active-1)',
+        'bg-active-2': 'var(--color-bg-active-2)',
+        'bg-active-3': 'var(--color-bg-active-3)',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
@@ -95,30 +103,30 @@ export default {
       },
       keyframes: {
         'accordion-down': {
-          from: { height: 0 },
+          from: { height: '0' },
           to: { height: 'var(--kb-accordion-content-height)' },
         },
         'accordion-up': {
           from: { height: 'var(--kb-accordion-content-height)' },
-          to: { height: 0 },
+          to: { height: '0' },
         },
         'content-show': {
           from: {
-            opacity: 0,
+            opacity: '0',
             transform: 'scale(0.96)',
           },
           to: {
-            opacity: 1,
+            opacity: '1',
             transform: 'scale(1)',
           },
         },
         'content-hide': {
           from: {
-            opacity: 1,
+            opacity: '1',
             transform: 'scale(1)',
           },
           to: {
-            opacity: 0,
+            opacity: '0',
             transform: 'scale(0.96)',
           },
         },

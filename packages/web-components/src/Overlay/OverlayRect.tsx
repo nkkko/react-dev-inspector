@@ -1,30 +1,13 @@
 import {
   createEffect,
   createSignal,
+  type JSX,
 } from 'solid-js'
-import type {
-  PropertiesHyphen,
-} from 'csstype'
 import { css } from '#utils'
 import type {
   Rect,
   BoxSizing,
 } from '#floating'
-
-
-type CSSProperties = Pick<
-  PropertiesHyphen,
-  | 'top'
-  | 'left'
-  | 'display'
-  | 'height'
-  | 'width'
-  | 'border-top-width'
-  | 'border-left-width'
-  | 'border-right-width'
-  | 'border-bottom-width'
-  | 'border-style'
->
 
 
 export const InspectorOverlayRect = (props: {
@@ -34,17 +17,17 @@ export const InspectorOverlayRect = (props: {
   /** target element margin/border/padding */
   boxSizing?: BoxSizing;
 }) => {
-  const position = (): Required<Pick<CSSProperties, 'top' | 'left'>> => ({
+  const position = (): Required<Pick<JSX.CSSProperties, 'top' | 'left'>> => ({
     top: `${(props.boundingRect?.y ?? 0) - Math.max(props.boxSizing?.marginTop ?? 0, 0)}px`,
     left: `${(props.boundingRect?.x ?? 0) - Math.max(props.boxSizing?.marginLeft ?? 0, 0)}px`,
   })
 
-  const [marginStyle, setMarginStyle] = createSignal<CSSProperties>({ display: 'none' })
-  const [borderStyle, setBorderStyle] = createSignal<CSSProperties>({ display: 'none' })
-  const [paddingStyle, setPaddingStyle] = createSignal<CSSProperties>({ display: 'none' })
-  const [contentStyle, setContentStyle] = createSignal<CSSProperties>({ display: 'none' })
+  const [marginStyle, setMarginStyle] = createSignal<JSX.CSSProperties>({ display: 'none' })
+  const [borderStyle, setBorderStyle] = createSignal<JSX.CSSProperties>({ display: 'none' })
+  const [paddingStyle, setPaddingStyle] = createSignal<JSX.CSSProperties>({ display: 'none' })
+  const [contentStyle, setContentStyle] = createSignal<JSX.CSSProperties>({ display: 'none' })
 
-  const getBoxStyle = (boxSizing: BoxSizing | undefined, type: 'margin' | 'padding' | 'border'): CSSProperties => {
+  const getBoxStyle = (boxSizing: BoxSizing | undefined, type: 'margin' | 'padding' | 'border'): JSX.CSSProperties => {
     if (!boxSizing) {
       return {
         display: 'none',
@@ -114,47 +97,49 @@ export const InspectorOverlayRect = (props: {
         </div>
       </div>
       <style>
-        {css`
-          .inspector-overlay-rect-container {
-            position: fixed;
-            display: block;
-            cursor: default;
-            box-sizing: border-box;
-          }
-
-          .inspector-overlay-margin {
-            /**
-             * PageHighlight.Margin in
-             *   https://github.com/ChromeDevTools/devtools-frontend/blob/chromium/6210/front_end/core/common/Color.ts#L2322
-             */
-            border-color: rgba(246, 178, 107, .66);
-            border-style: solid;
-          }
-          .inspector-overlay-border {
-            /**
-             * PageHighlight.Border in
-             *   https://github.com/ChromeDevTools/devtools-frontend/blob/chromium/6210/front_end/core/common/Color.ts#L2320
-             */
-            border-color: rgba(255, 229, 153, .66);
-            border-style: solid;
-          }
-          .inspector-overlay-padding {
-            /**
-             * PageHighlight.Padding in
-             *   https://github.com/ChromeDevTools/devtools-frontend/blob/chromium/6210/front_end/core/common/Color.ts#L2318
-             */
-            border-color: rgba(147, 196, 125, .55);
-            border-style: solid;
-          }
-          .inspector-overlay-content {
-            /**
-             * PageHighlight.Content in
-             *   https://github.com/ChromeDevTools/devtools-frontend/blob/chromium/6210/front_end/core/common/Color.ts#L2315
-             */
-            background-color: rgba(111, 168, 220, .66);
-          }
-        `}
+        {styles}
       </style>
     </div>
   )
 }
+
+const styles = css`
+.inspector-overlay-rect-container {
+  position: fixed;
+  display: block;
+  cursor: default;
+  box-sizing: border-box;
+}
+
+.inspector-overlay-margin {
+  /**
+    * PageHighlight.Margin in
+    *   https://github.com/ChromeDevTools/devtools-frontend/blob/chromium/6210/front_end/core/common/Color.ts#L2322
+    */
+  border-color: rgba(246, 178, 107, .66);
+  border-style: solid;
+}
+.inspector-overlay-border {
+  /**
+    * PageHighlight.Border in
+    *   https://github.com/ChromeDevTools/devtools-frontend/blob/chromium/6210/front_end/core/common/Color.ts#L2320
+    */
+  border-color: rgba(255, 229, 153, .66);
+  border-style: solid;
+}
+.inspector-overlay-padding {
+  /**
+    * PageHighlight.Padding in
+    *   https://github.com/ChromeDevTools/devtools-frontend/blob/chromium/6210/front_end/core/common/Color.ts#L2318
+    */
+  border-color: rgba(147, 196, 125, .55);
+  border-style: solid;
+}
+.inspector-overlay-content {
+  /**
+    * PageHighlight.Content in
+    *   https://github.com/ChromeDevTools/devtools-frontend/blob/chromium/6210/front_end/core/common/Color.ts#L2315
+    */
+  background-color: rgba(111, 168, 220, .66);
+}
+`

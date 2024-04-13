@@ -3,7 +3,9 @@
 @tailwind utilities;
 
 /* https://tailwindcss.com/docs/customizing-colors#using-css-variables */
+/* https://www.solid-ui.com/docs/installation/manual */
 
+@layer base {
   :root {
     /* https://ui.shadcn.com/docs/theming#list-of-variables */
     --background: 0 0% 100%;
@@ -42,3 +44,15 @@
   #storybook-root {
     padding: 0 !important;
   }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}

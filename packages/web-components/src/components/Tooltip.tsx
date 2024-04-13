@@ -23,7 +23,7 @@ export const Tooltip = (props: TooltipProps) => {
   return (
     <TooltipPrimitive.Root
       openDelay={200}
-      closeDelay={100}
+      closeDelay={0}
       placement='top'
       gutter={4}
       flip={'top bottom right left'}
