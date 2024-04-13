@@ -4,8 +4,7 @@ import { styled } from '#utils'
 export const PanelContainer = styled.div({
   class: `
     inspector-panel-container
-    flex flex-col items-stretch justify-stretch
-    max-w-96 max-h-[400px] w-[300px] h-96
+    flex flex-auto flex-col items-stretch justify-stretch overflow-hidden
     bg-bg-1  text-text-1 text-sm
   `,
 })

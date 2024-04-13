@@ -23,7 +23,9 @@ type PureObject = Record<string, any>
 export interface ListProps<ItemData extends PureObject> {
   class?: string | undefined;
   style?: JSX.CSSProperties;
-  forwardProps?: JSX.HTMLAttributes<HTMLDivElement>;
+  forwardProps?: JSX.HTMLAttributes<HTMLDivElement> & {
+    [key: `data-${string}`]: boolean | string | undefined;
+  };
   onPointerLeave?: JSX.EventHandler<HTMLDivElement, PointerEvent>;
   ElementItem: Component<ItemData>;
   generator: ItemGenerator<ItemData>;
@@ -127,6 +129,7 @@ export const List = <ItemData extends PureObject>(props: ListProps<ItemData>): J
         <Match when={store.loadDone && !store.items.length}>
           <div
             class={`flex items-center justify-center h-full text-text-3 select-none`}
+            data-draggable-block
           >
             Empty
           </div>

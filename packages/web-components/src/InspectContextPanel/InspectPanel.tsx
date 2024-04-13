@@ -5,6 +5,7 @@ import {
 import {
   type ItemInfo,
   ContextPanel,
+  type DragPanelParams,
 } from '#components'
 import {
   createStore,
@@ -19,6 +20,7 @@ import {
   type EditorType,
 } from './types'
 
+
 export interface InspectPanelProps<Item extends ItemInfo = ItemInfo> {
   renderLayers: ElementInfoGeneratorGetter<Item>[];
   sourceLayers: ElementInfoGeneratorGetter<Item>[];
@@ -30,7 +32,7 @@ export interface InspectPanelProps<Item extends ItemInfo = ItemInfo> {
   }) => void | Promise<void>;
 }
 
-export const InspectPanel = <Item extends ItemInfo = ItemInfo>(props: InspectPanelProps<Item>) => {
+export const InspectPanel = <Item extends ItemInfo = ItemInfo>(props: InspectPanelProps<Item> & DragPanelParams) => {
   const store = createStore<InspectPanelStore>(({ set }) => ({
     panelType: PanelType.Elements,
     onPanelTypeChange: (type) => set({ panelType: type }),
@@ -46,26 +48,33 @@ export const InspectPanel = <Item extends ItemInfo = ItemInfo>(props: InspectPan
     return layers[store.elementChainMode]() ?? []
   }
 
+
   return (
-    <>
-      <style type='postcss'>
-        @import './tailwind.css';
-      </style>
-      <ContextPanel>
-        <Switch>
-          <Match when={store.panelType === PanelType.Elements}>
-            <ElementInspectPanel
-              elementChainMode={store.elementChainMode}
-              layers={elementLayers()}
-              onChangeChainMode={store.onChangeChainMode}
-              onClickItem={props.onClickItem}
-              onClickEditor={props.onClickEditor}
-              onHoverItem={props.onHoverItem}
-            />
-          </Match>
-        </Switch>
-      </ContextPanel>
-    </>
+    <ContextPanel
+      initialPosition={props.initialPosition}
+      spaceBox={props.spaceBox}
+      class={`w-[300px] h-96`}
+      sizeLimit={{
+        minWidth: 160,
+        minHeight: 160,
+        maxWidth: 800,
+        maxHeight: 800,
+      }}
+    >
+      <Switch>
+        <Match when={store.panelType === PanelType.Elements}>
+          <ElementInspectPanel
+            elementChainMode={store.elementChainMode}
+            layers={elementLayers()}
+            onChangeChainMode={store.onChangeChainMode}
+            onClickItem={props.onClickItem}
+            onClickEditor={props.onClickEditor}
+            onHoverItem={props.onHoverItem}
+            // toSettingsPanel={() => {}}
+          />
+        </Match>
+      </Switch>
+    </ContextPanel>
   )
 }
 
@@ -75,3 +84,4 @@ interface InspectPanelStore {
   elementChainMode: ElementChainMode;
   onChangeChainMode: (mode: ElementChainMode) => void;
 }
+

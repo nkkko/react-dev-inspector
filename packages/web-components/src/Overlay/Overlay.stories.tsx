@@ -28,6 +28,11 @@ import {
   CardFooter,
 } from '@stories/components'
 import {
+  type Rect,
+  type BoxSizing,
+  getBoundingRect,
+} from '#floating'
+import {
   InspectorOverlayRect,
 } from './OverlayRect'
 import {
@@ -38,12 +43,7 @@ import {
 } from './Overlay'
 import {
   getElementDimensions,
-  getBoundingRect,
 } from './utils'
-import type {
-  Rect,
-  BoxSizing,
-} from './types'
 
 
 // https://storybook.js.org/docs/react/writing-stories/introduction#component-story-format

@@ -1,5 +1,5 @@
 
-import type { StoryFn, Meta } from 'storybook-solidjs'
+import type { Meta } from 'storybook-solidjs'
 
 import {
   Menubar,

@@ -6,7 +6,7 @@ import {
 } from '#components'
 import {
   InspectPanel,
-} from './InspectContextPanel'
+} from './InspectPanel'
 
 
 // https://storybook.js.org/docs/react/writing-stories/introduction#component-story-format

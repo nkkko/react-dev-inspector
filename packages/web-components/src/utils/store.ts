@@ -1,6 +1,7 @@
 import {
   createStore as solidCreateStore,
   produce,
+  type StoreSetter,
 } from 'solid-js/store'
 
 
@@ -45,7 +46,7 @@ export const createStore = <State extends PureObject>(initializer: State | State
     return _updateState(mutator)
   }
 
-  const [store, setStore] = solidCreateStore(
+  const [store, setStore] = solidCreateStore<State>(
     (typeof initializer === 'function')
       ? (initializer({
         set: setState,
@@ -56,12 +57,11 @@ export const createStore = <State extends PureObject>(initializer: State | State
   )
 
   _setState = (setter) => {
-    setStore(state => ({
-      ...state,
-      ...(typeof setter === 'function')
+    setStore(((state: State) => (
+      (typeof setter === 'function')
         ? setter(state)
-        : setter,
-    }))
+        : setter
+    )) as any as StoreSetter<State, []>)
   }
 
   _getState = () => {

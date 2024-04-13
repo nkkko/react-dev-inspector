@@ -7,16 +7,16 @@ import {
   type ComponentType,
 } from 'solid-element'
 import { css } from '#utils'
+import type {
+  Rect,
+  BoxSizing,
+} from '#floating'
 import {
   InspectorOverlayRect,
 } from './OverlayRect'
 import {
   InspectorOverlayTip,
 } from './OverlayTip'
-import type {
-  Rect,
-  BoxSizing,
-} from './types'
 
 
 export interface InspectorOverlayExpose {

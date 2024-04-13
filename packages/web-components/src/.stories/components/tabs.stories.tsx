@@ -1,4 +1,4 @@
-import type { StoryFn, Meta } from 'storybook-solidjs'
+import type { Meta } from 'storybook-solidjs'
 
 // https://storybook.js.org/docs/react/writing-stories/introduction#component-story-format
 export default {

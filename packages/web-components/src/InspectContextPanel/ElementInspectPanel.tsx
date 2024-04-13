@@ -47,7 +47,7 @@ export interface ElementInspectPanelProps<Item extends ItemInfo = ItemInfo> {
 }
 
 export const ElementInspectPanel = <Item extends ItemInfo = ItemInfo>(props: ElementInspectPanelProps<Item>) => {
-  const [selectedLayer, setSelectedLayer] = createSignal(1)
+  const [selectedLayer, setSelectedLayer] = createSignal(0)
   const [listElement, setListElement] = createSignal<JSX.Element | null>(null)
 
   const elementChainGenerator = () => {
@@ -82,6 +82,9 @@ export const ElementInspectPanel = <Item extends ItemInfo = ItemInfo>(props: Ele
         // due to reactive will loose in `generator` props which will be transform to a getter
         generator={generator}
         onPointerLeave={() => props.onHoverItem?.(null)}
+        forwardProps={{
+          'data-draggable-block': true,
+        }}
       />
     )
   }
@@ -96,12 +99,13 @@ export const ElementInspectPanel = <Item extends ItemInfo = ItemInfo>(props: Ele
 
   return (
     <PanelContainer>
-      <PanelHeader>
+      <PanelHeader data-draggable-block>
         <Tabs.Tabs
           value={props.elementChainMode}
           onChange={(tab) => props.onChangeChainMode(tab as ElementChainMode)}
+          class={`flex-initial no-scrollbar overflow-x-auto`}
         >
-          <Tabs.List>
+          <Tabs.List data-draggable-block>
             <Tooltip
               content={'List elements as render hierarchy. (root at bottom)'}
               rootProps={{
@@ -136,7 +140,7 @@ export const ElementInspectPanel = <Item extends ItemInfo = ItemInfo>(props: Ele
         <Show
           when={props.toSettingsPanel}
         >
-          <div class={`flex items-center justify-between py-1 gap-2`}>
+          <div class={`flex items-center justify-between py-1 gap-1.5`}>
             <S.VerticalDivider />
 
             <Tooltip
@@ -155,11 +159,11 @@ export const ElementInspectPanel = <Item extends ItemInfo = ItemInfo>(props: Ele
         </Show>
       </PanelHeader>
 
-      <PanelBody>
+      <PanelBody data-draggable-block>
         <Show
           when={props.layers.length > 1}
         >
-          <Layer.LayerSide class={`pb-1`}>
+          <Layer.LayerSide data-draggable-block>
             <Layer.Title>
               <Tooltip
                 content='Layers'
@@ -208,7 +212,7 @@ export const ElementInspectPanel = <Item extends ItemInfo = ItemInfo>(props: Ele
 
 const S = {
   VerticalDivider: styled.div({
-    class: `w-[1px] h-5 bg-border flex-none`,
+    class: `w-[1px] h-4 bg-border flex-none`,
   }),
 
   LayerButton: styled(IconBox, {

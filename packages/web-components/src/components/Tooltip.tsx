@@ -5,7 +5,7 @@ import * as TooltipPrimitive from '@kobalte/core/tooltip'
 
 import { cn } from '#utils'
 import {
-  useShadowRootContext,
+  usePopupContext,
 } from './hooks'
 
 
@@ -17,7 +17,7 @@ export interface TooltipProps {
 }
 
 export const Tooltip = (props: TooltipProps) => {
-  const shadowRoot = useShadowRootContext()
+  const popupContext = usePopupContext()
 
   // https://kobalte.dev/docs/core/components/tooltip#tooltip-1
   return (
@@ -36,13 +36,13 @@ export const Tooltip = (props: TooltipProps) => {
       </TooltipPrimitive.Trigger>
 
       <TooltipPrimitive.Portal
-        mount={shadowRoot.host}
+        mount={popupContext.popupRoot}
       >
         <TooltipPrimitive.Content
           {...props.contentProps}
           class={cn(
             `
-            z-50 origin-[var(--kb-popover-content-transform-origin)] overflow-hidden rounded-md border bg-popover
+            z-[10001050] origin-[var(--kb-popover-content-transform-origin)] overflow-hidden rounded-md border bg-popover
             px-3 py-1.5 text-sm text-popover-foreground shadow-xl animate-in fade-in-0 zoom-in-95
             `,
             props.contentProps?.class,

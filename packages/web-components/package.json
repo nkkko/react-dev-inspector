@@ -36,6 +36,7 @@
   },
   "imports": {
     "#utils": "./src/utils/index.ts",
+    "#floating": "./src/floating/index.ts",
     "#components": "./src/components/index.ts"
   },
   "files": [
@@ -86,7 +87,7 @@
     "rimraf": "3.0.2",
     "rollup": "4.17.2",
     "rollup-preset-solid": "2.0.1",
-    "rxjs": "7.8.1",
+    "rxjs": "8.0.0-alpha.14",
     "solid-icons": "1.1.0",
     "solidui-cli": "0.6.6",
     "storybook": "8.1.5",

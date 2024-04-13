@@ -11,8 +11,8 @@
   "svg.preview.background": "transparent",
 
   "tailwindCSS.experimental.classRegex": [
-    "\\b(?:class|className): *`(.*?)`",
-    "\\b(?:class|className): *\"(.*?)\"",
-    "\\b(?:class|className): *'(.*?)'",
+    "\\b(?:class|className): *`((.|\n)*?)`",
+    "\\b(?:class|className): *\"((.|\n)*?)\"",
+    "\\b(?:class|className): *'((.|\n)*?)'",
   ],
 }

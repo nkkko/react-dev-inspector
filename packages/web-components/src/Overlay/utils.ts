@@ -1,8 +1,7 @@
 import type {
   Box,
-  Rect,
   BoxSizing,
-} from './types'
+} from '#floating'
 
 /**
  * @deprecated now use `getBoundingRect` instead
@@ -29,27 +28,6 @@ export function getBoundingBox(element: HTMLElement | any): Box {
     bottom: domRect.bottom,
   }
 }
-
-
-export function getBoundingRect(element: HTMLElement | any): Rect {
-  const domRect = element?.getBoundingClientRect?.() as DOMRect | undefined
-  if (!domRect) {
-    return {
-      x: 0,
-      y: 0,
-      width: 0,
-      height: 0,
-    }
-  }
-
-  return {
-    x: domRect.left,
-    y: domRect.top,
-    width: domRect.width,
-    height: domRect.height,
-  }
-}
-
 
 export function getElementDimensions(element: HTMLElement | any): BoxSizing {
   if (element instanceof HTMLElement) {

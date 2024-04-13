@@ -3,10 +3,11 @@ import {
   useContext,
 } from 'solid-js'
 
-export const ShadowRootContext = createContext<{
-  host: HTMLElement | undefined;
+
+export const PopupContext = createContext<{
+  popupRoot: HTMLElement | undefined;
 }>({
-  host: document.body,
+  popupRoot: document.body,
 })
 
-export const useShadowRootContext = () => useContext(ShadowRootContext)
+export const usePopupContext = () => useContext(PopupContext)

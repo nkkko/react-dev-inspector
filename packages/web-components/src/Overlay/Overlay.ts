@@ -2,18 +2,18 @@ import {
   customElement,
 } from 'solid-element'
 import {
-  getElementDimensions,
+  type Rect,
+  type BoxSizing,
   getBoundingRect,
+} from '#floating'
+import {
+  getElementDimensions,
 } from './utils'
 import {
   InspectorOverlay,
   type InspectorOverlayElement,
 } from './InspectorOverlay'
 
-import type {
-  Rect,
-  BoxSizing,
-} from './types'
 
 export class Overlay {
   window: Window

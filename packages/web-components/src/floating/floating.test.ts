@@ -1,10 +1,12 @@
 import {
   type ClientRectObject,
 } from '@floating-ui/core'
-import { restraintTipPosition } from './OverlayTip'
-import type {
-  Rect,
+import {
+  type Rect,
 } from './types'
+import {
+  restraintTipPosition,
+} from './floating'
 
 
 class ItemBox implements ClientRectObject {

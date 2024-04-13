@@ -222,6 +222,7 @@ tags.forEach(tag => {
 export const css = String.raw
 
 // eslint-disable-next-line unused-imports/no-unused-vars
+// @ts-expect-error  TS6196: 'RestrictPropsStyle' is declared but never used.
 type RestrictPropsStyle<Props, ParamsStyle> = Omit<Props, 'style'> & {
   style?: IntrinsicStyle<ParamsStyle>;
 }

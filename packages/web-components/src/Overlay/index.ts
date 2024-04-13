@@ -1,9 +1,6 @@
-/// <reference path='./elements.d.ts' />
-
-export * from './types'
+/// <reference path='../elements.d.ts' />
 
 export {
-  getBoundingRect,
   getElementDimensions,
   getBoundingBox,
 } from './utils'

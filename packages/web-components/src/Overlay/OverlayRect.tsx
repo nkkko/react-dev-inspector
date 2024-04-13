@@ -9,7 +9,7 @@ import { css } from '#utils'
 import type {
   Rect,
   BoxSizing,
-} from './types'
+} from '#floating'
 
 
 type CSSProperties = Pick<

@@ -106,9 +106,11 @@ export const ContextPanelDemo: StoryFn = () => {
   const items = generator()
 
   return (
-    <ContextPanel>
+    <ContextPanel
+      class={`w-[300px] h-96`}
+    >
       <PanelContainer>
-        <PanelHeader>
+        <PanelHeader data-draggable-block>
           <Tabs.Tabs
             value={selectedTab()}
             onChange={(tab) => {
@@ -116,6 +118,7 @@ export const ContextPanelDemo: StoryFn = () => {
               onTabChange(tab)
             }}
             class={`flex flex-col flex-grow items-stretch justify-stretch h-full`}
+            data-draggable-block
           >
             <Tabs.List>
               <Tabs.Trigger
@@ -141,14 +144,12 @@ export const ContextPanelDemo: StoryFn = () => {
           </IconBox>
         </PanelHeader>
 
-        <PanelBody>
+        <PanelBody data-draggable-block>
           <Switch>
             <Match
               when={selectedTab() === ElementChainMode.Render}
             >
-              <Layer.LayerSide
-                class={`pb-1`}
-              >
+              <Layer.LayerSide>
                 <Layer.Title>
                   <Layers size={16} strokeWidth={1} />
                 </Layer.Title>
@@ -186,6 +187,7 @@ export const ContextPanelDemo: StoryFn = () => {
               </Layer.LayerSide>
 
               <LazyList.List
+                class={`panel-draggable`}
                 generator={items}
                 ElementItem={ElementItem}
                 onPointerLeave={() => onHoverItem(null)}
