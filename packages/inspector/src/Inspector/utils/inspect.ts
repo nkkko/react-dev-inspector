@@ -1,9 +1,15 @@
 import type { Fiber, Source } from 'react-reconciler'
+import type {
+  TagItem,
+} from '@react-dev-inspector/web-components'
+
 
 import type {
+  InspectAgent,
   CodeInfo,
   CodeDataAttribute,
   InspectChainItem,
+  InspectChainGenerator,
 } from '../types'
 import {
   isNativeTagFiber,
@@ -239,9 +245,21 @@ export const getElementInspect = (element: Element): {
   }
 }
 
-export function *genInspectChainFromFibers<Element>({ fibers, isAgentElement }: {
+export const getPathWithLineNumber = (codeInfo?: CodeInfo): string | undefined => {
+  let path = codeInfo?.relativePath ?? codeInfo?.absolutePath
+  if (codeInfo?.lineNumber) {
+    path += `:${codeInfo.lineNumber}`
+  }
+  return path
+}
+
+export function *genInspectChainFromFibers<Element>({
+  agent, fibers, isAgentElement, getElementTags,
+}: {
+  agent: InspectAgent<Element>;
   fibers: Generator<Fiber, void, void>;
   isAgentElement: (element: unknown) => element is Element;
+  getElementTags?: (element: unknown) => TagItem[];
 }): Generator<InspectChainItem<Element>, unknown, void> {
   let lastElement: Element | null = null
   let fiber: Fiber | undefined
@@ -257,14 +275,22 @@ export function *genInspectChainFromFibers<Element>({ fibers, isAgentElement }: 
     const element = node ?? lastElement
     lastElement = node ?? lastElement
 
-    if (displayName || tagName) {
-      yield {
-        element,
-        title: displayName || '',
-        subtitle: codeInfo?.relativePath ?? codeInfo?.absolutePath,
-        tags: [tagName],
-        codeInfo,
-      }
+    const tags: TagItem[] = getElementTags?.(node) ?? []
+    if (tagName) {
+      tags.push(tagName)
+    }
+
+    if (!displayName && !tags.length) {
+      continue
+    }
+
+    yield {
+      agent,
+      element,
+      title: displayName || '',
+      subtitle: getPathWithLineNumber(codeInfo),
+      tags,
+      codeInfo,
     }
   }
 
@@ -274,5 +300,45 @@ export function *genInspectChainFromFibers<Element>({ fibers, isAgentElement }: 
       return root.containerInfo
     }
     return root
+  }
+}
+
+export function * elementsChainGenerator<Element = unknown>({
+  agent,
+  agents,
+  element,
+  generateElement,
+}: {
+  agent: InspectAgent<Element>;
+  agents: InspectAgent<Element>[];
+  element: Element;
+  generateElement: <Element = unknown>(agent: InspectAgent<Element>, element: Element) => InspectChainGenerator<Element>;
+}): InspectChainGenerator<Element> {
+  const generator = generateElement(agent, element)
+  while (true) {
+    const next = generator.next()
+    if (!next.done) {
+      yield next.value
+      continue
+    }
+
+    if (!next.value) {
+      return
+    }
+
+    for (const agent of agents) {
+      if (!agent.isAgentElement(next.value)) {
+        continue
+      }
+      yield * elementsChainGenerator({
+        agent,
+        agents,
+        element: next.value,
+        generateElement,
+      })
+      return
+    }
+
+    return
   }
 }

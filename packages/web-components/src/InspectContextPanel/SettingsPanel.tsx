@@ -9,7 +9,7 @@
  *   - URL Scheme
  *     - builtin editor type
  *     - path
- * - quick editor type in elements panel (two options)
+ * - choose quickly-access editors in elements panel (two slot)
  * - theme mode
  *
  */

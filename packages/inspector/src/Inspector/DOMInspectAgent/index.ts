@@ -1,1 +1,5 @@
-export * from './DOMInspectAgent'
+export {
+  type DOMElement,
+  DOMInspectAgent,
+  domInspectAgent,
+} from './DOMInspectAgent'

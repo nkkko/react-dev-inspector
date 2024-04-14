@@ -3,13 +3,14 @@ import {
 } from 'react'
 import type { StoryFn, Meta } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
-
-
 import {
   InspectContextPanel,
   type ElementInfoGenerator,
   type ElementItemInfo,
 } from '@react-dev-inspector/web-components'
+import {
+  Inspector,
+} from './Inspector'
 
 
 // https://storybook.js.org/docs/react/writing-stories/introduction#component-story-format
@@ -38,6 +39,11 @@ const demoItems: ElementItemInfo[] = [
     tags: ['Memo', 'Forward'],
   },
   {
+    title: `ComponentName`,
+    subtitle: 'relative/short/path',
+    tags: ['Memo', 'Forward', 'Lazy', 'Lazzzzzzzzzzzzzzzzzzy'],
+  },
+  {
     title: `div`,
   },
   {
@@ -49,6 +55,11 @@ const demoItems: ElementItemInfo[] = [
     title: `LoooooooooooooooongComponentName`,
     subtitle: 'loooooooong/relative/path/to/packages/component.tsx',
     tags: ['Memo'],
+  },
+  {
+    title: `LoooooooooooooooooooooooooooooooooongComponentName`,
+    subtitle: 'loooooooong/relative/path/to/packages/component.tsx',
+    tags: ['Memo', 'Forward', 'Lazy', 'Lazzzzzzzzzzzzzzzzzzy'],
   },
   {
     title: `div in <Card>`,
@@ -64,8 +75,7 @@ export const InspectContextPanelPure: StoryFn<{
   useEffect(() => {
     function *generator(): ElementInfoGenerator {
       for (let i = 0; i < 100; i++) {
-        const index = i + 1
-        yield demoItems[index % demoItems.length]
+        yield demoItems[i % demoItems.length]
       }
     }
 
@@ -94,7 +104,7 @@ export const InspectContextPanelPure: StoryFn<{
     }
   })
 
-  return (<div />)
+  return (<Inspector />)
 }
 
 InspectContextPanelPure.args = {

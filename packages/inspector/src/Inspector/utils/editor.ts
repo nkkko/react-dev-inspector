@@ -1,9 +1,8 @@
-/**
- * https://github.com/facebook/create-react-app/blob/v5.0.1/packages/react-dev-utils/launchEditorEndpoint.js
- * used in https://github.com/facebook/create-react-app/blob/v5.0.1/packages/react-dev-utils/errorOverlayMiddleware.js#L14
- */
-// @ts-expect-error import from deep path for reduce load files
-import launchEditorEndpoint from 'react-dev-utils/launchEditorEndpoint'
+import {
+  launchEditorEndpoint,
+  type LaunchEditorParams,
+  type TrustedEditor,
+} from '@react-dev-inspector/launch-editor-endpoint'
 import type { CodeInfo } from '../types'
 
 
@@ -15,11 +14,12 @@ const getCodeInfo = (_codeInfo: CodeInfoLike): CodeInfo => (
     : _codeInfo
 )
 
-
 /**
  * fetch server api to open the code editor
  */
-export const gotoServerEditor = (_codeInfo?: CodeInfoLike) => {
+export const gotoServerEditor = (_codeInfo?: CodeInfoLike, options?: {
+  editor?: TrustedEditor;
+}) => {
   if (!_codeInfo) return
   const codeInfo = getCodeInfo(_codeInfo)
 
@@ -38,20 +38,26 @@ export const gotoServerEditor = (_codeInfo?: CodeInfoLike) => {
     return
   }
 
-  const launchParams = {
+  const launchParams: LaunchEditorParams = {
     fileName,
     lineNumber,
     colNumber: columnNumber,
+    editor: options?.editor,
   }
 
+  const urlParams = new URLSearchParams(
+    Object.entries(launchParams)
+      .filter(([, value]) => Boolean(value)) as [string, string][],
+  )
+
   /**
-   * api path in '@react-dev-inspector/middlewares' launchEditorMiddleware
+   * api path in {@link {import('@react-dev-inspector/middlewares').launchEditorMiddleware}}
    */
   const apiRoute = isRelative
     ? `${launchEditorEndpoint}/relative`
     : launchEditorEndpoint
 
-  fetch(`${apiRoute}?${new URLSearchParams(launchParams)}`)
+  fetch(`${apiRoute}?${urlParams}`)
 }
 
 /**

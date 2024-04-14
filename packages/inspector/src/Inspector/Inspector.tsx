@@ -7,7 +7,16 @@ import {
 } from 'react'
 import type { Fiber } from 'react-reconciler'
 import {
+  InspectContextPanel,
+  type ElementItemInfo,
+  type InspectContextPanelShowParams,
+} from '@react-dev-inspector/web-components'
+import {
+  type TrustedEditor,
+} from '@react-dev-inspector/launch-editor-endpoint'
+import {
   gotoServerEditor,
+  elementsChainGenerator,
 } from './utils'
 import {
   useHotkeyToggle,
@@ -124,6 +133,8 @@ export interface InspectorProps<Element> {
    */
   onClickElement?: (params: InspectParams<Element>) => void;
 
+  ContextPanel?: typeof InspectContextPanel;
+
   /** any children of react nodes */
   children?: ReactNode;
 
@@ -149,11 +160,14 @@ export const Inspector = function<Element = unknown>(props: InspectorProps<Eleme
     inspectAgents = defaultInspectAgents as InspectAgent<Element>[],
     disableLaunchEditor,
     disable = (process.env.NODE_ENV !== 'development'),
+    ContextPanel = InspectContextPanel,
     children,
   } = props
 
   const pointerRef = useRecordPointer({ disable })
   const agentRef = useRef<InspectAgent<Element>>()
+  const contextPanelRef = useRef<InspectContextPanel<InspectElementItem<Element>>>()
+
 
   useEffect(() => {
     return () => {
@@ -182,6 +196,8 @@ export const Inspector = function<Element = unknown>(props: InspectorProps<Eleme
       })
     })
 
+    window.addEventListener('contextmenu', onContextMenuEvent, { capture: true })
+
     if (!pointerRef.current) {
       return
     }
@@ -201,18 +217,117 @@ export const Inspector = function<Element = unknown>(props: InspectorProps<Eleme
       })
   })
 
+  const onContextMenuEvent = useEffectEvent(async (event: MouseEvent) => {
+    if (contextPanelRef.current) {
+      return
+    }
+
+    event.preventDefault()
+    event.stopPropagation()
+    event.stopImmediatePropagation()
+
+    inspectAgents.forEach(agent => {
+      agent.deactivate()
+    })
+
+    agentRef.current?.removeIndicate()
+    agentRef.current = undefined
+
+    const layers = (await Promise.all(
+      inspectAgents
+        .filter(agent => agent.getTopElementsFromPointer)
+        .map(async agent => {
+          const elements = await agent.getTopElementsFromPointer!(event)
+          return elements.map(element => ({
+            agent,
+            element,
+          }))
+        }),
+    )).flat()
+
+    const renderLayers = layers.map(({ agent, element }) => (() => elementsChainGenerator({
+      agent,
+      agents: inspectAgents,
+      element,
+      generateElement: (agent, element) => agent.getRenderChain(element),
+    })))
+
+    const sourceLayers = layers.map(({ agent, element }) => (() => elementsChainGenerator({
+      agent,
+      agents: inspectAgents,
+      element,
+      generateElement: (agent, element) => agent.getSourceChain(element),
+    })))
+
+
+    const onHoverToIndicate = (item: InspectElementItem<Element> | null) => {
+      if (!item?.element) {
+        agentRef.current?.removeIndicate()
+        agentRef.current = undefined
+        return
+      }
+
+      handleHoverElement({
+        agent: item.agent,
+        element: item.element,
+      })
+    }
+
+    const onClickToEditor = ({ item, editor }: {
+      item: InspectElementItem<Element>;
+      editor?: TrustedEditor;
+    }) => {
+      if (!item?.element) {
+        return
+      }
+      if (agentRef.current !== item.agent) {
+        agentRef.current?.removeIndicate()
+        agentRef.current = item.agent
+      }
+      handleClickElement({
+        agent: item.agent,
+        element: item.element,
+        editor,
+      })
+    }
+
+    contextPanelRef.current = new ContextPanel()
+    contextPanelRef.current.show({
+      initialPosition: {
+        x: event.clientX,
+        y: event.clientY,
+      },
+      sizeLimit: contextPanelSizeLimit,
+      onClickOutside: deactivate,
+      panelParams: {
+        renderLayers,
+        sourceLayers,
+        onHoverItem: onHoverToIndicate,
+        onClickItem: (item) => {
+          onClickToEditor({ item })
+        },
+        onClickEditor: onClickToEditor,
+      },
+    })
+  })
+
   const stopInspecting = useEffectEvent(() => {
     agentRef.current?.removeIndicate()
     inspectAgents.forEach(agent => {
       agent.deactivate()
     })
     agentRef.current = undefined
+
+    contextPanelRef.current?.hide()
+    contextPanelRef.current?.remove()
+    contextPanelRef.current = undefined
+    window.removeEventListener('contextmenu', onContextMenuEvent, { capture: true })
   })
 
   const handleHoverElement = useEffectEvent(({ agent, element, pointer }: {
     agent: InspectAgent<Element>;
     element: Element;
-    pointer: PointerEvent;
+    pointer?: PointerEvent;
   }) => {
     if (agent !== agentRef.current) {
       agentRef.current?.removeIndicate()
@@ -265,19 +380,25 @@ export const Inspector = function<Element = unknown>(props: InspectorProps<Eleme
     }
   })
 
-  const handleClickElement = useEffectEvent(({ agent, element, pointer }: {
+  const handleClickElement = useEffectEvent(({
+    agent,
+    element,
+    pointer,
+    editor,
+  }: {
     agent: InspectAgent<Element>;
     element?: Element;
-    pointer: PointerEvent;
+    pointer?: PointerEvent;
+    editor?: TrustedEditor;
   }) => {
     if (agent !== agentRef.current) {
       return
     }
 
     // only need stop event when it trigger by current agent
-    pointer.preventDefault()
-    pointer.stopPropagation()
-    pointer.stopImmediatePropagation()
+    pointer?.preventDefault()
+    pointer?.stopPropagation()
+    pointer?.stopImmediatePropagation()
 
     agent.removeIndicate()
 
@@ -308,7 +429,7 @@ export const Inspector = function<Element = unknown>(props: InspectorProps<Eleme
     }
 
     if (codeInfo && !onInspectElement && !disableLaunchEditor) {
-      gotoServerEditor(codeInfo)
+      gotoServerEditor(codeInfo, { editor })
     }
   })
 
@@ -329,4 +450,16 @@ export const Inspector = function<Element = unknown>(props: InspectorProps<Eleme
   })
 
   return (<>{children ?? null}</>)
+}
+
+interface InspectElementItem<Element = any> extends ElementItemInfo {
+  agent: InspectAgent<Element>;
+  element?: Element | null;
+}
+
+const contextPanelSizeLimit: InspectContextPanelShowParams['sizeLimit'] = {
+  minWidth: 160,
+  minHeight: 160,
+  maxWidth: 800,
+  maxHeight: 800,
 }

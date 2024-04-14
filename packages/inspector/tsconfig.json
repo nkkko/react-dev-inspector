@@ -17,6 +17,7 @@
     "paths": {
       "react-dev-inspector": ["src"],
       "@stories/*": ["src/.stories/*"],
+      "@react-dev-inspector/web-components": ["@react-dev-inspector/web-components/dist/types"],
     },
   },
   "include": [
@@ -26,6 +27,8 @@
   ],
   // https://www.typescriptlang.org/docs/handbook/project-references.html
   "references": [
+    { "path": "../web-components" },
+    { "path": "../launch-editor-endpoint" },
     { "path": "../babel-plugin" },
     { "path": "../middleware" },
     { "path": "../vite-plugin" },

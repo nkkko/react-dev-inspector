@@ -3,23 +3,23 @@
   "version": "2.1.0-beta.6",
   "sideEffects": false,
   "description": "dev-tool for inspect react components and jump to local IDE for component code.",
-  "main": "lib",
-  "module": "es",
-  "types": "es",
+  "main": "dist/cjs",
+  "module": "dist/esm",
+  "types": "dist/esm",
   "exports": {
     ".": {
-      "import": "./es/index.js",
-      "require": "./lib/index.js"
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
     },
-    "./plugins/babel": "./lib/plugins/babel.js",
-    "./plugins/vite": "./lib/plugins/vite.js",
-    "./plugins/webpack": "./lib/plugins/webpack.js",
-    "./plugins/umi": "./lib/plugins/umi.js",
-    "./plugins/umi/react-inspector": "./lib/plugins/umi.js",
-    "./plugins/ice": "./lib/plugins/ice.js"
+    "./plugins/babel": "./dist/cjs/plugins/babel.js",
+    "./plugins/vite": "./dist/cjs/plugins/vite.js",
+    "./plugins/webpack": "./dist/cjs/plugins/webpack.js",
+    "./plugins/umi": "./dist/cjs/plugins/umi.js",
+    "./plugins/umi/react-inspector": "./dist/cjs/plugins/umi.js",
+    "./plugins/ice": "./dist/cjs/plugins/ice.js"
   },
   "scripts": {
-    "test": "vitest run",
+    "test": "vitest run --passWithNoTests",
     "test:watch": "vitest watch",
     "clean": "rimraf coverage dist es lib build",
     "dev": "storybook dev -p 59762",
@@ -53,20 +53,19 @@
   "files": [
     "README.md",
     "src",
-    "es",
-    "lib"
+    "dist"
   ],
   "engines": {
     "node": ">=12.0.0"
   },
   "dependencies": {
     "@floating-ui/core": "^1.6.0",
+    "@react-dev-inspector/launch-editor-endpoint": "workspace:^",
     "@react-dev-inspector/web-components": "workspace:^",
     "@types/react-reconciler": "^0.28.8",
     "hotkeys-js": "^3.12.2",
     "lit": "^2.8.0",
-    "picocolors": "1.0.0",
-    "react-dev-utils": "12.0.1"
+    "picocolors": "1.0.0"
   },
   "peerDependencies": {
     "@react-dev-inspector/babel-plugin": "workspace:^",
@@ -109,7 +108,6 @@
     "@storybook/test": "8.1.5",
     "@types/node": "20.12.10",
     "@types/react": "18.0.26",
-    "@types/react-dev-utils": "9.0.11",
     "@types/react-dom": "18.0.9",
     "@types/react-reconciler": "0.28.0",
     "@vitejs/plugin-react": "4.0.3",

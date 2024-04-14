@@ -59,6 +59,7 @@
   "dependencies": {
     "@floating-ui/core": "^1.6.0",
     "@kobalte/core": "^0.13.2",
+    "@react-dev-inspector/launch-editor-endpoint": "workspace:^",
     "rxjs": "^8.0.0-alpha.14",
     "solid-element": "^1.8.0",
     "solid-js": "^1.8.17",

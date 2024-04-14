@@ -3,6 +3,7 @@
   "compilerOptions": {
     "rootDir": "src",
     "baseUrl": ".",
+    "outDir": "dist/types",
 
     "declaration": true,
 
@@ -23,5 +24,9 @@
     "src",
     "src/.stories/**/*",
     ".storybook",
+  ],
+  // https://www.typescriptlang.org/docs/handbook/project-references.html
+  "references": [
+    { "path": "../launch-editor-endpoint" },
   ],
 }

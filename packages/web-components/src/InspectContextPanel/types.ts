@@ -4,7 +4,6 @@ import {
 
 export type ElementInfoGenerator<Item extends ItemInfo = ItemInfo> = Generator<Item, void, void>
 export type ElementInfoGeneratorGetter<Item extends ItemInfo = ItemInfo> = () => Generator<Item, void, void>
-export type EditorType = 'VSCode' | 'WebStorm'
 
 export enum ElementChainMode {
   Render = 'Render',

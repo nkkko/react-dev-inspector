@@ -2,13 +2,16 @@
 import type { Fiber } from 'react-reconciler'
 import {
   Overlay,
+  type TagItem,
 } from '@react-dev-inspector/web-components'
 import {
   setupPointerListener,
   getElementCodeInfo,
   getElementFiberUpward,
+  getElementFiber,
   getElementInspect,
   genInspectChainFromFibers,
+  getPathWithLineNumber,
 } from '../utils'
 import type {
   InspectAgent,
@@ -54,15 +57,16 @@ export class DOMInspectAgent implements InspectAgent<DOMElement> {
     element: DOMElement;
     title?: string;
   }) {
+    if (!this.overlay) {
+      this.overlay = new Overlay()
+    }
+
     const codeInfo = this.findCodeInfo(element)
 
-    const relativePath = codeInfo?.relativePath
-    const absolutePath = codeInfo?.absolutePath
-
-    this.overlay?.inspect({
+    this.overlay.inspect({
       element,
       title,
-      info: relativePath ?? absolutePath,
+      info: getPathWithLineNumber(codeInfo),
     })
   }
 
@@ -99,7 +103,23 @@ export class DOMInspectAgent implements InspectAgent<DOMElement> {
   }
 
   public *getRenderChain(element: DOMElement): Generator<InspectChainItem<DOMElement>, unknown, void> {
-    let fiber: Fiber | undefined | null = this.findElementFiber(element)
+    let fiber: Fiber | undefined | null
+
+    while (element) {
+      fiber = getElementFiber(element)
+      if (fiber) {
+        break
+      }
+
+      yield {
+        agent: this,
+        element,
+        title: element.nodeName.toLowerCase(),
+        tags: getDOMElementTags(element),
+      }
+
+      element = element.parentElement as DOMElement
+    }
 
     function *fiberChain(): Generator<Fiber, void, void> {
       while (fiber) {
@@ -112,8 +132,10 @@ export class DOMInspectAgent implements InspectAgent<DOMElement> {
     }
 
     return yield * genInspectChainFromFibers<DOMElement>({
+      agent: this,
       fibers: fiberChain(),
       isAgentElement: this.isAgentElement,
+      getElementTags: getDOMElementTags,
     })
   }
 
@@ -131,8 +153,10 @@ export class DOMInspectAgent implements InspectAgent<DOMElement> {
     }
 
     return yield * genInspectChainFromFibers<DOMElement>({
+      agent: this,
       fibers: fiberChain(),
       isAgentElement: this.isAgentElement,
+      getElementTags: getDOMElementTags,
     })
   }
 
@@ -154,3 +178,30 @@ export class DOMInspectAgent implements InspectAgent<DOMElement> {
 
 
 export const domInspectAgent = new DOMInspectAgent()
+
+
+export const getDOMElementTags = (element: unknown): TagItem[] => {
+  const tags: TagItem[] = []
+
+  if (element instanceof HTMLElement) {
+    if (element.id) {
+      tags.push({
+        label: `#${element.id}`,
+        background: 'var(--color-tag-gray-1)',
+      })
+    }
+
+    let classList = ''
+    element.classList.forEach(className => {
+      classList += `.${className}`
+    })
+    if (classList) {
+      tags.push({
+        label: classList,
+        background: 'var(--color-tag-gray-1)',
+      })
+    }
+  }
+
+  return tags
+}

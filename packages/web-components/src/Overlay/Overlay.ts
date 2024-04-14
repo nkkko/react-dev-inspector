@@ -29,7 +29,7 @@ export class Overlay {
 
     const doc = currentWindow.document
     this.overlay = document.createElement('inspector-overlay')
-    this.overlay.setAttribute('popover', '')
+    // this.overlay.setAttribute('popover', '')
     doc.body.appendChild(this.overlay)
   }
 

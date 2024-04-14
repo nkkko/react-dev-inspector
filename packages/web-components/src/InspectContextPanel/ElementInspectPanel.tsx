@@ -10,6 +10,9 @@ import {
   Settings,
   Layers,
 } from 'lucide-solid'
+import type {
+  TrustedEditor,
+} from '@react-dev-inspector/launch-editor-endpoint'
 import {
   IconBox,
   LazyList,
@@ -28,7 +31,6 @@ import { styled } from '#utils'
 import {
   type ElementInfoGenerator,
   type ElementInfoGeneratorGetter,
-  type EditorType,
   ElementChainMode,
 } from './types'
 
@@ -40,7 +42,7 @@ export interface ElementInspectPanelProps<Item extends ItemInfo = ItemInfo> {
   onClickItem?: (item: Item) => void;
   onClickEditor?: (params: {
     item: Item;
-    editor: EditorType;
+    editor: TrustedEditor;
   }) => void | Promise<void>;
   onHoverItem?: (item: Item | null) => void;
   toSettingsPanel?: () => void;

@@ -3,6 +3,9 @@ import {
   Match,
 } from 'solid-js'
 import {
+  type TrustedEditor,
+} from '@react-dev-inspector/launch-editor-endpoint'
+import {
   type ItemInfo,
   ContextPanel,
   type DragPanelParams,
@@ -17,7 +20,6 @@ import {
   PanelType,
   ElementChainMode,
   type ElementInfoGeneratorGetter,
-  type EditorType,
 } from './types'
 
 
@@ -28,7 +30,7 @@ export interface InspectPanelProps<Item extends ItemInfo = ItemInfo> {
   onClickItem?: (item: Item) => void;
   onClickEditor?: (params: {
     item: Item;
-    editor: EditorType;
+    editor: TrustedEditor;
   }) => void | Promise<void>;
 }
 

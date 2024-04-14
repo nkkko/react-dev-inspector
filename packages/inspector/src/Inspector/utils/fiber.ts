@@ -274,7 +274,7 @@ const resolveFiberType = (type: any): (() => void) | null => {
  */
 const getDisplayName = (
   type: any,
-  fallbackName: string = '_Anonymous_',
+  fallbackName: string = '(anonymous)',
 ): string => {
   let displayName = fallbackName
   if (!type) {

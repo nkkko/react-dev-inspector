@@ -7,6 +7,9 @@ import {
   Copy,
 } from 'lucide-solid'
 import {
+  TrustedEditor,
+} from '@react-dev-inspector/launch-editor-endpoint'
+import {
   cn,
   styled,
   css,
@@ -35,7 +38,7 @@ export interface ElementItemProps<Item extends ItemInfo = ItemInfo> {
   index: number;
   onClickItem?: (item: Item) => void;
   onClickEditor?: (params: {
-    editor: EditorType;
+    editor: TrustedEditor;
     item: Item;
   }) => void | Promise<void>;
   onHoverItem?: (item: Item) => void;
@@ -145,7 +148,7 @@ export const ElementItem = <Item extends ItemInfo = ItemInfo>(props: ElementItem
               event.preventDefault()
               props.onClickEditor?.({
                 item: unwrap(props.item),
-                editor: 'VSCode',
+                editor: TrustedEditor.VSCode,
               })
             }}
           >
@@ -157,7 +160,7 @@ export const ElementItem = <Item extends ItemInfo = ItemInfo>(props: ElementItem
               event.preventDefault()
               props.onClickEditor?.({
                 item: unwrap(props.item),
-                editor: 'WebStorm',
+                editor: TrustedEditor.WebStorm,
               })
             }}
           >
@@ -253,8 +256,6 @@ interface CodeInfo {
    */
   absolutePath?: string;
 }
-
-type EditorType = 'VSCode' | 'WebStorm'
 
 const copyText = (text: string) => {
   return navigator.clipboard.writeText(text)

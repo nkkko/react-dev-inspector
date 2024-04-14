@@ -1,4 +1,7 @@
 import type { Fiber } from 'react-reconciler'
+import type {
+  TagItem,
+} from '@react-dev-inspector/web-components'
 
 
 export interface CodeInfo {
@@ -127,7 +130,7 @@ export interface InspectAgent<Element> {
    *
    * @TODO chain list will show in the Inspector's context-menu when right-click on the element.
    */
-  getRenderChain(element: Element): InspectChainGenerator;
+  getRenderChain(element: Element): InspectChainGenerator<Element>;
 
   /**
    * like {@link getRenderChain}, get elements from input element upward to render root,
@@ -136,7 +139,7 @@ export interface InspectAgent<Element> {
    *
    * @TODO chain list will show in the Inspector's context-menu when right-click on the element.
    */
-  getSourceChain(element: Element): InspectChainGenerator;
+  getSourceChain(element: Element): InspectChainGenerator<Element>;
 
   /**
    * get the element display name and title for show in indicator UI
@@ -176,7 +179,7 @@ export interface InspectAgent<Element> {
 }
 
 
-type InspectChainGenerator = Generator<InspectChainItem<Element>, (UpperRootElement | undefined | null), void>
+export type InspectChainGenerator<Element> = Generator<InspectChainItem<Element>, (UpperRootElement | undefined | null), void>
 
 type UpperRootElement = any
 
@@ -184,6 +187,7 @@ type UpperRootElement = any
  * chain item data in {@link InspectAgent.getRenderChain} / {@link InspectAgent.getSourceChain}
  */
 export interface InspectChainItem<Element> {
+  agent: InspectAgent<Element>;
   /**
    * for show indicator UI like hovered element
    *
@@ -203,8 +207,9 @@ export interface InspectChainItem<Element> {
   /**
    * for show in chain list,
    * typically display some marks like `Memo` / `ForwardRef`
+   *   or some DOM attributes like `id` / `class`
    */
-  tags?: (string | undefined | null)[];
+  tags?: TagItem[];
   /** for open in editor */
   codeInfo?: CodeInfo;
 }

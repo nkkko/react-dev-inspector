@@ -19,6 +19,9 @@ export interface TagObject {
   textColor?: string;
   /**
    * @default `var(--color-tag-lightblue-1)`
+   *
+   * > supported tag colors:
+   * > red / pink / orange / amber / yellow / lime / green / lightblue / cyan / blue / indigo / violet / purple / gray
    */
   background?: string;
 }

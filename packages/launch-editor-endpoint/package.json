@@ -1,8 +1,8 @@
 {
-  "name": "@react-dev-inspector/middleware",
+  "name": "@react-dev-inspector/launch-editor-endpoint",
   "version": "2.1.0-beta.6",
   "sideEffects": false,
-  "description": "express middleware for react-dev-inspector to launch local IDE",
+  "description": "middleware's endpoint and types for react-dev-inspector",
   "main": "dist/cjs",
   "module": "dist/esm",
   "types": "dist/esm",
@@ -11,11 +11,6 @@
       "types": "./dist/esm/index.d.ts",
       "import": "./dist/esm/index.js",
       "require": "./dist/cjs/index.js"
-    },
-    "./endpoint": {
-      "types": "./dist/esm/endpoint.d.ts",
-      "import": "./dist/esm/endpoint.js",
-      "require": "./dist/cjs/endpoint.js"
     }
   },
   "scripts": {
@@ -27,7 +22,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/zthxxx/react-dev-inspector.git",
-    "directory": "packages/middleware"
+    "directory": "packages/launch-editor-endpoint"
   },
   "publishConfig": {
     "access": "public",
@@ -44,16 +39,7 @@
     "src",
     "dist"
   ],
-  "engines": {
-    "node": ">=12.0.0"
-  },
-  "dependencies": {
-    "@react-dev-inspector/launch-editor-endpoint": "workspace:^",
-    "launch-editor": "2.8.0"
-  },
   "devDependencies": {
-    "@types/connect": "3.4.35",
-    "@types/express": "4.17.13",
     "@types/node": "20.12.10",
     "@zthxxx/tsconfig": "1.0.4",
     "npm-run-all": "4.1.5",

@@ -34,7 +34,7 @@ export class InspectContextPanel<Item extends ItemInfo = ItemInfo> {
 
     const doc = currentWindow.document
     this.#panel = document.createElement('inspect-context-panel')
-    this.#panel!.setAttribute('popover', '')
+    // this.#panel!.setAttribute('popover', '')
     doc.body.appendChild(this.#panel!)
   }
 
