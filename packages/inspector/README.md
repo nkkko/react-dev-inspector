@@ -93,7 +93,7 @@ then call your local IDE/Editor to open the source file.
 
 ## Articles about it
 
-- [chinese] [🎉 我点了页面上的元素，VSCode 乖乖打开了对应的组件？原理揭秘](https://juejin.cn/post/6901466406823575560)
+- [Chinese] [🎉 我点了页面上的元素，VSCode 乖乖打开了对应的组件？原理揭秘](https://juejin.cn/post/6901466406823575560)
 
 <br />
 

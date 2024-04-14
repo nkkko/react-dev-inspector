@@ -4,6 +4,8 @@
     "rootDir": ".",
     "baseUrl": ".",
 
+    "moduleResolution": "Node",
+
     "types": [
       "node",
     ],

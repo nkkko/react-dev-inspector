@@ -2,8 +2,8 @@
   "extends": "@zthxxx/tsconfig/tsconfig.json",
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "es",
     "baseUrl": ".",
+    "outDir": "dist/esm",
 
     "types": [
       "node",
@@ -17,7 +17,6 @@
     "paths": {
       "react-dev-inspector": ["src"],
       "@stories/*": ["src/.stories/*"],
-      "@react-dev-inspector/web-components": ["@react-dev-inspector/web-components/dist/types"],
     },
   },
   "include": [

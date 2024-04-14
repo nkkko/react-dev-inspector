@@ -13,7 +13,7 @@ import pkg from './package.json'
 export default defineConfig(() => {
   const input = 'src/index.ts'
   const sourcemap = false
-  const minify = false
+  const minify = true
 
   const extensions = ['.js', '.ts', '.jsx', '.tsx']
 
@@ -35,7 +35,9 @@ export default defineConfig(() => {
   const external = [
     // regexp for match subpath import
     /^solid-js/,
-    /^@kobalte\/core/,
+
+    // `@kobalte/core` will cause resolve error in Next.js example
+    // /^@kobalte\/core/,
 
     ...Object.keys(pkg.dependencies || {}),
     ...Object.keys('peerDependencies' in pkg

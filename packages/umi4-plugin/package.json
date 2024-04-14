@@ -3,9 +3,9 @@
   "version": "2.1.0-beta.6",
   "sideEffects": false,
   "description": "umi4 plugin for react-dev-inspector to add babel plugin and server middleware",
-  "main": "lib",
-  "module": "es",
-  "types": "es",
+  "main": "dist/cjs",
+  "module": "dist/esm",
+  "types": "dist/esm",
   "scripts": {
     "clean": "rimraf coverage dist es lib build",
     "build:esm": "tsc -p tsconfig.esm.json",
@@ -30,8 +30,7 @@
   "files": [
     "README.md",
     "src",
-    "es",
-    "lib"
+    "dist"
   ],
   "engines": {
     "node": ">=12.0.0"
