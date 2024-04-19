@@ -15,6 +15,7 @@ import {
 } from '#components'
 import {
   InspectContextPanelRoot,
+  InspectContextPanelTagName,
   type InspectContextPanelElement,
   type InspectContextPanelShowParams,
 } from './InspectContextPanelRoot'
@@ -27,13 +28,13 @@ export class InspectContextPanel<Item extends ItemInfo = ItemInfo> {
 
   constructor() {
     // ensure register with no-side-effect tree-shaking
-    customElement('inspect-context-panel', InspectContextPanelRoot)
+    customElement(InspectContextPanelTagName, InspectContextPanelRoot)
 
     // Find the root window, because overlays are positioned relative to it.
     const currentWindow = window.__REACT_DEVTOOLS_TARGET_WINDOW__ || window
 
     const doc = currentWindow.document
-    this.#panel = document.createElement('inspect-context-panel')
+    this.#panel = document.createElement(InspectContextPanelTagName)
     // this.#panel!.setAttribute('popover', '')
     doc.body.appendChild(this.#panel!)
   }

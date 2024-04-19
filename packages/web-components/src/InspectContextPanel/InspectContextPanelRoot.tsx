@@ -15,7 +15,7 @@ import {
   css,
   createStore,
 } from '#utils'
-import tailwindRoot from '../tailwind.css'
+import tailwindRoot from '../tailwind.less'
 import {
   InspectPanel,
   type InspectPanelProps,
@@ -123,8 +123,10 @@ const hostStyles = css`
   }
 `
 
+export const InspectContextPanelTagName = 'inspect-context-panel'
+
 /**
  * that's also no-side-effect for tree-shaking,
  * because it will call again in `ContextPanel` constructor
  */
-customElement('inspect-context-panel', InspectContextPanelRoot)
+customElement(InspectContextPanelTagName, InspectContextPanelRoot)

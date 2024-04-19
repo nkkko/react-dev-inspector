@@ -12,6 +12,9 @@ import type {
   BoxSizing,
 } from '#floating'
 import {
+  InspectContextPanelTagName,
+} from '../InspectContextPanel'
+import {
   InspectorOverlayRect,
 } from './OverlayRect'
 import {
@@ -41,6 +44,10 @@ export const InspectorOverlay: ComponentType<Record<string, never>> = (_props, {
     boundingRect?: Rect;
     /** target element margin/border/padding */
     boxSizing?: BoxSizing;
+    /**
+     * only show OverlayTips's corner hint message when no opened InspectContextPanel
+     */
+    hasInspectContextPanel?: boolean;
   }>({
     display: 'none',
     title: '',
@@ -68,6 +75,7 @@ export const InspectorOverlay: ComponentType<Record<string, never>> = (_props, {
 
     const boxSizing = getBoxSizing(element)
     const boundingRect = getBoundingRect(element)
+    const hasInspectContextPanel = document.getElementsByTagName(InspectContextPanelTagName).length > 0
 
     setInspectInfo({
       display: 'block',
@@ -75,6 +83,7 @@ export const InspectorOverlay: ComponentType<Record<string, never>> = (_props, {
       info,
       boundingRect,
       boxSizing,
+      hasInspectContextPanel,
     })
   }
 
@@ -109,6 +118,7 @@ export const InspectorOverlay: ComponentType<Record<string, never>> = (_props, {
         info={inspectInfo().info}
         boundingRect={inspectInfo().boundingRect}
         boxSizing={inspectInfo().boxSizing}
+        showCornerHint={!inspectInfo().hasInspectContextPanel}
       />
       <style>
         {hostStyles}
@@ -127,8 +137,10 @@ const hostStyles = css`
   }
 `
 
+export const InspectorOverlayTagName = 'inspector-overlay'
+
 /**
  * that's also no-side-effect for tree-shaking,
  * because it will call again in `Overlay` constructor
  */
-customElement('inspector-overlay', InspectorOverlay)
+customElement(InspectorOverlayTagName, InspectorOverlay)

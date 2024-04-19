@@ -149,7 +149,7 @@ export const CornerItems = () => {
     <For
       each={positions()}
     >
-      {position => {
+      {(position, index) => {
         const boundingRect: Rect = {
           ...position,
           width: itemSize,
@@ -163,9 +163,10 @@ export const CornerItems = () => {
               boxSizing={boxSizing}
             />
             <InspectorOverlayTip
-              title='div in <Card>'
+              title={(index() % 2) ? 'div in <Card>' : 'p'}
               boundingRect={boundingRect}
               boxSizing={boxSizing}
+              showCornerHint
             />
           </>
         )
@@ -275,7 +276,8 @@ export const MoveableDragItem: StoryFn<{ itemSize: 'normal' | 'full' | 'large' }
       />
       <InspectorOverlayTip
         title='div in <Card>'
-        info='relative/path/to/packages/component.tsx'
+        info='longlonglonglonglonglonglonglong/relative/path/to/packages/component.tsx'
+        showCornerHint
         {...sizing()}
       />
     </div>

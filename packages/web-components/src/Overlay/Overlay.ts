@@ -11,6 +11,7 @@ import {
 } from './utils'
 import {
   InspectorOverlay,
+  InspectorOverlayTagName,
   type InspectorOverlayElement,
 } from './InspectorOverlay'
 
@@ -21,14 +22,14 @@ export class Overlay {
 
   constructor() {
     // ensure register with no-side-effect tree-shaking
-    customElement('inspector-overlay', InspectorOverlay)
+    customElement(InspectorOverlayTagName, InspectorOverlay)
 
     // Find the root window, because overlays are positioned relative to it.
     const currentWindow = window.__REACT_DEVTOOLS_TARGET_WINDOW__ || window
     this.window = currentWindow
 
     const doc = currentWindow.document
-    this.overlay = document.createElement('inspector-overlay')
+    this.overlay = document.createElement(InspectorOverlayTagName)
     // this.overlay.setAttribute('popover', '')
     doc.body.appendChild(this.overlay)
   }

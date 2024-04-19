@@ -47,7 +47,17 @@ export interface InspectParams<Element = DOMElement> {
   codeInfo?: CodeInfo;
   /** react component name for dom element */
   name?: string;
+  /**
+   * user chosen prefer editor
+   *
+   * > add in version `v2.1.0`
+   */
+  editor?: TrustedEditor;
 }
+
+type OnInspectElementParams<Element> =
+  & Omit<Required<InspectParams<Element>>, 'editor'>
+  & Pick<InspectParams<Element>, 'editor'>
 
 export interface InspectorProps<Element> {
   /**
@@ -123,7 +133,7 @@ export interface InspectorProps<Element> {
    *
    * > add in version `v2.0.0`
    */
-  onInspectElement?: (params: Required<InspectParams<Element>>) => void;
+  onInspectElement?: (params: OnInspectElementParams<Element>) => void;
 
   /** Callback when hovering on an element */
   onHoverElement?: (params: InspectParams<Element>) => void;
@@ -417,6 +427,7 @@ export const Inspector = function<Element = unknown>(props: InspectorProps<Eleme
       fiber,
       codeInfo,
       name: nameInfo?.name,
+      editor,
     })
 
     if (fiber && codeInfo) {
@@ -425,6 +436,7 @@ export const Inspector = function<Element = unknown>(props: InspectorProps<Eleme
         fiber,
         codeInfo,
         name: nameInfo?.name ?? '',
+        editor,
       })
     }
 

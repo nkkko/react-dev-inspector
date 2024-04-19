@@ -77,12 +77,60 @@ const demoItems: ElementItemProps['item'][] = [
     title: '',
     tags: [
       {
-        label: 'Tag1',
-        background: 'hsl(var(--error))',
+        label: 'gray',
+        background: 'var(--color-tag-gray-1)',
       },
       {
-        label: 'Tag2',
-        background: 'hsl(var(--error))',
+        label: 'red',
+        background: 'var(--color-tag-red-1)',
+      },
+      {
+        label: 'pink',
+        background: 'var(--color-tag-pink-1)',
+      },
+      {
+        label: 'orange',
+        background: 'var(--color-tag-orange-1)',
+      },
+      {
+        label: 'amber',
+        background: 'var(--color-tag-amber-1)',
+      },
+      {
+        label: 'yellow',
+        background: 'var(--color-tag-yellow-1)',
+      },
+      {
+        label: 'lime',
+        background: 'var(--color-tag-lime-1)',
+      },
+      {
+        label: 'green',
+        background: 'var(--color-tag-green-1)',
+      },
+      {
+        label: 'cyan',
+        background: 'var(--color-tag-cyan-1)',
+      },
+      {
+        label: 'lightblue',
+        background: 'var(--color-tag-lightblue-1)',
+      },
+      {
+        label: 'blue',
+        background: 'var(--color-tag-blue-1)',
+      },
+      {
+        label: 'indigo',
+        background: 'var(--color-tag-indigo-1)',
+      },
+      {
+        label: 'violet',
+        background: 'var(--color-tag-violet-1)',
+      },
+      {
+        label: 'purple',
+        background: 'var(--color-tag-purple-1)',
       },
     ],
   },

@@ -56,6 +56,8 @@ export interface Pointer {
  *   and its target element  (like DOM, Three.js etc.)
  * - collect inspection info from its element  (like name, code source position etc.)
  * - show/hide indicator UI on element  (like highlight element, show tooltip for name or code position etc.)
+ *
+ * > add in version `v2.1.0`
  */
 export interface InspectAgent<Element> {
   /**

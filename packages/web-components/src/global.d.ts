@@ -7,7 +7,7 @@ declare module 'global' {
 }
 
 
-declare module '*/tailwind.css' {
+declare module '*/tailwind.less' {
   const stylesheet: string;
   export default stylesheet;
 }
