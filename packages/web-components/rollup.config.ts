@@ -1,7 +1,8 @@
 import ts from 'typescript'
 import { defineConfig } from 'rollup'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
-import terser from '@rollup/plugin-terser'
+import alias from '@rollup/plugin-alias'
+import { minify } from 'rollup-plugin-esbuild'
 import postcss from 'rollup-plugin-postcss'
 import { babel, type RollupBabelInputPluginOptions } from '@rollup/plugin-babel'
 import { dts } from 'rollup-plugin-dts'
@@ -13,7 +14,7 @@ import pkg from './package.json'
 export default defineConfig(() => {
   const input = 'src/index.ts'
   const sourcemap = false
-  const minify = true
+  const isMinify = !process.env.DISABLE_BUILD_MINIFY
 
   const extensions = ['.js', '.ts', '.jsx', '.tsx']
 
@@ -35,9 +36,7 @@ export default defineConfig(() => {
   const external = [
     // regexp for match subpath import
     /^solid-js/,
-
-    // `@kobalte/core` will cause resolve error in Next.js example
-    // /^@kobalte\/core/,
+    /^@kobalte\/core/,
 
     ...Object.keys(pkg.dependencies || {}),
     ...Object.keys('peerDependencies' in pkg
@@ -64,7 +63,18 @@ export default defineConfig(() => {
         },
       ],
       plugins: [
-        minify && terser(),
+        isMinify && minify({
+          banner: `'use client';`,
+        }),
+
+        alias({
+          entries: [
+            {
+              find: /^(?<file>.*?)\.(?<ext>css|less)\?inline$/,
+              replacement: '$<file>.$<ext>',
+            },
+          ],
+        }),
 
         babel({
           extensions,

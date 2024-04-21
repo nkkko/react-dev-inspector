@@ -13,6 +13,8 @@ export interface IconBoxProps {
   /** default is 14 */
   size?: number;
   onClick?: (e: MouseEvent) => void;
+  onPointerEnter?: (e: PointerEvent) => void;
+  onPointerLeave?: (e: PointerEvent) => void;
   forwardProps?: JSX.HTMLAttributes<HTMLDivElement>;
 }
 
@@ -35,6 +37,8 @@ export const IconBox = (props: IconBoxProps) => {
         ...props.style,
       }}
       onClick={props.onClick}
+      onPointerEnter={props.onPointerEnter}
+      onPointerLeave={props.onPointerLeave}
     >
       {props.children}
     </div>

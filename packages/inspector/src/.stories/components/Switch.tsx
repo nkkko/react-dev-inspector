@@ -1,5 +1,3 @@
-'use client'
-
 /**
  * https://ui.shadcn.com/docs/components/switch
  */

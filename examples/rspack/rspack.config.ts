@@ -1,14 +1,22 @@
-import type { Configuration } from '@rspack/cli'
+import {
+  type RspackOptions,
+  DefinePlugin,
+  ProgressPlugin,
+  HtmlRspackPlugin,
+} from '@rspack/core'
+import ReactRefreshPlugin from '@rspack/plugin-react-refresh'
 import { launchEditorMiddleware } from '@react-dev-inspector/middleware'
 
 const isDev = process.env.NODE_ENV === 'development'
 const publicPath = isDev ? '/' : '/rspack/'
 
-const config: Configuration = {
+const config: RspackOptions = ({
   context: process.cwd(),
   devServer: {
     setupMiddlewares(middlewares) {
-      /** react-dev-inspector server config for rspack */
+      /**
+       * react-dev-inspector server config for rspack
+       */
       middlewares.unshift(launchEditorMiddleware)
       return middlewares
     },
@@ -16,18 +24,6 @@ const config: Configuration = {
 
   entry: {
     main: './src/main.tsx',
-  },
-  builtins: {
-    html: [
-      {
-        template: './index.html',
-      },
-    ],
-    emotion: {
-      sourceMap: true,
-      autoLabel: 'always',
-      labelFormat: '[local]',
-    },
   },
   output: {
     publicPath,
@@ -39,6 +35,16 @@ const config: Configuration = {
   devtool: false,
   optimization: {
     minimize: false,
+  },
+
+  resolve: {
+    extensions: [
+      '...',
+      '.ts',
+      '.tsx',
+      '.css',
+      '.less',
+    ],
   },
   module: {
     rules: [
@@ -55,6 +61,7 @@ const config: Configuration = {
             options: {
               postcssOptions: {
                 plugins: {
+                  'tailwindcss/nesting': {},
                   tailwindcss: {},
                   autoprefixer: {},
                 },
@@ -64,23 +71,44 @@ const config: Configuration = {
         ],
       },
 
-      /**
-       * NOTE: the following `@react-dev-inspector/babel-plugin` is optional,
-       *       only use for online demo site,
-       *       you can remove it from your local development config.
-       */
       {
-        test: isDev
-          ? () => false
-          : /\.tsx$/,
-        loader: 'babel-loader',
+        test: /\.tsx?$/,
+        exclude: [/[\\/]node_modules[\\/]/],
+        loader: 'builtin:swc-loader',
         options: {
-          presets: ['@babel/preset-typescript'],
-          plugins: ['@react-dev-inspector/babel-plugin'],
+          sourceMap: isDev,
+          jsc: {
+            parser: {
+              syntax: 'typescript',
+              decorators: true,
+              jsx: true,
+            },
+            externalHelpers: true,
+            transform: {
+              decoratorMetadata: true,
+              // useDefineForClassFields: true,
+              react: {
+                runtime: 'automatic',
+                development: isDev,
+                // https://www.rspack.dev/blog/announcing-0-4#deprecating-builtinreactrefresh
+                refresh: isDev,
+              },
+            },
+          },
         },
       },
     ],
   },
-}
+  plugins: [
+    new DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+    }),
+    new ProgressPlugin({}),
+    new HtmlRspackPlugin({
+      template: './index.html',
+    }),
+    isDev && new ReactRefreshPlugin(),
+  ],
+})
 
 export default config

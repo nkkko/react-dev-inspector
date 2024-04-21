@@ -65,7 +65,7 @@ export interface InspectAgent<Element> {
    *
    * Agent need setup event listeners to collect user interaction on their target renderer (like DOM, React Native, React Three.js etc.)
    */
-  activate(params: {
+  activate: (params: {
     /**
      * when hovered onto a element
      * trigger it like on PointerMove on PointerOver event.
@@ -85,7 +85,7 @@ export interface InspectAgent<Element> {
      *   and the `Click` event will use to trigger the inspection and remove event listeners (by deactivate agent).
      */
     onClick: (params: { element?: Element; pointer: PointerEvent }) => void;
-  }): void;
+  }) => void;
 
 
   /**
@@ -93,7 +93,7 @@ export interface InspectAgent<Element> {
    *
    * to clear agent's indicators, remove event listeners, release resources and reset states
    */
-  deactivate(): void;
+  deactivate: () => void;
 
   /**
    * get the top layer element for coordinate,
@@ -146,7 +146,7 @@ export interface InspectAgent<Element> {
   /**
    * get the element display name and title for show in indicator UI
    */
-  getNameInfo(element: Element): (
+  getNameInfo: (element: Element) => (
     | undefined
     | {
       /** element's constructor name */
@@ -156,7 +156,7 @@ export interface InspectAgent<Element> {
     }
   );
 
-  findCodeInfo(element: Element): CodeInfo | undefined;
+  findCodeInfo: (element: Element) => CodeInfo | undefined;
 
   /**
    * [optional] find the nearest react fiber from the element's render tree,
@@ -167,17 +167,18 @@ export interface InspectAgent<Element> {
   /**
    * show a indicator UI for the element on page
    */
-  indicate(params: {
+  indicate: (params: {
     element: Element;
+    codeInfo?: CodeInfo;
     pointer?: PointerEvent;
     name?: string;
     title?: string;
-  }): void;
+  }) => void;
 
   /**
    * hide agent's indicator UI
    */
-  removeIndicate(): void;
+  removeIndicate: () => void;
 }
 
 

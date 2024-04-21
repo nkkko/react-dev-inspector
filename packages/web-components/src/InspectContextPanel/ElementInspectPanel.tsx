@@ -51,10 +51,11 @@ export interface ElementInspectPanelProps<Item extends ItemInfo = ItemInfo> {
 export const ElementInspectPanel = <Item extends ItemInfo = ItemInfo>(props: ElementInspectPanelProps<Item>) => {
   const [selectedLayers, setSelectedLayers] = createSignal<Partial<Record<ElementChainMode, number>>>({})
   const [listElement, setListElement] = createSignal<JSX.Element | null>(null)
+  let layerFirstItemsCache: Record<number, Item> = {}
 
   const selectedLayer = () => selectedLayers()[props.elementChainMode] ?? 0
 
-  const elementChainGenerator = () => {
+  const getCurrentLayerChain = () => {
     const layer = props.layers[selectedLayer()]
     return layer?.() ?? []
   }
@@ -78,7 +79,7 @@ export const ElementInspectPanel = <Item extends ItemInfo = ItemInfo>(props: Ele
   }
 
   const getListElement = () => {
-    const generator = getListItem(elementChainGenerator())
+    const generator = getListItem(getCurrentLayerChain())
 
     return (
       <LazyList.List
@@ -98,8 +99,27 @@ export const ElementInspectPanel = <Item extends ItemInfo = ItemInfo>(props: Ele
   })
 
   createEffect(() => {
+    layerFirstItemsCache = (props.layers, {})
+  })
+
+  createEffect(() => {
     setListElement(getListElement())
   })
+
+  const getLayerFirstItem = (index: number): Item | undefined => {
+    if (layerFirstItemsCache[index]) {
+      return layerFirstItemsCache[index]
+    }
+
+    const chain = props.layers[index]?.()
+    const first = chain?.next()
+    if (first.done || !first.value) {
+      return
+    }
+    layerFirstItemsCache[index] = first.value
+
+    return first.value
+  }
 
   return (
     <PanelContainer>
@@ -111,7 +131,12 @@ export const ElementInspectPanel = <Item extends ItemInfo = ItemInfo>(props: Ele
         >
           <Tabs.List data-draggable-block>
             <Tooltip
-              content={'List elements as render hierarchy. (root at bottom)'}
+              content={(
+                <span>
+                  List elements as render hierarchy. <br />
+                  (root at bottom)
+                </span>
+              )}
               rootProps={{
                 placement: 'top-start',
                 shift: -40,
@@ -125,7 +150,12 @@ export const ElementInspectPanel = <Item extends ItemInfo = ItemInfo>(props: Ele
               </Tabs.Trigger>
             </Tooltip>
             <Tooltip
-              content={'List elements as source-code hierarchy. (root at bottom)'}
+              content={(
+                <span>
+                  List elements as source-code hierarchy. <br />
+                  (root at bottom)
+                </span>
+              )}
               rootProps={{
                 placement: 'top-start',
                 shift: -40,
@@ -170,7 +200,12 @@ export const ElementInspectPanel = <Item extends ItemInfo = ItemInfo>(props: Ele
           <Layer.LayerSide data-draggable-block>
             <Layer.Title>
               <Tooltip
-                content='Layers'
+                content={(
+                  <span>
+                    Layers, <br />
+                    floating at same inspection spot
+                  </span>
+                )}
               >
                 <Layers size={16} strokeWidth={1} />
               </Tooltip>
@@ -194,6 +229,15 @@ export const ElementInspectPanel = <Item extends ItemInfo = ItemInfo>(props: Ele
                             ...selects,
                             [props.elementChainMode]: index(),
                           }))
+                        }}
+                        onPointerEnter={() => {
+                          const first = getLayerFirstItem(index())
+                          if (first) {
+                            props.onHoverItem?.(first)
+                          }
+                        }}
+                        onPointerLeave={() => {
+                          props.onHoverItem?.(null)
                         }}
                       >
                         <Layer.LayerItemText>

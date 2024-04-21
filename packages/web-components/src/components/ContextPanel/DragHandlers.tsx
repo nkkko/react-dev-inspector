@@ -22,7 +22,7 @@ export const DragHandlers = (props: DragHandlersProps) => {
     <>
       {/* 4 x Border Handlers ↑ → ↓ ← */}
       <div
-        class={`absolute top-0 left-0 z-10 w-full [&.dragging]:bg-red cursor-ns-resize`}
+        class={`absolute top-0 left-0 z-10 w-full cursor-ns-resize`}
         style={{ height: borderSize() }}
         data-resize-handler
         data-resize-border-top

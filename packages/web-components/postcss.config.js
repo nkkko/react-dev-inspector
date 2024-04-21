@@ -2,7 +2,7 @@
 // https://tailwindcss.com/docs/using-with-preprocessors
 
 
-const isBuild = Boolean(process.env.TAILWIND_BUILD)
+const isMinify = !process.env.DISABLE_BUILD_MINIFY
 
 /** @type {import('postcss-load-config').Config} */
 module.exports = {
@@ -11,6 +11,6 @@ module.exports = {
     'tailwindcss/nesting': {},
     tailwindcss: {},
     autoprefixer: {},
-    cssnano: isBuild && {},
+    cssnano: isMinify && {},
   },
 }

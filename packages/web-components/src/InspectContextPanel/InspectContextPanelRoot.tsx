@@ -15,7 +15,7 @@ import {
   css,
   createStore,
 } from '#utils'
-import tailwindRoot from '../tailwind.less'
+import tailwindRoot from '../tailwind.less?inline'
 import {
   InspectPanel,
   type InspectPanelProps,

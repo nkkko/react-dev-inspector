@@ -1,14 +1,14 @@
 import type { Config } from 'tailwindcss'
 import tailwindAnimate from 'tailwindcss-animate'
 
-const isBuild = Boolean(process.env.TAILWIND_BUILD)
+const isMinify = !process.env.DISABLE_BUILD_MINIFY
 
 /**
  * https://www.solid-ui.com/docs/installation/manual#configure-tailwindconfigjs
  */
 export default {
   darkMode: ['class', '[data-kb-theme="dark"]'],
-  content: isBuild
+  content: isMinify
     ? [
       './src/**/*.{ts,tsx}',
       '!**/.stories/**/*',

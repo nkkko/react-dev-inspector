@@ -31,7 +31,7 @@ import type {
 } from './types'
 
 
-const defaultInspectAgents = [
+const defaultInspectAgents: InspectAgent<any>[] = [
   domInspectAgent,
 ]
 
@@ -55,7 +55,7 @@ export interface InspectParams<Element = DOMElement> {
   editor?: TrustedEditor;
 }
 
-type OnInspectElementParams<Element> =
+export type OnInspectElementParams<Element> =
   & Omit<Required<InspectParams<Element>>, 'editor'>
   & Pick<InspectParams<Element>, 'editor'>
 
@@ -159,7 +159,7 @@ export interface InspectorProps<Element> {
   disableLaunchEditor?: boolean;
 }
 
-export const Inspector = function<Element = unknown>(props: InspectorProps<Element>) {
+export const Inspector = function<Element = any>(props: InspectorProps<Element>) {
   const {
     keys,
     onHoverElement,
@@ -280,6 +280,11 @@ export const Inspector = function<Element = unknown>(props: InspectorProps<Eleme
       handleHoverElement({
         agent: item.agent,
         element: item.element,
+        nameInfo: {
+          name: item.title,
+          title: item.title,
+        },
+        codeInfo: item.codeInfo,
       })
     }
 
@@ -297,6 +302,11 @@ export const Inspector = function<Element = unknown>(props: InspectorProps<Eleme
       handleClickElement({
         agent: item.agent,
         element: item.element,
+        codeInfo: item.codeInfo,
+        nameInfo: {
+          name: item.title,
+          title: item.title,
+        },
         editor,
       })
     }
@@ -334,19 +344,33 @@ export const Inspector = function<Element = unknown>(props: InspectorProps<Eleme
     window.removeEventListener('contextmenu', onContextMenuEvent, { capture: true })
   })
 
-  const handleHoverElement = useEffectEvent(({ agent, element, pointer }: {
+  const handleHoverElement = useEffectEvent(({
+    agent,
+    element,
+    nameInfo,
+    codeInfo,
+    pointer,
+  }: {
     agent: InspectAgent<Element>;
     element: Element;
     pointer?: PointerEvent;
+    nameInfo?: {
+      /** element's constructor name */
+      name: string;
+      /** display to describe the element as short */
+      title: string;
+    };
+    codeInfo?: CodeInfo;
   }) => {
     if (agent !== agentRef.current) {
       agentRef.current?.removeIndicate()
       agentRef.current = agent
     }
 
-    const nameInfo = agent.getNameInfo(element)
+    nameInfo ??= agent.getNameInfo(element)
     agent.indicate({
       element,
+      codeInfo,
       pointer,
       name: nameInfo?.name,
       title: nameInfo?.title,
@@ -356,14 +380,14 @@ export const Inspector = function<Element = unknown>(props: InspectorProps<Eleme
       return
     }
 
-    const codeInfo = agent.findCodeInfo(element)
+    codeInfo ??= agent.findCodeInfo(element)
     const fiber = agent.findElementFiber?.(element)
 
     onHoverElement({
       element,
       fiber,
       codeInfo,
-      name: nameInfo?.name ?? '',
+      name: nameInfo?.name ?? nameInfo?.title ?? '',
     })
   })
 
@@ -394,11 +418,20 @@ export const Inspector = function<Element = unknown>(props: InspectorProps<Eleme
     agent,
     element,
     pointer,
+    nameInfo,
+    codeInfo,
     editor,
   }: {
     agent: InspectAgent<Element>;
     element?: Element;
     pointer?: PointerEvent;
+    nameInfo?: {
+      /** element's constructor name */
+      name: string;
+      /** display to describe the element as short */
+      title: string;
+    };
+    codeInfo?: CodeInfo;
     editor?: TrustedEditor;
   }) => {
     if (agent !== agentRef.current) {
@@ -416,8 +449,8 @@ export const Inspector = function<Element = unknown>(props: InspectorProps<Eleme
       return
     }
 
-    const nameInfo = agent.getNameInfo(element)
-    const codeInfo = agent.findCodeInfo(element)
+    nameInfo ??= agent.getNameInfo(element)
+    codeInfo ??= agent.findCodeInfo(element)
     const fiber = agent.findElementFiber?.(element)
 
     deactivate()
@@ -435,7 +468,7 @@ export const Inspector = function<Element = unknown>(props: InspectorProps<Eleme
         element,
         fiber,
         codeInfo,
-        name: nameInfo?.name ?? '',
+        name: nameInfo?.name ?? nameInfo?.title ?? '',
         editor,
       })
     }

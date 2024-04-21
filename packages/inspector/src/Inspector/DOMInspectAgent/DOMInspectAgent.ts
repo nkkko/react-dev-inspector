@@ -1,3 +1,4 @@
+'use client'
 
 import type { Fiber } from 'react-reconciler'
 import {
@@ -14,6 +15,7 @@ import {
   getPathWithLineNumber,
 } from '../utils'
 import type {
+  CodeInfo,
   InspectAgent,
   InspectChainItem,
   Pointer,
@@ -26,7 +28,7 @@ export class DOMInspectAgent implements InspectAgent<DOMElement> {
   protected overlay?: Overlay
   protected unsubscribeListener?: () => void
 
-  public activate({
+  public activate = ({
     onHover,
     onPointerDown,
     onClick,
@@ -34,7 +36,7 @@ export class DOMInspectAgent implements InspectAgent<DOMElement> {
     onHover: (params: { element: DOMElement; pointer: PointerEvent }) => void;
     onPointerDown: (params: { element?: DOMElement; pointer: PointerEvent }) => void;
     onClick: (params: { element?: DOMElement; pointer: PointerEvent }) => void;
-  }) {
+  }) => {
     this.deactivate()
     this.overlay = new Overlay()
 
@@ -45,7 +47,7 @@ export class DOMInspectAgent implements InspectAgent<DOMElement> {
     })
   }
 
-  public deactivate() {
+  public deactivate = () => {
     this.overlay?.remove()
     this.overlay = undefined
 
@@ -53,15 +55,16 @@ export class DOMInspectAgent implements InspectAgent<DOMElement> {
     this.unsubscribeListener = undefined
   }
 
-  public indicate({ element, title }: {
+  public indicate = ({ element, codeInfo, title }: {
     element: DOMElement;
     title?: string;
-  }) {
+    codeInfo?: CodeInfo;
+  }) => {
     if (!this.overlay) {
       this.overlay = new Overlay()
     }
 
-    const codeInfo = this.findCodeInfo(element)
+    codeInfo ??= this.findCodeInfo(element)
 
     this.overlay.inspect({
       element,
@@ -70,15 +73,15 @@ export class DOMInspectAgent implements InspectAgent<DOMElement> {
     })
   }
 
-  public removeIndicate() {
+  public removeIndicate = () => {
     this.overlay?.hide()
   }
 
-  public getTopElementFromPointer(pointer: Pointer): DOMElement | undefined | null {
+  public getTopElementFromPointer = (pointer: Pointer): DOMElement | undefined | null => {
     return document.elementFromPoint(pointer.clientX, pointer.clientY) as DOMElement | undefined
   }
 
-  public getTopElementsFromPointer(pointer: Pointer): DOMElement[] {
+  public getTopElementsFromPointer = (pointer: Pointer): DOMElement[] => {
     const elements = document.elementsFromPoint(pointer.clientX, pointer.clientY) as DOMElement[]
     const parents = new Set<DOMElement | null>([null, document.documentElement, document.body])
 
@@ -160,18 +163,18 @@ export class DOMInspectAgent implements InspectAgent<DOMElement> {
     })
   }
 
-  public getNameInfo(element: DOMElement): {
+  public getNameInfo = (element: DOMElement): {
     name: string;
     title: string;
-  } {
+  } => {
     return getElementInspect(element)
   }
 
-  public findCodeInfo(element: DOMElement) {
+  public findCodeInfo = (element: DOMElement) => {
     return getElementCodeInfo(element)
   }
 
-  public findElementFiber(element: DOMElement): Fiber | undefined {
+  public findElementFiber = (element: DOMElement): Fiber | undefined => {
     return getElementFiberUpward(element)
   }
 }

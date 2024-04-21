@@ -1,11 +1,10 @@
-
 import { useState } from 'react'
+import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Inspector } from 'react-dev-inspector'
 import inspectPreview from '@images/inspect.gif'
 import workingPipeline from '@images/working-pipeline.svg'
-import { isDev, handleInspectOnline } from '@utils'
+import { isDev } from '@utils'
 import { Feature, Features } from '@components/features'
 import { StackBlitz } from '@components/stack-blitz'
 import { Marquee } from '@components/marquee'
@@ -18,16 +17,21 @@ import {
   FrameworkLogos,
 } from './items'
 
+
+const OnlineInspector = dynamic(
+  () => import('@components/online-inspector').then(({ OnlineInspector }) => OnlineInspector),
+  { ssr: false },
+)
+
+
 export const LandingPage = () => {
   const [active, setActive] = useState(false)
 
   return (
     <div className='home-content'>
-      <Inspector
-        disable={false}
+      <OnlineInspector
         active={active}
-        onActiveChange={setActive}
-        onInspectElement={handleInspectOnline}
+        setActive={setActive}
       />
       <div className='content-container'>
         <h1 className='headline'>

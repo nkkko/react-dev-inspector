@@ -12,10 +12,11 @@ export const ShowPage = () => {
   const [active, setActive] = useState(false)
 
   return (
-    <Inspector
-      active={active}
-      onActiveChange={setActive}
-    >
+    <>
+      <Inspector
+        active={active}
+        onActiveChange={setActive}
+      />
       <S.Base>
         <S.GithubCorner
           href={projectRepo}
@@ -87,6 +88,6 @@ export const ShowPage = () => {
           </div>
         </div>
       </S.Base>
-    </Inspector>
+    </>
   )
 }

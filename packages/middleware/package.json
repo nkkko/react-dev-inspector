@@ -6,18 +6,6 @@
   "main": "dist/cjs",
   "module": "dist/esm",
   "types": "dist/esm",
-  "exports": {
-    ".": {
-      "types": "./dist/esm/index.d.ts",
-      "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js"
-    },
-    "./endpoint": {
-      "types": "./dist/esm/endpoint.d.ts",
-      "import": "./dist/esm/endpoint.js",
-      "require": "./dist/cjs/endpoint.js"
-    }
-  },
   "scripts": {
     "clean": "rimraf coverage dist es lib build",
     "build:esm": "tsc -p tsconfig.esm.json",
