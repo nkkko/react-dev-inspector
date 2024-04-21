@@ -1,6 +1,6 @@
 {
   "name": "@react-dev-inspector/middleware",
-  "version": "2.1.0-beta.6",
+  "version": "2.1.0-beta.7",
   "sideEffects": false,
   "description": "express middleware for react-dev-inspector to launch local IDE",
   "main": "dist/cjs",

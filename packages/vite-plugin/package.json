@@ -1,6 +1,6 @@
 {
   "name": "@react-dev-inspector/vite-plugin",
-  "version": "2.1.0-beta.6",
+  "version": "2.1.0-beta.7",
   "sideEffects": false,
   "description": "vite plugin for react-dev-inspector to add server middleware. support vite2/vite3/vite4",
   "main": "dist/cjs",
