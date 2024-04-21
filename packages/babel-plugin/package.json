@@ -50,7 +50,7 @@
     "@types/babel__generator": "7.6.4",
     "@types/babel__traverse": "7.18.3",
     "@types/node": "20.12.10",
-    "@zthxxx/tsconfig": "1.0.4",
+    "@zthxxx/tsconfig": "1.0.5",
     "babel-plugin-tester": "10.1.0",
     "fs-extra": "11.1.0",
     "globby": "11.1.0",

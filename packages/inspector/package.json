@@ -111,7 +111,7 @@
     "@types/react-dom": "18.0.9",
     "@types/react-reconciler": "0.28.0",
     "@vitejs/plugin-react": "4.0.3",
-    "@zthxxx/tsconfig": "1.0.4",
+    "@zthxxx/tsconfig": "1.0.5",
     "autoprefixer": "10.4.14",
     "class-variance-authority": "0.6.1",
     "clsx": "1.2.1",

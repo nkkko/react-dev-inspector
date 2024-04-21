@@ -32,7 +32,7 @@
     "@types/react": "18.0.26",
     "@types/react-dom": "18.0.9",
     "@umijs/preset-umi": "4.0.72",
-    "@zthxxx/tsconfig": "1.0.4",
+    "@zthxxx/tsconfig": "1.0.5",
     "autoprefixer": "10.4.14",
     "npm-run-all": "4.1.5",
     "postcss": "8.4.26",
