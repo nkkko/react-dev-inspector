@@ -18,6 +18,7 @@ export default withNextra({
     ignoreDuringBuilds: true,
   },
   output: 'export',
+  distDir: 'dist',
   images: {
     /**
      * Error: Image Optimization using Next.js' default loader is not compatible with `next export`.

@@ -43,7 +43,7 @@ const defaultInspectAgents: InspectAgent<any>[] = [
 /**
  * the inspect meta info that is sent to the callback when an element is hovered over or clicked.
  */
-export interface InspectParams<Element> {
+export interface InspectParams<Element = DOMElement> {
   /** hover / click event target dom element */
   element: Element;
   /** nearest named react component fiber for dom element */
@@ -60,7 +60,7 @@ export interface InspectParams<Element> {
   editor?: TrustedEditor;
 }
 
-export type OnInspectElementParams<Element> =
+export type OnInspectElementParams<Element = DOMElement> =
   & Omit<Required<InspectParams<Element>>, 'editor'>
   & Pick<InspectParams<Element>, 'editor'>
 

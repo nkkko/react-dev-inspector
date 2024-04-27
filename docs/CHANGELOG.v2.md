@@ -1,15 +1,17 @@
 # Changelog
 
 
-## [2.1.0-beta.7](https://github.com/zthxxx/react-dev-inspector/compare/v2.0.1...v2.1.0-beta.7)
+## [2.1.0-beta.8](https://github.com/zthxxx/react-dev-inspector/compare/v2.0.1...v2.1.0-beta.8)
 
 ### Features
 
 - integrate an `InspectContextPanel` trigger by right-click inspect
-- add `@react-dev-inspector/components` package
+- allow to setting some custom `InspectAgent`, to work with default `DOMInspectAgent` together
+- add `@react-dev-inspector/web-components` package
   - export the `Overlay` (inspector indicating UI), support custom to get boxSizing and bounding
   - export the `InspectContextPanel` component, which is a context-menu as a draggable and resizable floating panel
-- add export of some utils for access react fiber
+- add export of some utils for access react fiber (`fiberUtils`) or help inspecting (`inspectUtils`),
+  use for custom InspectAgent
 
 ### Refactor
 

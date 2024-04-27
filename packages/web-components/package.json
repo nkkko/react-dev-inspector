@@ -1,6 +1,6 @@
 {
   "name": "@react-dev-inspector/web-components",
-  "version": "2.1.0-beta.7",
+  "version": "2.1.0-beta.8",
   "sideEffects": false,
   "description": "Web UI components for react-dev-inspector, build as Web Components via solid-js.",
   "repository": {
@@ -8,6 +8,7 @@
     "url": "https://github.com/zthxxx/react-dev-inspector.git",
     "directory": "packages/web-components"
   },
+  "homepage": "https://github.com/zthxxx/react-dev-inspector/tree/dev/packages/web-components",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
@@ -22,10 +23,14 @@
   "bugs": {
     "url": "https://github.com/zthxxx/react-dev-inspector/issues"
   },
-  "homepage": "https://github.com/zthxxx/react-dev-inspector",
   "main": "dist/cjs",
   "module": "dist/esm",
   "types": "dist/types",
+  "files": [
+    "README.md",
+    "src",
+    "dist"
+  ],
   "exports": {
     ".": {
       "import": "./dist/esm/index.js",
@@ -39,10 +44,6 @@
     "#floating": "./src/floating/index.ts",
     "#components": "./src/components/index.ts"
   },
-  "files": [
-    "README.md",
-    "dist"
-  ],
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest watch",

@@ -16,7 +16,7 @@
   "scripts": {
     "clean": "rimraf .next dist",
     "dev": "npm run clean && node server.mjs",
-    "build": "npm run clean && next build && next export -o dist"
+    "build": "npm run clean && next build"
   },
   "dependencies": {
     "clsx": "1.2.1",

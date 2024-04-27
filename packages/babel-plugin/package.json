@@ -1,24 +1,17 @@
 {
   "name": "@react-dev-inspector/babel-plugin",
-  "version": "2.1.0-beta.7",
+  "version": "2.1.0-beta.8",
   "sideEffects": false,
   "description": "babel plugin for react-dev-inspector to generate source code position info into jsx properties",
   "main": "dist/cjs",
   "module": "dist/esm",
   "types": "dist/esm",
-  "scripts": {
-    "test": "jest --passWithNoTests",
-    "gen:test-outputs": "tsx scripts/gen-test-outputs.ts",
-    "clean": "rimraf coverage dist es lib build",
-    "build:esm": "tsc -p tsconfig.esm.json",
-    "build:cjs": "tsc -p tsconfig.cjs.json",
-    "build": "npm-run-all clean --parallel build:esm build:cjs"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/zthxxx/react-dev-inspector.git",
     "directory": "packages/babel-plugin"
   },
+  "homepage": "https://react-dev-inspector.zthxxx.me/docs/compiler-plugin#react-dev-inspectorbabel-plugin",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
@@ -28,12 +21,19 @@
   "bugs": {
     "url": "https://github.com/zthxxx/react-dev-inspector/issues"
   },
-  "homepage": "https://github.com/zthxxx/react-dev-inspector",
   "files": [
     "README.md",
     "src",
     "dist"
   ],
+  "scripts": {
+    "test": "jest --passWithNoTests",
+    "gen:test-outputs": "tsx scripts/gen-test-outputs.ts",
+    "clean": "rimraf coverage dist es lib build",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build": "npm-run-all clean --parallel build:esm build:cjs"
+  },
   "engines": {
     "node": ">=12.0.0"
   },

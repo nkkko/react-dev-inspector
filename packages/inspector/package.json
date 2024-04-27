@@ -1,11 +1,36 @@
 {
   "name": "react-dev-inspector",
-  "version": "2.1.0-beta.7",
+  "version": "2.1.0-beta.8",
   "sideEffects": false,
   "description": "dev-tool for inspect react components and jump to local IDE for component code.",
   "main": "dist/cjs",
   "module": "dist/esm",
   "types": "dist/esm",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zthxxx/react-dev-inspector.git",
+    "directory": "packages/inspector"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "keywords": [
+    "react",
+    "component",
+    "inspector"
+  ],
+  "author": "zthxxx <zthxxx.me@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zthxxx/react-dev-inspector/issues"
+  },
+  "homepage": "https://react-dev-inspector.zthxxx.me",
+  "files": [
+    "README.md",
+    "src",
+    "dist"
+  ],
   "exports": {
     ".": {
       "import": "./dist/esm/index.js",
@@ -30,31 +55,6 @@
     "build:test": "tsc -p tsconfig.test.json",
     "build": "npm-run-all clean --parallel sync:readme build:esm build:cjs build:test"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/zthxxx/react-dev-inspector.git",
-    "directory": "packages/inspector"
-  },
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org"
-  },
-  "keywords": [
-    "react",
-    "component",
-    "inspector"
-  ],
-  "author": "zthxxx <zthxxx.me@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/zthxxx/react-dev-inspector/issues"
-  },
-  "homepage": "https://github.com/zthxxx/react-dev-inspector",
-  "files": [
-    "README.md",
-    "src",
-    "dist"
-  ],
   "engines": {
     "node": ">=12.0.0"
   },

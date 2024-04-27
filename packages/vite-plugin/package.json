@@ -1,22 +1,17 @@
 {
   "name": "@react-dev-inspector/vite-plugin",
-  "version": "2.1.0-beta.7",
+  "version": "2.1.0-beta.8",
   "sideEffects": false,
   "description": "vite plugin for react-dev-inspector to add server middleware. support vite2/vite3/vite4",
   "main": "dist/cjs",
   "module": "dist/esm",
   "types": "dist/esm",
-  "scripts": {
-    "clean": "rimraf coverage dist es lib build",
-    "build:esm": "tsc -p tsconfig.esm.json",
-    "build:cjs": "tsc -p tsconfig.cjs.json",
-    "build": "npm-run-all clean --parallel build:esm build:cjs"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/zthxxx/react-dev-inspector.git",
     "directory": "packages/vite-plugin"
   },
+  "homepage": "https://react-dev-inspector.zthxxx.me/docs/integration/vite",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
@@ -26,7 +21,12 @@
   "bugs": {
     "url": "https://github.com/zthxxx/react-dev-inspector/issues"
   },
-  "homepage": "https://github.com/zthxxx/react-dev-inspector",
+  "scripts": {
+    "clean": "rimraf coverage dist es lib build",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build": "npm-run-all clean --parallel build:esm build:cjs"
+  },
   "files": [
     "README.md",
     "src",

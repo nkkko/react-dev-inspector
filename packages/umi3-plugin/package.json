@@ -1,22 +1,17 @@
 {
   "name": "@react-dev-inspector/umi3-plugin",
-  "version": "2.1.0-beta.7",
+  "version": "2.1.0-beta.8",
   "sideEffects": false,
   "description": "umi3 plugin for react-dev-inspector to add babel plugin and server middleware",
   "main": "dist/cjs",
   "module": "dist/esm",
   "types": "dist/esm",
-  "scripts": {
-    "clean": "rimraf coverage dist es lib build",
-    "build:esm": "tsc -p tsconfig.esm.json",
-    "build:cjs": "tsc -p tsconfig.cjs.json",
-    "build": "npm-run-all clean --parallel build:esm build:cjs"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/zthxxx/react-dev-inspector.git",
     "directory": "packages/umi3-plugin"
   },
+  "homepage": "https://react-dev-inspector.zthxxx.me/docs/integration/umijs",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
@@ -26,12 +21,17 @@
   "bugs": {
     "url": "https://github.com/zthxxx/react-dev-inspector/issues"
   },
-  "homepage": "https://github.com/zthxxx/react-dev-inspector",
   "files": [
     "README.md",
     "src",
     "dist"
   ],
+  "scripts": {
+    "clean": "rimraf coverage dist es lib build",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build": "npm-run-all clean --parallel build:esm build:cjs"
+  },
   "engines": {
     "node": ">=12.0.0"
   },
