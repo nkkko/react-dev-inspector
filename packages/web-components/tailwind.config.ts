@@ -1,7 +1,7 @@
 import type { Config } from 'tailwindcss'
 import tailwindAnimate from 'tailwindcss-animate'
 
-const isMinify = !process.env.DISABLE_BUILD_MINIFY
+const isMinify = process.env.BUILD_CSS_MINIFY && (process.env.BUILD_CSS_MINIFY !== 'false')
 
 /**
  * https://www.solid-ui.com/docs/installation/manual#configure-tailwindconfigjs

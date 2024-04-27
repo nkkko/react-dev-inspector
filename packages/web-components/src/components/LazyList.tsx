@@ -48,7 +48,7 @@ export const List = <ItemData extends PureObject>(props: ListProps<ItemData>): J
   const setLoadDone = (value: boolean) => setStore('loadDone', value)
   const setIsLoading = (value: boolean) => setStore('isLoading', value)
 
-  let containerRef: HTMLDivElement | undefined
+  let container: HTMLDivElement | undefined
   let itemsHeight = 0
 
   const loadItems = (count: number = 1) => {
@@ -70,8 +70,8 @@ export const List = <ItemData extends PureObject>(props: ListProps<ItemData>): J
   }
 
   const onScroll = () => {
-    if (!containerRef || store.isLoading || store.loadDone) return
-    const { scrollTop, clientHeight, scrollHeight } = containerRef
+    if (!container || store.isLoading || store.loadDone) return
+    const { scrollTop, clientHeight, scrollHeight } = container
     const scrollBottom = scrollTop + clientHeight
     const bottomTriggerToScroll = 30
 
@@ -92,9 +92,9 @@ export const List = <ItemData extends PureObject>(props: ListProps<ItemData>): J
   }
 
   onMount(async () => {
-    if (containerRef) {
+    if (container) {
       await Promise.resolve()
-      const initialHeight = containerRef.clientHeight
+      const initialHeight = container.clientHeight
       batch(() => {
         do {
           loadItems()
@@ -109,7 +109,7 @@ export const List = <ItemData extends PureObject>(props: ListProps<ItemData>): J
   return (
     <div
       {...props.forwardProps}
-      ref={containerRef}
+      ref={el => container = el}
       class={cn(
         `
           h-full gap-1 p-1.5 overflow-y-auto flex flex-col items-stretch justify-start

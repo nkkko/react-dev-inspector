@@ -22,14 +22,14 @@ import {
 } from './OverlayTip'
 
 
-export interface InspectorOverlayExpose {
+interface InspectorOverlayExpose {
   inspect: <Element = HTMLElement>(params: {
     element?: Element;
     title?: string;
     info?: string;
     getBoxSizing: (element: Element) => BoxSizing;
     getBoundingRect: (element: Element) => Rect;
-  }) => Promise<void>;
+  }) => void;
   hide: () => void;
 }
 
@@ -55,7 +55,7 @@ export const InspectorOverlay: ComponentType<Record<string, never>> = (_props, {
   })
 
 
-  const inspect: InspectorOverlayExpose['inspect'] = async <Element = HTMLElement>({
+  const inspect: InspectorOverlayExpose['inspect'] = <Element = HTMLElement>({
     element,
     title = '',
     info = '',

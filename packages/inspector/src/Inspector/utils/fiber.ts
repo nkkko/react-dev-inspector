@@ -1,5 +1,8 @@
 import type { Fiber } from 'react-reconciler'
 
+// eslint-disable-next-line unused-imports/no-unused-imports
+import type { InspectAgent } from '../types'
+
 
 /**
  * only native html tag fiber's type will be string,
@@ -112,6 +115,31 @@ export const getDirectParentFiber = (child: Fiber): Fiber | null => {
   return null
 }
 
+/**
+ * return(parent) first of a fiber, typical use for {@link InspectAgent.getRenderChain}
+ */
+export function * genFiberRenderChain(fiber?: Fiber | null): Generator<Fiber, void, void> {
+  while (fiber) {
+    yield fiber
+    if (fiber.return === fiber) {
+      return
+    }
+    fiber = fiber.return
+  }
+}
+
+/**
+ * debugOwner first of a fiber, typical use for {@link InspectAgent.getSourceChain}
+ */
+export function * genFiberSourceChain(fiber?: Fiber | null): Generator<Fiber, void, void> {
+  while (fiber) {
+    yield fiber
+    if (fiber.return === fiber || fiber._debugOwner === fiber) {
+      return
+    }
+    fiber = fiber._debugOwner ?? fiber.return
+  }
+}
 
 /**
  * The displayName property is not guaranteed to be a string.

@@ -1,6 +1,7 @@
 import {
   createEffect,
   createSignal,
+  createMemo,
   type JSX,
 } from 'solid-js'
 import { css } from '#utils'
@@ -17,9 +18,13 @@ export const InspectorOverlayRect = (props: {
   /** target element margin/border/padding */
   boxSizing?: BoxSizing;
 }) => {
-  const position = (): Required<Pick<JSX.CSSProperties, 'top' | 'left'>> => ({
-    top: `${(props.boundingRect?.y ?? 0) - Math.max(props.boxSizing?.marginTop ?? 0, 0)}px`,
-    left: `${(props.boundingRect?.x ?? 0) - Math.max(props.boxSizing?.marginLeft ?? 0, 0)}px`,
+  const position = createMemo((): Required<Pick<JSX.CSSProperties, 'translate'>> => {
+    const x = (props.boundingRect?.x ?? 0) - Math.max(props.boxSizing?.marginLeft ?? 0, 0)
+    const y = (props.boundingRect?.y ?? 0) - Math.max(props.boxSizing?.marginTop ?? 0, 0)
+
+    return {
+      translate: `${x}px ${y}px`,
+    }
   })
 
   const [marginStyle, setMarginStyle] = createSignal<JSX.CSSProperties>({ display: 'none' })
@@ -75,7 +80,9 @@ export const InspectorOverlayRect = (props: {
   return (
     <div
       class={`inspector-overlay-rect-container ${props.class ?? ''}`}
-      style={position()}
+      style={{
+        translate: position().translate,
+      }}
     >
       <div
         class='inspector-overlay-margin'
@@ -106,6 +113,8 @@ export const InspectorOverlayRect = (props: {
 const styles = css`
 .inspector-overlay-rect-container {
   position: fixed;
+  top: 0;
+  left: 0;
   display: block;
   cursor: default;
   box-sizing: border-box;

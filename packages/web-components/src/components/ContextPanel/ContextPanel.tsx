@@ -40,6 +40,8 @@ export const ContextPanel = (props: ContextPanelProps) => {
       ref={setContainerRef}
       style={positionStyle()}
       onPointerDown={resizeOrDragTrigger}
+      onMouseDown={stopPropagation}
+      onClick={stopPropagation}
       data-draggable-block
     >
       {props.children}
@@ -48,3 +50,5 @@ export const ContextPanel = (props: ContextPanelProps) => {
     </div>
   )
 }
+
+const stopPropagation = (e: Event) => e.stopPropagation()

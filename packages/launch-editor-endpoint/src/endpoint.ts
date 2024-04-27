@@ -1,6 +1,8 @@
+// eslint-disable-next-line unused-imports/no-unused-imports
+import type { LaunchEditorParams } from './types'
+
 /**
- * @typedef {import('./types').LaunchEditorParams} LaunchEditorParams
- * endpoint params {@link LaunchEditorParams}
+ * endpoint params for {@link LaunchEditorParams}
  */
 export const launchEditorEndpoint = '/__inspect-open-in-editor'
 

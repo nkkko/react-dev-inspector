@@ -1,8 +1,14 @@
 import {
   createSignal,
   createEffect,
+  onCleanup,
   type JSX,
 } from 'solid-js'
+import {
+  Subject,
+  switchMap,
+  tap,
+} from 'rxjs'
 import { css } from '#utils'
 import {
   type Rect,
@@ -35,10 +41,7 @@ export const InspectorOverlayTip = (props: {
   const width = () => Math.round(props.boundingRect?.width ?? 0)
   const height = () => Math.round(props.boundingRect?.height ?? 0)
 
-  const [position, setPosition] = createSignal<Pick<JSX.CSSProperties, 'top' | 'left'>>({
-    top: '0',
-    left: '0',
-  })
+  const [position, setPosition] = createSignal<Pick<JSX.CSSProperties, 'translate'>>({})
 
   const outerBox = (): Rect => {
     const { boundingRect, boxSizing } = props
@@ -64,22 +67,28 @@ export const InspectorOverlayTip = (props: {
     }
   }
 
-  // @eslint-ignore-next-line `'container' is never reassigned. Use 'const' instead `
-  //   but it reassigned by solid-js ref
-  let container: HTMLDivElement | undefined
+  const updatePosition$ = new Subject<Parameters<typeof restraintTipPosition>[0]>()
+
+  const subscription = updatePosition$.pipe(
+    switchMap(restraintTipPosition),
+    tap(position => {
+      setPosition({
+        translate: `${position.left}px ${position.top}px`,
+      })
+    }),
+  ).subscribe()
+
+  onCleanup(() => subscription.unsubscribe())
 
   createEffect(() => {
-    restraintTipPosition({
+    updatePosition$.next({
       elementBox: outerBox(),
       spaceBox: spaceBox(),
       tipSize: container!.getBoundingClientRect().toJSON(),
-    }).then(position => {
-      setPosition({
-        top: `${position.top}px`,
-        left: `${position.left}px`,
-      })
     })
   })
+
+  let container: HTMLDivElement | undefined
 
   return (
     <>
@@ -94,10 +103,10 @@ export const InspectorOverlayTip = (props: {
       </style>
       <div
         class={`inspector-tip-container ${props.class ?? ''}`}
-        ref={container}
+        ref={el => container = el}
         style={{
           display: hidden() ? 'none' : 'flex',
-          ...position(),
+          translate: position().translate,
         }}
       >
         <div class='inspector-tip-info-row'>
@@ -146,6 +155,8 @@ const styles = css`
   --color-shadow-2: #aaaaaa16;
 
   position: fixed;
+  top: 0;
+  left: 0;
   flex-flow: column;
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
   font-size: 12px;

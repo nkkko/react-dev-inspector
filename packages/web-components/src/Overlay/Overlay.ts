@@ -34,7 +34,7 @@ export class Overlay {
     doc.body.appendChild(this.overlay)
   }
 
-  public async inspect<Element = HTMLElement>({
+  public inspect<Element = HTMLElement>({
     element,
     title,
     info,
@@ -54,7 +54,7 @@ export class Overlay {
     getBoundingRect?: (element: Element) => Rect;
   }) {
     // @TODO: open with [Popover API](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API)
-    await this.overlay.inspect({
+    return this.overlay.inspect({
       element,
       title,
       info,

@@ -33,6 +33,7 @@ export interface CodeDataAttribute {
 
 /**
  * Pointer(mouse/touch) position
+ * use in {@link InspectAgent.getTopElementFromPointer}
  */
 export interface Pointer {
   /**
@@ -130,7 +131,42 @@ export interface InspectAgent<Element> {
    *   - so the returned element should not be {@link Element}, but the outside parent of the root element.
    *   - if agent's renderer is the top root of whole app, just return `undefined | null`.
    *
-   * @TODO chain list will show in the Inspector's context-menu when right-click on the element.
+   *
+   * e.g. if fetching source-chain from `<Child>'s` element with this source code:
+   *
+   * ```tsx
+   * const Root = () => (
+   *   <div id=1 >
+   *     <Parent>
+   *       <p id=2 >
+   *         <Child />
+   *       </p>
+   *     </Parent>
+   *   </div>
+   * )
+   *
+   * const Parent = (children) => (
+   *   <div id=3 >
+   *     {children}
+   *   </div>
+   * )
+   *
+   * const Child = () => <div id=child />
+   * ```
+   *
+   * will expect to get chain:
+   *
+   * ```tsx
+   * [
+   *   <div id=child >,
+   *   <Child>,
+   *   <p id=2 >,
+   *   <div id=3 >,
+   *   <Parent>,
+   *   <div id=1 >,
+   *   <Root>,
+   * ]
+   * ```
    */
   getRenderChain(element: Element): InspectChainGenerator<Element>;
 
@@ -139,7 +175,37 @@ export interface InspectAgent<Element> {
    *   - but base on source-code structure order rather than render structure order,
    *   - and only yield valid elements which considered have a valid name, source code position, or you want show it in the inspected list.
    *
-   * @TODO chain list will show in the Inspector's context-menu when right-click on the element.
+   * e.g. if fetching source-chain from `<Child>'s` element with this source code:
+   *
+   * ```tsx
+   * const Root = () => (
+   *   <div id=1 >
+   *     <Parent>
+   *       <p id=2 >
+   *         <Child />
+   *       </p>
+   *     </Parent>
+   *   </div>
+   * )
+   *
+   * const Parent = (children) => (
+   *   <div id=3 >
+   *     {children}
+   *   </div>
+   * )
+   *
+   * const Child = () => <div id=child />
+   * ```
+   *
+   * will expect to get chain:
+   *
+   * ```tsx
+   * [
+   *   <div id=child >,
+   *   <Child>,
+   *   <Root>,
+   * ]
+   * ```
    */
   getSourceChain(element: Element): InspectChainGenerator<Element>;
 
@@ -187,7 +253,7 @@ export type InspectChainGenerator<Element> = Generator<InspectChainItem<Element>
 type UpperRootElement = any
 
 /**
- * chain item data in {@link InspectAgent.getRenderChain} / {@link InspectAgent.getSourceChain}
+ * chain item data structure of {@link InspectAgent.getRenderChain} / {@link InspectAgent.getSourceChain}
  */
 export interface InspectChainItem<Element> {
   agent: InspectAgent<Element>;

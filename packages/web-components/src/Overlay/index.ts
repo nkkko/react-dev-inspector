@@ -1,5 +1,3 @@
-/// <reference path='../elements.d.ts' />
-
 export {
   getElementDimensions,
   getBoundingBox,

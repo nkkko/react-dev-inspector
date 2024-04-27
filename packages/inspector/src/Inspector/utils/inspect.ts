@@ -2,14 +2,11 @@ import type { Fiber, Source } from 'react-reconciler'
 import type {
   TagItem,
 } from '@react-dev-inspector/web-components'
-
-
 import type {
   InspectAgent,
   CodeInfo,
   CodeDataAttribute,
   InspectChainItem,
-  InspectChainGenerator,
 } from '../types'
 import {
   isNativeTagFiber,
@@ -110,7 +107,7 @@ export const getCodeInfoFromFiber = (fiber?: Fiber): CodeInfo | undefined => {
 
 /**
  * give a `base` dom fiber,
- * and will try to get the human friendly react component `reference` fiber from it;
+ * and will try to get the human-friendly react component `reference` fiber from it;
  *
  * rules and examples see below:
  * *******************************************************
@@ -178,6 +175,10 @@ export const getReferenceFiber = (baseFiber?: Fiber): Fiber | undefined => {
   return originReferenceFiber
 }
 
+/**
+ * find a human-friendly named fiber with source-code upward from element
+ * return source-code info
+ */
 export const getElementCodeInfo = (element: Element): CodeInfo | undefined => {
   const fiber: Fiber | undefined = getElementFiberUpward(element)
 
@@ -185,6 +186,9 @@ export const getElementCodeInfo = (element: Element): CodeInfo | undefined => {
   return getCodeInfoFromFiber(referenceFiber)
 }
 
+/**
+ * find a fiber with both name and source-code info upward,
+ */
 export const getNamedFiber = (baseFiber?: Fiber): Fiber | undefined => {
   let fiber = baseFiber
 
@@ -218,6 +222,10 @@ export const getNamedFiber = (baseFiber?: Fiber): Fiber | undefined => {
   return originNamedFiber
 }
 
+/**
+ * find a human-friendly named fiber with source-code upward from element,
+ * return inspection info
+ */
 export const getElementInspect = (element: Element): {
   fiber?: Fiber;
   name: string;
@@ -253,8 +261,14 @@ export const getPathWithLineNumber = (codeInfo?: CodeInfo): string | undefined =
   return path
 }
 
-export function *genInspectChainFromFibers<Element>({
-  agent, fibers, isAgentElement, getElementTags,
+/**
+ * commonly use for {@link InspectAgent.getRenderChain}
+ */
+export function * genInspectChainFromFibers<Element>({
+  agent,
+  fibers,
+  isAgentElement,
+  getElementTags,
 }: {
   agent: InspectAgent<Element>;
   fibers: Generator<Fiber, void, void>;
@@ -300,45 +314,5 @@ export function *genInspectChainFromFibers<Element>({
       return root.containerInfo
     }
     return root
-  }
-}
-
-export function * elementsChainGenerator<Element = unknown>({
-  agent,
-  agents,
-  element,
-  generateElement,
-}: {
-  agent: InspectAgent<Element>;
-  agents: InspectAgent<Element>[];
-  element: Element;
-  generateElement: <Element = unknown>(agent: InspectAgent<Element>, element: Element) => InspectChainGenerator<Element>;
-}): InspectChainGenerator<Element> {
-  const generator = generateElement(agent, element)
-  while (true) {
-    const next = generator.next()
-    if (!next.done) {
-      yield next.value
-      continue
-    }
-
-    if (!next.value) {
-      return
-    }
-
-    for (const agent of agents) {
-      if (!agent.isAgentElement(next.value)) {
-        continue
-      }
-      yield * elementsChainGenerator({
-        agent,
-        agents,
-        element: next.value,
-        generateElement,
-      })
-      return
-    }
-
-    return
   }
 }

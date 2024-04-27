@@ -146,6 +146,8 @@ export const useResizeAndDrag = (params: DragPanelParams): {
     positionStyle: () => store.positionSizeStyle,
 
     resizeOrDragTrigger: (event) => {
+      event.stopPropagation()
+
       const target = event.target
       if (!(target instanceof HTMLElement)) {
         return
@@ -156,17 +158,13 @@ export const useResizeAndDrag = (params: DragPanelParams): {
       }
 
       if ('resizeHandler' in target.dataset) {
-        event.stopPropagation()
         event.preventDefault()
-
         resizeStart$.next(event)
         return
       }
 
       if ('draggableBlock' in target.dataset) {
-        event.stopPropagation()
         event.preventDefault()
-
         dragStart$.next(event)
       }
     },
@@ -202,56 +200,54 @@ export const useDragContainer = (params: {
 
   const dragStart$ = new Subject<PointerEvent>()
 
-  onMount(() => {
-    const subscriber = dragStart$.pipe(
-      switchMap(down => {
-        const start = position() ?? (container()?.getBoundingClientRect().toJSON() as Rect | undefined)
-        if (!start) {
-          return EMPTY
-        }
+  const subscriber = dragStart$.pipe(
+    switchMap(down => {
+      const start = position() ?? (container()?.getBoundingClientRect().toJSON() as Rect | undefined)
+      if (!start) {
+        return EMPTY
+      }
 
-        let first = true
+      let first = true
 
-        return fromEvent<PointerEvent>(window, 'pointermove', { capture: true }).pipe(
-          filter(() => Boolean(container())),
-          tap(event => {
-            event.stopPropagation()
-            event.preventDefault()
-            event.stopImmediatePropagation()
-            if (first) {
-              container()!.dataset.dragging = ''
-              first = false
-            }
-          }),
-          map(move => ({
-            x: move.clientX - down.clientX + start.x,
-            y: move.clientY - down.clientY + start.y,
-          })),
-          takeUntil(
-            merge(
-              fromEvent(window, 'pointerdown', { capture: true }),
-              fromEvent(window, 'pointercancel', { capture: true }),
-              fromEvent(window, 'contextmenu', { capture: true }),
-              fromEvent(window, 'pointerup', { capture: true }),
-              fromEvent(window, 'blur', { capture: true }),
-            ).pipe(
-              take(1),
-              tap(() => {
-                if (container()) {
-                  delete container()!.dataset.dragging
-                }
-              }),
-            ),
+      return fromEvent<PointerEvent>(window, 'pointermove', { capture: true }).pipe(
+        filter(() => Boolean(container())),
+        tap(event => {
+          event.stopPropagation()
+          event.preventDefault()
+          event.stopImmediatePropagation()
+          if (first) {
+            container()!.dataset.dragging = ''
+            first = false
+          }
+        }),
+        map(move => ({
+          x: move.clientX - down.clientX + start.x,
+          y: move.clientY - down.clientY + start.y,
+        })),
+        takeUntil(
+          merge(
+            fromEvent(window, 'pointerdown', { capture: true }),
+            fromEvent(window, 'pointercancel', { capture: true }),
+            fromEvent(window, 'contextmenu', { capture: true }),
+            fromEvent(window, 'pointerup', { capture: true }),
+            fromEvent(window, 'blur', { capture: true }),
+          ).pipe(
+            take(1),
+            tap(() => {
+              if (container()) {
+                delete container()!.dataset.dragging
+              }
+            }),
           ),
-        )
-      }),
-      tap(position => {
-        updatePosition(position)
-      }),
-    ).subscribe()
+        ),
+      )
+    }),
+    tap(position => {
+      updatePosition(position)
+    }),
+  ).subscribe()
 
-    onCleanup(() => subscriber.unsubscribe())
-  })
+  onCleanup(() => subscriber.unsubscribe())
 
   return {
     dragStart$,
@@ -279,113 +275,111 @@ export const useResizeContainer = (params: {
 
   const resizeStart$ = new Subject<PointerEvent>()
 
-  onMount(() => {
-    const subscriber = resizeStart$.pipe(
-      switchMap(down => {
-        const target = down.target
+  const subscriber = resizeStart$.pipe(
+    switchMap(down => {
+      const target = down.target
 
-        const direction = getResizeDirection(target)
-        if (!direction) {
-          return EMPTY
+      const direction = getResizeDirection(target)
+      if (!direction) {
+        return EMPTY
+      }
+
+      const startRect: Rect | undefined = (position() && size())
+        ? {
+          ...position()!,
+          ...size()!,
         }
+        : (container()?.getBoundingClientRect().toJSON() as Rect | undefined)
 
-        const startRect: Rect | undefined = (position() && size())
-          ? {
-            ...position()!,
-            ...size()!,
+      if (!startRect) {
+        return EMPTY
+      }
+
+      const cursor = resizeCursor[direction]
+
+      let first = true
+      const bodyCursor = document.body.style.cursor
+
+      return fromEvent<PointerEvent>(window, 'pointermove', { capture: true }).pipe(
+        filter(() => Boolean(container())),
+        tap(event => {
+          event.stopPropagation()
+          event.preventDefault()
+          event.stopImmediatePropagation()
+          if (first) {
+            document.body.style.cursor = cursor
+            container()!.dataset.resizing = ''
+            first = false
           }
-          : (container()?.getBoundingClientRect().toJSON() as Rect | undefined)
-
-        if (!startRect) {
-          return EMPTY
-        }
-
-        const cursor = resizeCursor[direction]
-
-        let first = true
-        const bodyCursor = document.body.style.cursor
-
-        return fromEvent<PointerEvent>(window, 'pointermove', { capture: true }).pipe(
-          filter(() => Boolean(container())),
-          tap(event => {
-            event.stopPropagation()
-            event.preventDefault()
-            event.stopImmediatePropagation()
-            if (first) {
-              document.body.style.cursor = cursor
-              container()!.dataset.resizing = ''
-              first = false
-            }
-          }),
-          map(move => ({
-            startRect,
-            direction,
-            movement: {
-              x: move.clientX - down.clientX,
-              y: move.clientY - down.clientY,
-            },
-          })),
-          takeUntil(
-            merge(
-              fromEvent(window, 'pointerdown', { capture: true }),
-              fromEvent(window, 'pointercancel', { capture: true }),
-              fromEvent(window, 'contextmenu', { capture: true }),
-              fromEvent(window, 'pointerup', { capture: true }),
-              fromEvent(window, 'blur', { capture: true }),
-            ).pipe(
-              take(1),
-              tap(() => {
-                document.body.style.cursor = bodyCursor
-                if (container()) {
-                  delete container()!.dataset.resizing
-                }
-              }),
-            ),
-          ),
-        )
-      }),
-      tap(({ startRect, direction, movement }) => {
-        const sizeRatio = getResizeStrategy(direction)
-        let width = startRect.width + movement.x * sizeRatio.x
-        let height = startRect.height + movement.y * sizeRatio.y
-
-        const { sizeLimit } = params
-
-        if (sizeLimit?.minWidth) {
-          width = Math.max(sizeLimit.minWidth, width)
-        }
-        if (sizeLimit?.minHeight) {
-          height = Math.max(sizeLimit.minHeight, height)
-        }
-        if (sizeLimit?.maxWidth) {
-          width = Math.min(sizeLimit.maxWidth, width)
-        }
-        if (sizeLimit?.maxHeight) {
-          height = Math.min(sizeLimit.maxHeight, height)
-        }
-
-        const deltaX = startRect.width - width
-        const deltaY = startRect.height - height
-
-        const positionRatio = getPositionStrategy(sizeRatio)
-
-        updateRectBox({
-          position: positionRatio
-            ? {
-              x: startRect.x + deltaX * positionRatio.x,
-              y: startRect.y + deltaY * positionRatio.y,
-            }
-            : undefined,
-          size: {
-            width,
-            height,
+        }),
+        map(move => ({
+          startRect,
+          direction,
+          movement: {
+            x: move.clientX - down.clientX,
+            y: move.clientY - down.clientY,
           },
-        })
-      }),
-    ).subscribe()
+        })),
+        takeUntil(
+          merge(
+            fromEvent(window, 'pointerdown', { capture: true }),
+            fromEvent(window, 'pointercancel', { capture: true }),
+            fromEvent(window, 'contextmenu', { capture: true }),
+            fromEvent(window, 'pointerup', { capture: true }),
+            fromEvent(window, 'blur', { capture: true }),
+          ).pipe(
+            take(1),
+            tap(() => {
+              document.body.style.cursor = bodyCursor
+              if (container()) {
+                delete container()!.dataset.resizing
+              }
+            }),
+          ),
+        ),
+      )
+    }),
+    tap(({ startRect, direction, movement }) => {
+      const sizeRatio = getResizeStrategy(direction)
+      let width = startRect.width + movement.x * sizeRatio.x
+      let height = startRect.height + movement.y * sizeRatio.y
 
-    onCleanup(() => subscriber.unsubscribe())
-  })
+      const { sizeLimit } = params
+
+      if (sizeLimit?.minWidth) {
+        width = Math.max(sizeLimit.minWidth, width)
+      }
+      if (sizeLimit?.minHeight) {
+        height = Math.max(sizeLimit.minHeight, height)
+      }
+      if (sizeLimit?.maxWidth) {
+        width = Math.min(sizeLimit.maxWidth, width)
+      }
+      if (sizeLimit?.maxHeight) {
+        height = Math.min(sizeLimit.maxHeight, height)
+      }
+
+      const deltaX = startRect.width - width
+      const deltaY = startRect.height - height
+
+      const positionRatio = getPositionStrategy(sizeRatio)
+
+      updateRectBox({
+        position: positionRatio
+          ? {
+            x: startRect.x + deltaX * positionRatio.x,
+            y: startRect.y + deltaY * positionRatio.y,
+          }
+          : undefined,
+        size: {
+          width,
+          height,
+        },
+      })
+    }),
+  ).subscribe()
+
+  onCleanup(() => subscriber.unsubscribe())
 
   return {
     resizeStart$,

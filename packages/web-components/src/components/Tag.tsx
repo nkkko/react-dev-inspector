@@ -7,6 +7,9 @@ import {
   styled,
 } from '#utils'
 
+/**
+ * tag string with optional color styles
+ */
 export type TagItem =
   | string
   | TagObject

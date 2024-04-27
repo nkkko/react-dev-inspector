@@ -163,7 +163,7 @@ export const CornerItems = () => {
               boxSizing={boxSizing}
             />
             <InspectorOverlayTip
-              title={(index() % 2) ? 'div in <Card>' : 'p'}
+              title={(index() % 2) ? 'p' : 'div in <Card>'}
               boundingRect={boundingRect}
               boxSizing={boxSizing}
               showCornerHint

@@ -2,7 +2,6 @@ export {
   InspectContextPanelRoot,
   InspectContextPanelTagName,
   type InspectContextPanelElement,
-  type InspectContextPanelExpose,
   type InspectContextPanelShowParams,
 } from './InspectContextPanelRoot'
 export {

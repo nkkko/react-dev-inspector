@@ -16,15 +16,20 @@ import {
 } from '@react-dev-inspector/launch-editor-endpoint'
 import {
   gotoServerEditor,
-  elementsChainGenerator,
 } from './utils'
+import {
+  elementsChainGenerator,
+} from './services'
 import {
   useHotkeyToggle,
   useEffectEvent,
   useRecordPointer,
   useControlledActive,
 } from './hooks'
-import { domInspectAgent, type DOMElement } from './DOMInspectAgent'
+import {
+  type DOMElement,
+  domInspectAgent,
+} from './DOMInspectAgent'
 import type {
   CodeInfo,
   InspectAgent,
@@ -38,7 +43,7 @@ const defaultInspectAgents: InspectAgent<any>[] = [
 /**
  * the inspect meta info that is sent to the callback when an element is hovered over or clicked.
  */
-export interface InspectParams<Element = DOMElement> {
+export interface InspectParams<Element> {
   /** hover / click event target dom element */
   element: Element;
   /** nearest named react component fiber for dom element */
@@ -59,7 +64,10 @@ export type OnInspectElementParams<Element> =
   & Omit<Required<InspectParams<Element>>, 'editor'>
   & Pick<InspectParams<Element>, 'editor'>
 
-export interface InspectorProps<Element> {
+export interface InspectorProps<
+  InspectAgents extends InspectAgent<any>[],
+  Element extends ElementInInspectAgents<InspectAgents> = ElementInInspectAgents<InspectAgents>,
+> {
   /**
    * Inspector Component toggle hotkeys,
    *
@@ -105,11 +113,12 @@ export interface InspectorProps<Element> {
 
   /**
    * Agent for get inspection info in different React renderer with user interaction
-   * @default [domInspectAgent]
+   *
+   * Default: {@link domInspectAgent}
    *
    * > add in version `v2.1.0`
    */
-  inspectAgents?: InspectAgent<Element>[];
+  inspectAgents?: InspectAgents;
 
   /**
    * Callback when left-clicking on an element, with ensuring the source code info is found.
@@ -159,7 +168,11 @@ export interface InspectorProps<Element> {
   disableLaunchEditor?: boolean;
 }
 
-export const Inspector = function<Element = any>(props: InspectorProps<Element>) {
+export const Inspector = function<
+  InspectAgents extends InspectAgent<any>[] = InspectAgent<DOMElement>[],
+>(props: InspectorProps<InspectAgents>) {
+  type Element = ElementInInspectAgents<InspectAgents>
+
   const {
     keys,
     onHoverElement,
@@ -167,7 +180,7 @@ export const Inspector = function<Element = any>(props: InspectorProps<Element>)
     onInspectElement,
     active: controlledActive,
     onActiveChange,
-    inspectAgents = defaultInspectAgents as InspectAgent<Element>[],
+    inspectAgents = defaultInspectAgents,
     disableLaunchEditor,
     disable = (process.env.NODE_ENV !== 'development'),
     ContextPanel = InspectContextPanel,
@@ -501,6 +514,12 @@ interface InspectElementItem<Element = any> extends ElementItemInfo {
   agent: InspectAgent<Element>;
   element?: Element | null;
 }
+
+type ElementInInspectAgents<Agents> = Agents extends (infer Agent)[]
+  ? Agent extends InspectAgent<infer Element>
+    ? Element
+    : unknown
+  : unknown
 
 const contextPanelSizeLimit: InspectContextPanelShowParams['sizeLimit'] = {
   minWidth: 160,

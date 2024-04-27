@@ -24,7 +24,7 @@ import {
 import {
   VSCode,
   WebStorm,
-} from './logos'
+} from './icons'
 
 /**
  * `h-12` in ElementItem component
@@ -234,6 +234,9 @@ const S = {
 }
 
 
+/**
+ * item's structure in ElementItem component
+ */
 export interface ItemInfo {
   title: string;
   subtitle?: string;

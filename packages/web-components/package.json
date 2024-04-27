@@ -48,9 +48,9 @@
     "test:watch": "vitest watch",
     "clean": "rimraf coverage dist es lib build",
     "dev": "storybook dev -p 59678",
-    "dev:build": "DISABLE_BUILD_MINIFY=true npm run build",
+    "dev:build": "DISABLE_BUILD_MINIFY=true BUILD_CSS_MINIFY=false npm run build",
     "build:storybook": "storybook build",
-    "build:rollup": "NODE_OPTIONS='--import tsx' rollup --config rollup.config.ts",
+    "build:rollup": "NODE_OPTIONS=\"${NODE_OPTIONS} --import tsx\" BUILD_CSS_MINIFY=${BUILD_CSS_MINIFY:-true} rollup --config rollup.config.ts",
     "type-check": "tsc -p tsconfig.test.json",
     "build": "npm-run-all clean --parallel type-check build:rollup"
   },

@@ -24,9 +24,37 @@ import type {
 
 export type DOMElement = HTMLElement | SVGElement
 
+export interface DOMInspectAgentOptions {
+  /**
+   * events that need be prevent and stop propagation on capture,
+   * default is {@link defaultPreventEvents},
+   *
+   * adjust if you find some interaction conflict.
+   *
+   * > DO NOT set 'click' / 'mousedown' / 'pointerdown' / 'pointerover'
+   * >   which are always handle by DOMInspectAgent internal
+   */
+  preventEvents?: (keyof GlobalEventHandlersEventMap)[];
+}
+
+const defaultPreventEvents = [
+  'mouseup',
+  'pointerup',
+  'mouseover',
+  'mouseout',
+  'pointerout',
+] satisfies (keyof GlobalEventHandlersEventMap)[]
+
 export class DOMInspectAgent implements InspectAgent<DOMElement> {
-  protected overlay?: Overlay
-  protected unsubscribeListener?: () => void
+  #overlay?: Overlay
+  #unsubscribeListener?: () => void
+  #preventEvents: (keyof GlobalEventHandlersEventMap)[]
+
+  constructor({
+    preventEvents = defaultPreventEvents,
+  }: DOMInspectAgentOptions = {}) {
+    this.#preventEvents = preventEvents
+  }
 
   public activate = ({
     onHover,
@@ -38,21 +66,22 @@ export class DOMInspectAgent implements InspectAgent<DOMElement> {
     onClick: (params: { element?: DOMElement; pointer: PointerEvent }) => void;
   }) => {
     this.deactivate()
-    this.overlay = new Overlay()
+    this.#overlay = new Overlay()
 
-    this.unsubscribeListener = setupPointerListener({
+    this.#unsubscribeListener = setupPointerListener({
       onPointerOver: onHover,
       onPointerDown,
       onClick,
+      preventEvents: this.#preventEvents,
     })
   }
 
   public deactivate = () => {
-    this.overlay?.remove()
-    this.overlay = undefined
+    this.#overlay?.remove()
+    this.#overlay = undefined
 
-    this.unsubscribeListener?.()
-    this.unsubscribeListener = undefined
+    this.#unsubscribeListener?.()
+    this.#unsubscribeListener = undefined
   }
 
   public indicate = ({ element, codeInfo, title }: {
@@ -60,13 +89,13 @@ export class DOMInspectAgent implements InspectAgent<DOMElement> {
     title?: string;
     codeInfo?: CodeInfo;
   }) => {
-    if (!this.overlay) {
-      this.overlay = new Overlay()
+    if (!this.#overlay) {
+      this.#overlay = new Overlay()
     }
 
     codeInfo ??= this.findCodeInfo(element)
 
-    this.overlay.inspect({
+    this.#overlay.inspect({
       element,
       title,
       info: getPathWithLineNumber(codeInfo),
@@ -74,7 +103,7 @@ export class DOMInspectAgent implements InspectAgent<DOMElement> {
   }
 
   public removeIndicate = () => {
-    this.overlay?.hide()
+    this.#overlay?.hide()
   }
 
   public getTopElementFromPointer = (pointer: Pointer): DOMElement | undefined | null => {
@@ -180,7 +209,7 @@ export class DOMInspectAgent implements InspectAgent<DOMElement> {
 }
 
 
-export const domInspectAgent = new DOMInspectAgent()
+export const domInspectAgent: InspectAgent<DOMElement> = new DOMInspectAgent()
 
 
 export const getDOMElementTags = (element: unknown): TagItem[] => {
