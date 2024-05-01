@@ -4,4 +4,6 @@
 
 [`Vite`](https://vitejs.dev) plugin for [`react-dev-inspector`](https://react-dev-inspector.zthxxx.me)
 
+Just register a server middleware to launch the local editor with an endpoint using [`@react-dev-inspector/middleware`](https://react-dev-inspector.zthxxx.me/docs/integration#inspector-middleware)
+
 Docs see: https://react-dev-inspector.zthxxx.me/docs/integration/vite
