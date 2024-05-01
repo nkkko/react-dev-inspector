@@ -36,7 +36,7 @@ Just check out this demo below and you'll get it in a snap.
 
 Showcase: https://react-dev-inspector.zthxxx.me/showcase
 
-[![inspector-gif](https://github.com/zthxxx/react-dev-inspector/raw/master/docs/images/inspect.gif)](https://react-dev-inspector.zthxxx.me/showcase)
+[![inspector-preview](https://github.com/zthxxx/react-dev-inspector/raw/dev/docs/images/inspector.mp4)](https://react-dev-inspector.zthxxx.me/showcase)
 
 Wanna try out the demo right now? Sure, here is the online demo:
 

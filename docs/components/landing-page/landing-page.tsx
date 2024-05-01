@@ -2,9 +2,8 @@ import { useState } from 'react'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import Link from 'next/link'
-import inspectPreview from '@images/inspect.gif'
+import inspectorPreview from '@images/inspector.mp4'
 import workingPipeline from '@images/working-pipeline.svg'
-import { isDev } from '@utils'
 import { Feature, Features } from '@components/features'
 import { StackBlitz } from '@components/stack-blitz'
 import { Marquee } from '@components/marquee'
@@ -58,15 +57,19 @@ export const LandingPage = () => {
               centered
               href='/showcase'
             >
-              <Link
-                className='docs-img-wrapper'
-                href='/showcase'
-                target='_blank'
-              >
-                {!isDev && (
-                  <Image src={inspectPreview} alt='Background' loading='eager' />
-                )}
-              </Link>
+              <video
+                src={inspectorPreview}
+                className='docs-preview-video'
+                loop
+                autoPlay
+                muted
+                disablePictureInPicture
+                disableRemotePlayback
+                playsInline
+                controls
+                controlsList='play timeline nofullscreen nodownload novolume noremoteplayback noplaybackrate'
+              />
+
             </Feature>
 
             <Feature

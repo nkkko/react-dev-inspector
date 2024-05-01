@@ -1,5 +1,6 @@
 import {
   launchEditorEndpoint,
+  reactDevUtilsLaunchEditorEndpoint,
   type LaunchEditorParams,
   type TrustedEditor,
 } from '@react-dev-inspector/launch-editor-endpoint'
@@ -50,14 +51,33 @@ export const gotoServerEditor = (_codeInfo?: CodeInfoLike, options?: {
       .filter(([, value]) => Boolean(value)) as [string, string][],
   )
 
-  /**
-   * api path in {@link {import('@react-dev-inspector/middlewares').launchEditorMiddleware}}
-   */
-  const apiRoute = isRelative
-    ? `${launchEditorEndpoint}/relative`
-    : launchEditorEndpoint
+  fetchToServerEditor({
+    /**
+     * api path in {@link {import('@react-dev-inspector/middlewares').launchEditorMiddleware}}
+     * endpoint for >= v2.1.0
+     */
+    apiUrl: launchEditorEndpoint,
+    urlParams,
+    /**
+     * legacy endpoint for < v2.1.0
+     */
+    fallbackUrl: isRelative
+      ? `${reactDevUtilsLaunchEditorEndpoint}/relative`
+      : reactDevUtilsLaunchEditorEndpoint,
+  })
+}
 
-  fetch(`${apiRoute}?${urlParams}`)
+const fetchToServerEditor = async ({ apiUrl, urlParams, fallbackUrl }: {
+  apiUrl: string;
+  urlParams: URLSearchParams;
+  fallbackUrl?: string;
+}) => {
+  const response = await fetch(`${apiUrl}?${urlParams}`)
+  // only 404 need to try fallback legacy endpoint
+  if (response.status === 404 && fallbackUrl) {
+    return await fetch(`${fallbackUrl}?${urlParams}`)
+  }
+  return response
 }
 
 /**

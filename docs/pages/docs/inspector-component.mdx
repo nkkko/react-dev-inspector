@@ -33,7 +33,7 @@ Triggered by **hotkeys**, also able to be controlled by component props.
 See the default settings or change them below.
 
 Also provides a panel to show **hierarchy** from the inspected element to root.
-It’s triggered by a  **right-click** when inspecting (needs version `>=v2.1.0`).
+It’s triggered by a  **right-click** when inspecting (version `>=v2.1.0`).
 Called `InspectContextPanel` due to it's like the mouse context-menu
 
 Try it on the [Showcase page](/showcase) to see the effect.
@@ -150,7 +150,7 @@ For more advanced controls, refer to the [Props](#props) section below.
 
 ## Props
 
-This section refers to the interface of [`InspectorProps`](https://github.com/zthxxx/react-dev-inspector/blob/dev/packages/inspector/src/Inspector/Inspector.tsx#L49)
+This section refers to the interface of [`InspectorProps`](https://github.com/zthxxx/react-dev-inspector/blob/dev/packages/inspector/src/Inspector/Inspector.tsx#L67)
 for `<Inspector>` component.
 
 ```tsx
@@ -228,7 +228,7 @@ Whether to disable all behavior include hotkeys listening or trigger.
 - **Type:** `inspectAgents?: InspectAgent<Element>[]{:ts}`
   > interface [`InspectAgent{:ts}`](https://github.com/zthxxx/react-dev-inspector/blob/dev/packages/inspector/src/Inspector/types.ts#L33)
 - **Default:** built-in `[new DomInspectAgent()]{:ts}`
-  > class [`DomInspectAgent{:ts}`](https://github.com/zthxxx/react-dev-inspector/blob/dev/packages/inspector/src/Inspector/DOMInspectAgent/DOMInspectAgent.ts#L17)
+  > class [`DomInspectAgent{:ts}`](https://github.com/zthxxx/react-dev-inspector/blob/dev/packages/inspector/src/Inspector/DOMInspectAgent/DOMInspectAgent.ts#L48)
 
 Agent for get inspection info in different React renderer with user interaction.
 
@@ -239,8 +239,8 @@ Agent for get inspection info in different React renderer with user interaction.
 <p className='mt-3 text-sm text-gray-500'>Added in: `v2.0.0`</p>
 
 - **Type:** `onInspectElement?: (params: OnInspectElementParams<Element>) => void{:ts}`
-  > interface [`InspectParams{:ts}`](https://github.com/zthxxx/react-dev-inspector/blob/dev/packages/inspector/src/Inspector/Inspector.tsx#L29))
-- **Default:** built-in [`gotoServerEditor{:ts}`](https://github.com/zthxxx/react-dev-inspector/blob/dev/packages/inspector/src/Inspector/utils/editor.ts#L12) util function
+  > interface [`InspectParams{:ts}`](https://github.com/zthxxx/react-dev-inspector/blob/dev/packages/inspector/src/Inspector/Inspector.tsx#L46))
+- **Default:** built-in [`gotoServerEditor{:ts}`](https://github.com/zthxxx/react-dev-inspector/blob/dev/packages/inspector/src/Inspector/utils/editor.ts#L20) util function
 
 
 Callback when left-clicking on an element, with ensuring the source code info is found,

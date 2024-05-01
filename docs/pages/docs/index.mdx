@@ -4,7 +4,7 @@ title: Introduction - React Dev Inspector
 
 import Image from 'next/image'
 import { Steps, Callout } from 'nextra/components'
-import previewDemo from '@images/inspect.gif'
+import inspectorPreview from '@images/inspector.mp4'
 import workingPipeline from '@images/working-pipeline.svg'
 import { StackBlitz } from '@components/stack-blitz'
 
@@ -40,11 +40,26 @@ like browser extensions and developer toolkits.
 
 Just check out this demo below and you'll get it in a snap.
 
-<Image
+{/* <Image
   className='relative my-2 sm:my-4 lg:my-6 w-full'
   src={previewDemo}
   alt='Preview Demo'
   loading='eager'
+/> */}
+
+<video
+  src={inspectorPreview}
+  className='relative my-2 sm:my-4 lg:my-6 w-full rounded-xl shadow-xl'
+  loop
+  autoPlay
+  muted
+  disablePictureInPicture
+  disableRemotePlayback
+  playsInline
+  controls
+  controlsList='play timeline nofullscreen nodownload novolume noremoteplayback noplaybackrate'
+  x-webkit-airplay='true'
+  webkit-playsinline='true'
 />
 
 ### Try It Online
@@ -59,7 +74,7 @@ Wanna try out the demo right now? Sure, here is the online demo:
 <div
   className="
     relative -mx-6 md:-ml-12 md:-mr-8 xl:-mr-12
-    my-3 h-[600px] bg-[#0e0c0e] rounded-lg
+    my-3 h-[600px] bg-[#0e0c0e] rounded-xl
   "
 >
   <StackBlitz
