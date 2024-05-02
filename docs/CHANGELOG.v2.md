@@ -1,7 +1,7 @@
 # Changelog
 
 
-## [2.1.0-beta.8](https://github.com/zthxxx/react-dev-inspector/compare/v2.0.1...v2.1.0-beta.8)
+## [2.1.0-beta.9](https://github.com/zthxxx/react-dev-inspector/compare/v2.0.1...v2.1.0-beta.9)
 
 ### Features
 
@@ -21,6 +21,7 @@
 - add `@react-dev-inspector/launch-editor-endpoint`, split endpoint and types from middleware
   - replace `react-dev-utils` with `launch-editor` for middleware
   - replace middleware endpoint from `/__open-stack-frame-in-editor` to `/__inspect-open-in-editor`
+    - keep compatibility with old endpoint by both `Inspector` component and middleware
 - move `package.json` v1 compatible plugins from `dependencies` to `peerDependencies` with mark as optional
 - add `exports` field into `package.json`
 
