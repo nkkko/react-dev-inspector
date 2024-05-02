@@ -33,6 +33,13 @@
     "typescript": "5.2.2"
   },
   "pnpm": {
+    "packageExtensions": {
+      "storybook-solidjs-vite": {
+        "peerDependencies": {
+          "@storybook/builder-vite": "$@storybook/builder-vite"
+        }
+      }
+    },
     "overrides": {
       "array-buffer-byte-length": "npm:@nolyfill/array-buffer-byte-length@latest",
       "array-includes": "npm:@nolyfill/array-includes@latest",
