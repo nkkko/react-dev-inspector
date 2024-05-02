@@ -1,6 +1,6 @@
 {
   "name": "@react-dev-inspector/web-components",
-  "version": "2.1.0-beta.9",
+  "version": "2.1.0-beta.10",
   "sideEffects": false,
   "description": "Web UI components for react-dev-inspector, build as Web Components via solid-js.",
   "repository": {

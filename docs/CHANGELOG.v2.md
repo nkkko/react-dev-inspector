@@ -1,7 +1,7 @@
 # Changelog
 
 
-## [2.1.0-beta.9](https://github.com/zthxxx/react-dev-inspector/compare/v2.0.1...v2.1.0-beta.9)
+## [2.1.0-beta.10](https://github.com/zthxxx/react-dev-inspector/compare/v2.0.1...v2.1.0-beta.10)
 
 ### Features
 
@@ -24,6 +24,8 @@
     - keep compatibility with old endpoint by both `Inspector` component and middleware
 - move `package.json` v1 compatible plugins from `dependencies` to `peerDependencies` with mark as optional
 - add `exports` field into `package.json`
+
+![inspector-context-panel](https://media.githubusercontent.com/media/zthxxx/react-dev-inspector/dev/docs/images/inspect-context-panel.png)
 
 
 ## [2.0.1](https://github.com/zthxxx/react-dev-inspector/compare/v1.9.0...v2.0.1)

@@ -4,4 +4,9 @@
 
 Web UI components for [`react-dev-inspector`](https://react-dev-inspector.zthxxx.me), build as Web Components via [`solid-js`](https://www.solidjs.com/).
 
-Docs see: https://react-dev-inspector.zthxxx.me/docs/integration/vite
+Docs see: https://react-dev-inspector.zthxxx.me/docs/inspector-component
+
+- Exported `Overlay` (inspector UI), supporting custom boxSizing and bounding.
+- Exported `InspectContextPanel` component, a draggable and resizable floating context menu to show element hierarchy.
+
+![inspector-context-panel](https://media.githubusercontent.com/media/zthxxx/react-dev-inspector/dev/docs/images/inspect-context-panel.png)

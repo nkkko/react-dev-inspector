@@ -32,11 +32,11 @@ That's exactly why react-dev-inspector was created.
 
 Just check out this demo below and you'll get it in a snap.
 
-> screen record gif (8M size):
-
 Showcase: https://react-dev-inspector.zthxxx.me/showcase
 
-[![inspector-preview](https://github.com/zthxxx/react-dev-inspector/raw/dev/docs/images/inspector.mp4)](https://react-dev-inspector.zthxxx.me/showcase)
+> screen record:
+
+<video alt="inspector-preview" src="https://github.com/zthxxx/react-dev-inspector/assets/15135943/f88d3644-b603-484c-963a-a7db13036b9b" loop autoplay muted></video>
 
 Wanna try out the demo right now? Sure, here is the online demo:
 

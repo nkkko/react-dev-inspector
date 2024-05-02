@@ -14,8 +14,10 @@ At first install the plugin package:
 npm i -D @react-dev-inspector/vite-plugin
 ```
 
-The `@react-dev-inspector/vite-plugin{:ts}` now export a `inspectorServer` that compatible with `vite@5` / `vite@4` / `vite@3` / `vite@2`,
-just add it into `vite.config.ts` and that's all done.
+The `@react-dev-inspector/vite-plugin{:ts}` only register a `inspectorServer` middleware to launch the local editor with an endpoint using [`@react-dev-inspector/middleware`](https://react-dev-inspector.zthxxx.me/docs/integration#inspector-middleware),
+that compatible with `vite@5` / `vite@4` / `vite@3` / `vite@2`.
+
+Just add it into `vite.config.ts` and that's all done.
 
 
 ```ts filename="vite.config.ts" showLineNumbers {3,16}

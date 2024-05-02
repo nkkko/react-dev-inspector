@@ -6,8 +6,15 @@ Babel plugin for [`react-dev-inspector`](https://www.npmjs.com/package/react-dev
 
 Docs see: https://react-dev-inspector.zthxxx.me/docs/compiler-plugin
 
+> [!NOTE]
+> Note that this section is generally **OPTIONAL**.
+> Most React frameworks offer this feature **_out-of-the-box_**,
+> which means you usually **don't** need to manually configure it additionally.
+>
+> See about same effect in [`@babel/preset-react`](https://react-dev-inspector.zthxxx.me/docs/compiler-plugin#babelpreset-react) / [`SWC`](https://react-dev-inspector.zthxxx.me/docs/compiler-plugin#swc) / [`esbuild`](https://react-dev-inspector.zthxxx.me/docs/compiler-plugin#esbuild)
 
-```bash npm2yarn
+
+```bash
 npm i -D @react-dev-inspector/babel-plugin
 ```
 
