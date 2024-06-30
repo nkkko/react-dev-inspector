@@ -1,5 +1,9 @@
 process.env.ESLINT_TSCONFIG = 'tsconfig.json'
-const jsonExtJsoncFiles = ['**/tsconfig.*.json', '.vscode/*.json']
+const jsonExtJsoncFiles = [
+  '**/tsconfig.json',
+  '**/tsconfig.*.json',
+  '.vscode/*.json',
+]
 
 module.exports = {
   root: true,
