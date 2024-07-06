@@ -1,111 +1,239 @@
+'use client'
 
 import type { Fiber } from 'react-reconciler'
-import { Overlay } from '../Overlay'
+import {
+  Overlay,
+  type TagItem,
+} from '@react-dev-inspector/web-components'
 import {
   setupPointerListener,
   getElementCodeInfo,
   getElementFiberUpward,
+  getElementFiber,
   getElementInspect,
+  genInspectChainFromFibers,
+  getPathWithLineNumber,
 } from '../utils'
 import type {
+  CodeInfo,
   InspectAgent,
+  InspectChainItem,
+  Pointer,
 } from '../types'
 
 
-export class DOMInspectAgent implements InspectAgent<HTMLElement> {
-  protected overlay?: Overlay
-  protected unsubscribeListener?: () => void
+export type DOMElement = HTMLElement | SVGElement
 
-  public activate({
-    pointer,
+export interface DOMInspectAgentOptions {
+  /**
+   * events that need be prevent and stop propagation on capture,
+   * default is {@link defaultPreventEvents},
+   *
+   * adjust if you find some interaction conflict.
+   *
+   * > DO NOT set 'click' / 'mousedown' / 'pointerdown' / 'pointerover'
+   * >   which are always handle by DOMInspectAgent internal
+   */
+  preventEvents?: (keyof GlobalEventHandlersEventMap)[];
+}
+
+const defaultPreventEvents = [
+  'mouseup',
+  'pointerup',
+  'mouseover',
+  'mouseout',
+  'pointerout',
+] satisfies (keyof GlobalEventHandlersEventMap)[]
+
+export class DOMInspectAgent implements InspectAgent<DOMElement> {
+  #overlay?: Overlay
+  #unsubscribeListener?: () => void
+  #preventEvents: (keyof GlobalEventHandlersEventMap)[]
+
+  constructor({
+    preventEvents = defaultPreventEvents,
+  }: DOMInspectAgentOptions = {}) {
+    this.#preventEvents = preventEvents
+  }
+
+  public activate = ({
     onHover,
     onPointerDown,
     onClick,
   }: {
-    /**
-     * the last PointerMove event when activate inspector,
-     * use to check whether hovered any element at initial
-     */
-    pointer?: PointerEvent;
-    onHover: (params: { element: HTMLElement; pointer: PointerEvent }) => void;
-    onPointerDown: (params: { element?: HTMLElement; pointer: PointerEvent }) => void;
-    onClick: (params: { element?: HTMLElement; pointer: PointerEvent }) => void;
-  }) {
+    onHover: (params: { element: DOMElement; pointer: PointerEvent }) => void;
+    onPointerDown: (params: { element?: DOMElement; pointer: PointerEvent }) => void;
+    onClick: (params: { element?: DOMElement; pointer: PointerEvent }) => void;
+  }) => {
     this.deactivate()
-    this.overlay = new Overlay()
+    this.#overlay = new Overlay()
 
-    this.unsubscribeListener = setupPointerListener({
+    this.#unsubscribeListener = setupPointerListener({
       onPointerOver: onHover,
       onPointerDown,
       onClick,
+      preventEvents: this.#preventEvents,
     })
+  }
 
-    if (!pointer) {
-      return
+  public deactivate = () => {
+    this.#overlay?.remove()
+    this.#overlay = undefined
+
+    this.#unsubscribeListener?.()
+    this.#unsubscribeListener = undefined
+  }
+
+  public indicate = ({ element, codeInfo, title }: {
+    element: DOMElement;
+    title?: string;
+    codeInfo?: CodeInfo;
+  }) => {
+    if (!this.#overlay) {
+      this.#overlay = new Overlay()
     }
-    const element = document.elementFromPoint(pointer.clientX, pointer.clientY) as HTMLElement | undefined
-    if (element) {
-      onHover({
-        element,
-        pointer,
-      })
+
+    codeInfo ??= this.findCodeInfo(element)
+
+    this.#overlay.inspect({
+      element,
+      title,
+      info: getPathWithLineNumber(codeInfo),
+    })
+  }
+
+  public removeIndicate = () => {
+    this.#overlay?.hide()
+  }
+
+  public getTopElementFromPointer = (pointer: Pointer): DOMElement | undefined | null => {
+    return document.elementFromPoint(pointer.clientX, pointer.clientY) as DOMElement | undefined
+  }
+
+  public getTopElementsFromPointer = (pointer: Pointer): DOMElement[] => {
+    const elements = document.elementsFromPoint(pointer.clientX, pointer.clientY) as DOMElement[]
+    const parents = new Set<DOMElement | null>([null, document.documentElement, document.body])
+
+    // due to returns of `document.elementsFromPoint()` maybe not continuous elements
+    for (const element of elements) {
+      let parent = element.parentElement
+      while (parent && !parents.has(parent)) {
+        parents.add(parent)
+        parent = parent.parentElement
+      }
     }
+
+    const topEntities = elements.filter(element => (
+      element && !parents.has(element)
+    ))
+
+    return topEntities
   }
 
-  public deactivate() {
-    this.overlay?.remove()
-    this.overlay = undefined
-
-    this.unsubscribeListener?.()
-    this.unsubscribeListener = undefined
+  public isAgentElement = (element: unknown): element is DOMElement => {
+    return element instanceof HTMLElement || element instanceof SVGElement
   }
 
-  public getElementFiber(element?: HTMLElement): Fiber | undefined {
-    return getElementFiberUpward(element)
-  }
+  public *getRenderChain(element: DOMElement): Generator<InspectChainItem<DOMElement>, unknown, void> {
+    let fiber: Fiber | undefined | null
 
-  public *getAncestorChain(element: HTMLElement): Generator<HTMLElement, void, void> {
-    let current: HTMLElement | null = element
-    while (current) {
-      if (this.getElementFiber(current)) {
-        yield current
+    while (element) {
+      fiber = getElementFiber(element)
+      if (fiber) {
+        break
       }
 
-      current = current.parentElement
+      yield {
+        agent: this,
+        element,
+        title: element.nodeName.toLowerCase(),
+        tags: getDOMElementTags(element),
+      }
+
+      element = element.parentElement as DOMElement
     }
+
+    function *fiberChain(): Generator<Fiber, void, void> {
+      while (fiber) {
+        yield fiber
+        if (fiber.return === fiber) {
+          return
+        }
+        fiber = fiber.return
+      }
+    }
+
+    return yield * genInspectChainFromFibers<DOMElement>({
+      agent: this,
+      fibers: fiberChain(),
+      isAgentElement: this.isAgentElement,
+      getElementTags: getDOMElementTags,
+    })
   }
 
-  public getNameInfo(element: HTMLElement): {
+  public *getSourceChain(element: DOMElement): Generator<InspectChainItem<DOMElement>, unknown, void> {
+    let fiber: Fiber | undefined | null = this.findElementFiber(element)
+
+    function *fiberChain(): Generator<Fiber, void, void> {
+      while (fiber) {
+        yield fiber
+        if (fiber.return === fiber || fiber._debugOwner === fiber) {
+          return
+        }
+        fiber = fiber._debugOwner ?? fiber.return
+      }
+    }
+
+    return yield * genInspectChainFromFibers<DOMElement>({
+      agent: this,
+      fibers: fiberChain(),
+      isAgentElement: this.isAgentElement,
+      getElementTags: getDOMElementTags,
+    })
+  }
+
+  public getNameInfo = (element: DOMElement): {
     name: string;
     title: string;
-  } {
+  } => {
     return getElementInspect(element)
   }
 
-  public findCodeInfo(element: HTMLElement) {
+  public findCodeInfo = (element: DOMElement) => {
     return getElementCodeInfo(element)
   }
 
-  public indicate({ element, title }: {
-    element: HTMLElement;
-    title?: string;
-  }) {
-    const codeInfo = this.findCodeInfo(element)
-
-    const relativePath = codeInfo?.relativePath
-    const absolutePath = codeInfo?.absolutePath
-
-    this.overlay?.inspect({
-      element,
-      title,
-      info: relativePath ?? absolutePath,
-    })
-  }
-
-  public removeIndicate() {
-    this.overlay?.hide()
+  public findElementFiber = (element: DOMElement): Fiber | undefined => {
+    return getElementFiberUpward(element)
   }
 }
 
 
-export const domInspectAgent = new DOMInspectAgent()
+export const domInspectAgent: InspectAgent<DOMElement> = new DOMInspectAgent()
+
+
+export const getDOMElementTags = (element: unknown): TagItem[] => {
+  const tags: TagItem[] = []
+
+  if (element instanceof HTMLElement) {
+    if (element.id) {
+      tags.push({
+        label: `#${element.id}`,
+        background: 'var(--color-tag-gray-1)',
+      })
+    }
+
+    let classList = ''
+    element.classList.forEach(className => {
+      classList += `.${className}`
+    })
+    if (classList) {
+      tags.push({
+        label: classList,
+        background: 'var(--color-tag-gray-1)',
+      })
+    }
+  }
+
+  return tags
+}

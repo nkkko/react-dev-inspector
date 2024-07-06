@@ -23,6 +23,9 @@ module.exports = {
      * ===================================
      */
 
+    // https://eslint.org/docs/latest/rules/quote-props
+    // https://github.com/antfu/eslint-config/blob/v0.39.7/packages/eslint-config-basic/index.js#L223
+    'quote-props': ['error', 'as-needed'],
     // https://eslint.org/docs/latest/rules/no-console
     // https://github.com/antfu/eslint-config/blob/v0.39.7/packages/eslint-config-basic/index.js#L241
     'no-console': ['error', { allow: ['warn', 'error', 'debug'] }],
@@ -38,6 +41,23 @@ module.exports = {
         allowSeparatedGroups: false,
       },
     ],
+
+    // https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/order.md
+    // https://github.com/antfu/eslint-config/blob/v0.39.7/packages/eslint-config-basic/index.js#L212
+    'import/order': [
+      'error',
+      {
+        groups: [
+          'builtin',
+          'external',
+          'unknown',
+          'internal',
+          'parent',
+          'sibling',
+        ],
+      },
+    ],
+
     // https://eslint.org/docs/latest/rules/no-multiple-empty-lines
     'no-multiple-empty-lines': [
       'error',
@@ -84,7 +104,7 @@ module.exports = {
 
     // https://eslint.org/docs/latest/rules/curly#multi-line
     // https://github.com/antfu/eslint-config/blob/v0.39.7/packages/eslint-config-basic/index.js#L221
-    'curly': ['error', 'multi-line', 'consistent'],
+    curly: ['error', 'multi-line', 'consistent'],
     // https://eslint.org/docs/latest/rules/arrow-parens
     // https://github.com/antfu/eslint-config/blob/v0.39.7/packages/eslint-config-basic/index.js#L305
     'arrow-parens': 'off',
@@ -289,7 +309,7 @@ module.exports = {
     // https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/no-unknown-property.md
     //   `css`: https://emotion.sh/docs/css-prop
     //   `jsx`,`global`: https://nextjs.org/blog/styling-next-with-styled-jsx
-    'react/no-unknown-property': ['error', { ignore: ['css', 'jsx', 'global'] }],
+    'react/no-unknown-property': ['error', { ignore: ['css', 'jsx', 'global', 'class'] }],
 
 
     /**

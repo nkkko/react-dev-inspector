@@ -6,4 +6,8 @@ dist
 build
 .next
 
-**/src/tests/outputs
+**/src/tests/outputs/
+
+**/.stories/components/
+**/components/logos/
+**/components/icons/

@@ -1,0 +1,18 @@
+{
+  "cSpell.words": [
+    "Nextra",
+    "clsx",
+    "solidjs",
+    "kobalte",
+    "lucide",
+    "iconbox",
+    "Zustand",
+  ],
+  "svg.preview.background": "transparent",
+
+  "tailwindCSS.experimental.classRegex": [
+    "\\b(?:class|className): *`((.|\n)*?)`",
+    "\\b(?:class|className): *\"((.|\n)*?)\"",
+    "\\b(?:class|className): *'((.|\n)*?)'",
+  ],
+}

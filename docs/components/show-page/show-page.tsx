@@ -1,23 +1,27 @@
 import { useState } from 'react'
+import dynamic from 'next/dynamic'
 import {
-  Inspector,
   defaultHotkeys,
 } from 'react-dev-inspector'
-import { projectRepo, handleInspectOnline } from '@utils'
+import { projectRepo } from '@utils'
 import { ChecksPattern } from './components/Pattern'
 
 import * as S from './styles'
+
+const OnlineInspector = dynamic(
+  () => import('@components/online-inspector').then(({ OnlineInspector }) => OnlineInspector),
+  { ssr: false },
+)
 
 export const ShowPage = () => {
   const [active, setActive] = useState(false)
 
   return (
-    <Inspector
-      disable={false}
-      active={active}
-      onActiveChange={setActive}
-      onInspectElement={handleInspectOnline}
-    >
+    <>
+      <OnlineInspector
+        active={active}
+        setActive={setActive}
+      />
       <S.Base>
         <S.GithubCorner
           href={projectRepo}
@@ -26,6 +30,7 @@ export const ShowPage = () => {
         <div
           className='
             absolute -z-10 top-4 left-0 rotate-45
+            sm:max-lg:top-[-100px] sm:max-lg:left-[-200px]
             [aspect-ratio:1] max-w-[70vw] w-[564px] h-auto
             fill-blue-400/10 stroke-indigo-300/30
           '
@@ -36,6 +41,7 @@ export const ShowPage = () => {
         <div
           className='
             absolute -z-10 bottom-2 right-6 rotate-[135deg]
+            sm:max-lg:bottom-[-100px] sm:max-lg:right-[-100px]
             [aspect-ratio:1] max-w-[70vw] w-[564px] h-auto
             fill-blue-400/10 stroke-indigo-300/30
           '
@@ -83,12 +89,14 @@ export const ShowPage = () => {
                 <span>
                   {defaultHotkeys().join(' + ')}
                 </span>
-                <S.ButtonIcon>🍭</S.ButtonIcon>
+                <S.ButtonIcon>
+                  🍭
+                </S.ButtonIcon>
               </S.InspectorButton>
             </div>
           </div>
         </div>
       </S.Base>
-    </Inspector>
+    </>
   )
 }

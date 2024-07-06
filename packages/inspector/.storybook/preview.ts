@@ -1,9 +1,9 @@
 import type { Preview } from '@storybook/react'
+import { withThemeByClassName } from '@storybook/addon-themes'
 import './tailwind.css'
 
 const preview: Preview = {
   parameters: {
-    actions: { argTypesRegex: '^on[A-Z].*' },
     controls: {
       matchers: {
         color: /(background|color)$/i,
@@ -14,6 +14,17 @@ const preview: Preview = {
     // https://storybook.js.org/docs/react/configure/story-layout
     layout: 'centered',
   },
+  decorators: [
+    // https://github.com/storybookjs/storybook/blob/next/code/addons/themes/docs/api.md#withthemebyclassname
+    withThemeByClassName({
+      themes: {
+        light: 'light',
+        dark: 'dark',
+        default: '',
+      },
+      defaultTheme: 'default',
+    }),
+  ],
 }
 
 export default preview

@@ -1,5 +1,5 @@
 // https://umijs.org/config/
-import path from 'path'
+import path, { resolve } from 'path'
 import { defineConfig } from 'umi'
 
 const isDev = process.env.NODE_ENV === 'development'
@@ -32,8 +32,12 @@ export default defineConfig({
   extraBabelIncludes: [
     // for support `?.` (optional-chaining) and `??` (nullish-coalescing-operator) in umi3 webpack4
     'react-dev-inspector',
-    path.join(__dirname, '../../packages/inspector/es'),
+    path.join(__dirname, '../../packages/'),
   ],
+  alias: {
+    // for support package.json `exports` field in umi3 webpack4
+    '@kobalte/core': '@kobalte/core/dist',
+  },
 
   plugins: [
     /**

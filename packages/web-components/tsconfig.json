@@ -1,0 +1,32 @@
+{
+  "extends": "@zthxxx/tsconfig/tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "baseUrl": ".",
+    "outDir": "dist/types",
+
+    "declaration": true,
+
+    "types": [
+      "node",
+      "vitest/globals",
+    ],
+
+    // https://docs.solidjs.com/configuration/typescript
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+
+    "paths": {
+      "@stories/*": ["src/.stories/*"],
+    },
+  },
+  "include": [
+    "src",
+    "src/.stories/**/*",
+    ".storybook",
+  ],
+  // https://www.typescriptlang.org/docs/handbook/project-references.html
+  "references": [
+    { "path": "../launch-editor-endpoint" },
+  ],
+}

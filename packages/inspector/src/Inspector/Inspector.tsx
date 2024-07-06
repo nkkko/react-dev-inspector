@@ -7,29 +7,43 @@ import {
 } from 'react'
 import type { Fiber } from 'react-reconciler'
 import {
+  InspectContextPanel,
+  type ElementItemInfo,
+  type InspectContextPanelShowParams,
+} from '@react-dev-inspector/web-components'
+import {
+  type TrustedEditor,
+} from '@react-dev-inspector/launch-editor-endpoint'
+import {
   gotoServerEditor,
 } from './utils'
+import {
+  elementsChainGenerator,
+} from './services'
 import {
   useHotkeyToggle,
   useEffectEvent,
   useRecordPointer,
   useControlledActive,
 } from './hooks'
-import { domInspectAgent } from './DOMInspectAgent'
+import {
+  type DOMElement,
+  domInspectAgent,
+} from './DOMInspectAgent'
 import type {
   CodeInfo,
   InspectAgent,
 } from './types'
 
 
-const defaultInspectAgents: InspectAgent<HTMLElement>[] = [
+const defaultInspectAgents: InspectAgent<any>[] = [
   domInspectAgent,
 ]
 
 /**
  * the inspect meta info that is sent to the callback when an element is hovered over or clicked.
  */
-export interface InspectParams<Element = HTMLElement> {
+export interface InspectParams<Element = DOMElement> {
   /** hover / click event target dom element */
   element: Element;
   /** nearest named react component fiber for dom element */
@@ -38,9 +52,22 @@ export interface InspectParams<Element = HTMLElement> {
   codeInfo?: CodeInfo;
   /** react component name for dom element */
   name?: string;
+  /**
+   * user chosen prefer editor
+   *
+   * > add in version `v2.1.0`
+   */
+  editor?: TrustedEditor;
 }
 
-export interface InspectorProps<Element> {
+export type OnInspectElementParams<Element = DOMElement> =
+  & Omit<Required<InspectParams<Element>>, 'editor'>
+  & Pick<InspectParams<Element>, 'editor'>
+
+export interface InspectorProps<
+  InspectAgents extends InspectAgent<any>[],
+  Element extends ElementInInspectAgents<InspectAgents> = ElementInInspectAgents<InspectAgents>,
+> {
   /**
    * Inspector Component toggle hotkeys,
    *
@@ -79,15 +106,19 @@ export interface InspectorProps<Element> {
    * will automatically disable in production environment by default.
    *
    * @default `true` if `NODE_ENV` is 'production', otherwise is `false`.
+   *
    * > add in version `v2.0.0`
    */
   disable?: boolean;
 
   /**
    * Agent for get inspection info in different React renderer with user interaction
-   * @default [domInspectAgent]
+   *
+   * Default: {@link domInspectAgent}
+   *
+   * > add in version `v2.1.0`
    */
-  inspectAgents?: InspectAgent<Element>[];
+  inspectAgents?: InspectAgents;
 
   /**
    * Callback when left-clicking on an element, with ensuring the source code info is found.
@@ -111,7 +142,7 @@ export interface InspectorProps<Element> {
    *
    * > add in version `v2.0.0`
    */
-  onInspectElement?: (params: Required<InspectParams<Element>>) => void;
+  onInspectElement?: (params: OnInspectElementParams<Element>) => void;
 
   /** Callback when hovering on an element */
   onHoverElement?: (params: InspectParams<Element>) => void;
@@ -121,6 +152,8 @@ export interface InspectorProps<Element> {
    */
   onClickElement?: (params: InspectParams<Element>) => void;
 
+  ContextPanel?: typeof InspectContextPanel;
+
   /** any children of react nodes */
   children?: ReactNode;
 
@@ -129,11 +162,17 @@ export interface InspectorProps<Element> {
    *
    * @default `true` if setting `onInspectElement` callback, otherwise is `false`.
    * @deprecated please use `onInspectElement` callback instead for fully custom controlling.
+   *
+   * > deprecated in version `v2.0.0`
    */
   disableLaunchEditor?: boolean;
 }
 
-export const Inspector = function<Element>(props: InspectorProps<Element>) {
+export const Inspector = function<
+  InspectAgents extends InspectAgent<any>[] = InspectAgent<DOMElement>[],
+>(props: InspectorProps<InspectAgents>) {
+  type Element = ElementInInspectAgents<InspectAgents>
+
   const {
     keys,
     onHoverElement,
@@ -141,14 +180,17 @@ export const Inspector = function<Element>(props: InspectorProps<Element>) {
     onInspectElement,
     active: controlledActive,
     onActiveChange,
-    inspectAgents = defaultInspectAgents as InspectAgent<Element>[],
+    inspectAgents = defaultInspectAgents,
     disableLaunchEditor,
     disable = (process.env.NODE_ENV !== 'development'),
+    ContextPanel = InspectContextPanel,
     children,
   } = props
 
   const pointerRef = useRecordPointer({ disable })
   const agentRef = useRef<InspectAgent<Element>>()
+  const contextPanelRef = useRef<InspectContextPanel<InspectElementItem<Element>>>()
+
 
   useEffect(() => {
     return () => {
@@ -162,7 +204,6 @@ export const Inspector = function<Element>(props: InspectorProps<Element>) {
   const startInspecting = useEffectEvent(() => {
     inspectAgents.forEach(agent => {
       agent.activate({
-        pointer: pointerRef.current,
         onHover: (params) => handleHoverElement({
           ...params,
           agent,
@@ -177,6 +218,130 @@ export const Inspector = function<Element>(props: InspectorProps<Element>) {
         }),
       })
     })
+
+    window.addEventListener('contextmenu', onContextMenuEvent, { capture: true })
+
+    if (!pointerRef.current) {
+      return
+    }
+
+    Promise.all(inspectAgents.map(agent => agent.getTopElementFromPointer?.(pointerRef.current!)))
+      .then(elements => {
+        for (const [index, element] of elements.entries()) {
+          if (element) {
+            handleHoverElement({
+              agent: inspectAgents[index],
+              element,
+              pointer: pointerRef.current!,
+            })
+            return
+          }
+        }
+      })
+  })
+
+  const onContextMenuEvent = useEffectEvent(async (event: MouseEvent) => {
+    if (contextPanelRef.current) {
+      return
+    }
+
+    event.preventDefault()
+    event.stopPropagation()
+    event.stopImmediatePropagation()
+
+    inspectAgents.forEach(agent => {
+      agent.deactivate()
+    })
+
+    agentRef.current?.removeIndicate()
+    agentRef.current = undefined
+
+    const layers = (await Promise.all(
+      inspectAgents
+        .filter(agent => agent.getTopElementsFromPointer)
+        .map(async agent => {
+          const elements = await agent.getTopElementsFromPointer!(event)
+          return elements.map(element => ({
+            agent,
+            element,
+          }))
+        }),
+    )).flat()
+
+    const renderLayers = layers.map(({ agent, element }) => (() => elementsChainGenerator({
+      agent,
+      agents: inspectAgents,
+      element,
+      generateElement: (agent, element) => agent.getRenderChain(element),
+    })))
+
+    const sourceLayers = layers.map(({ agent, element }) => (() => elementsChainGenerator({
+      agent,
+      agents: inspectAgents,
+      element,
+      generateElement: (agent, element) => agent.getSourceChain(element),
+    })))
+
+
+    const onHoverToIndicate = (item: InspectElementItem<Element> | null) => {
+      if (!item?.element) {
+        agentRef.current?.removeIndicate()
+        agentRef.current = undefined
+        return
+      }
+
+      handleHoverElement({
+        agent: item.agent,
+        element: item.element,
+        nameInfo: {
+          name: item.title,
+          title: item.title,
+        },
+        codeInfo: item.codeInfo,
+      })
+    }
+
+    const onClickToEditor = ({ item, editor }: {
+      item: InspectElementItem<Element>;
+      editor?: TrustedEditor;
+    }) => {
+      if (!item?.element) {
+        return
+      }
+      if (agentRef.current !== item.agent) {
+        agentRef.current?.removeIndicate()
+        agentRef.current = item.agent
+      }
+      handleClickElement({
+        agent: item.agent,
+        element: item.element,
+        codeInfo: item.codeInfo,
+        nameInfo: {
+          name: item.title,
+          title: item.title,
+        },
+        editor,
+      })
+    }
+
+    contextPanelRef.current = new ContextPanel()
+    contextPanelRef.current.show({
+      initialPosition: {
+        x: event.clientX,
+        y: event.clientY,
+      },
+      sizeLimit: contextPanelSizeLimit,
+      onClickOutside: deactivate,
+      panelParams: {
+        renderLayers,
+        sourceLayers,
+        onHoverItem: onHoverToIndicate,
+        onClickItem: (item) => {
+          onClickToEditor({ item })
+        },
+        onClickEditor: onClickToEditor,
+      },
+    })
   })
 
   const stopInspecting = useEffectEvent(() => {
@@ -185,21 +350,40 @@ export const Inspector = function<Element>(props: InspectorProps<Element>) {
       agent.deactivate()
     })
     agentRef.current = undefined
+
+    contextPanelRef.current?.hide()
+    contextPanelRef.current?.remove()
+    contextPanelRef.current = undefined
+    window.removeEventListener('contextmenu', onContextMenuEvent, { capture: true })
   })
 
-  const handleHoverElement = useEffectEvent(({ agent, element, pointer }: {
+  const handleHoverElement = useEffectEvent(({
+    agent,
+    element,
+    nameInfo,
+    codeInfo,
+    pointer,
+  }: {
     agent: InspectAgent<Element>;
     element: Element;
-    pointer: PointerEvent;
+    pointer?: PointerEvent;
+    nameInfo?: {
+      /** element's constructor name */
+      name: string;
+      /** display to describe the element as short */
+      title: string;
+    };
+    codeInfo?: CodeInfo;
   }) => {
     if (agent !== agentRef.current) {
       agentRef.current?.removeIndicate()
       agentRef.current = agent
     }
 
-    const nameInfo = agent.getNameInfo(element)
+    nameInfo ??= agent.getNameInfo(element)
     agent.indicate({
       element,
+      codeInfo,
       pointer,
       name: nameInfo?.name,
       title: nameInfo?.title,
@@ -209,16 +393,14 @@ export const Inspector = function<Element>(props: InspectorProps<Element>) {
       return
     }
 
-    const codeInfo = agent.findCodeInfo(element)
-    const fiber = (element instanceof HTMLElement)
-      ? domInspectAgent.getElementFiber(element)
-      : undefined
+    codeInfo ??= agent.findCodeInfo(element)
+    const fiber = agent.findElementFiber?.(element)
 
     onHoverElement({
       element,
       fiber,
       codeInfo,
-      name: nameInfo?.name ?? '',
+      name: nameInfo?.name ?? nameInfo?.title ?? '',
     })
   })
 
@@ -245,19 +427,34 @@ export const Inspector = function<Element>(props: InspectorProps<Element>) {
     }
   })
 
-  const handleClickElement = useEffectEvent(({ agent, element, pointer }: {
+  const handleClickElement = useEffectEvent(({
+    agent,
+    element,
+    pointer,
+    nameInfo,
+    codeInfo,
+    editor,
+  }: {
     agent: InspectAgent<Element>;
     element?: Element;
-    pointer: PointerEvent;
+    pointer?: PointerEvent;
+    nameInfo?: {
+      /** element's constructor name */
+      name: string;
+      /** display to describe the element as short */
+      title: string;
+    };
+    codeInfo?: CodeInfo;
+    editor?: TrustedEditor;
   }) => {
     if (agent !== agentRef.current) {
       return
     }
 
     // only need stop event when it trigger by current agent
-    pointer.preventDefault()
-    pointer.stopPropagation()
-    pointer.stopImmediatePropagation()
+    pointer?.preventDefault()
+    pointer?.stopPropagation()
+    pointer?.stopImmediatePropagation()
 
     agent.removeIndicate()
 
@@ -265,11 +462,9 @@ export const Inspector = function<Element>(props: InspectorProps<Element>) {
       return
     }
 
-    const nameInfo = agent.getNameInfo(element)
-    const codeInfo = agent.findCodeInfo(element)
-    const fiber = (element instanceof HTMLElement)
-      ? domInspectAgent.getElementFiber(element)
-      : undefined
+    nameInfo ??= agent.getNameInfo(element)
+    codeInfo ??= agent.findCodeInfo(element)
+    const fiber = agent.findElementFiber?.(element)
 
     deactivate()
 
@@ -278,6 +473,7 @@ export const Inspector = function<Element>(props: InspectorProps<Element>) {
       fiber,
       codeInfo,
       name: nameInfo?.name,
+      editor,
     })
 
     if (fiber && codeInfo) {
@@ -285,12 +481,13 @@ export const Inspector = function<Element>(props: InspectorProps<Element>) {
         element,
         fiber,
         codeInfo,
-        name: nameInfo?.name ?? '',
+        name: nameInfo?.name ?? nameInfo?.title ?? '',
+        editor,
       })
     }
 
     if (codeInfo && !onInspectElement && !disableLaunchEditor) {
-      gotoServerEditor(codeInfo)
+      gotoServerEditor(codeInfo, { editor })
     }
   })
 
@@ -311,4 +508,22 @@ export const Inspector = function<Element>(props: InspectorProps<Element>) {
   })
 
   return (<>{children ?? null}</>)
+}
+
+interface InspectElementItem<Element = any> extends ElementItemInfo {
+  agent: InspectAgent<Element>;
+  element?: Element | null;
+}
+
+type ElementInInspectAgents<Agents> = Agents extends (infer Agent)[]
+  ? Agent extends InspectAgent<infer Element>
+    ? Element
+    : unknown
+  : unknown
+
+const contextPanelSizeLimit: InspectContextPanelShowParams['sizeLimit'] = {
+  minWidth: 160,
+  minHeight: 160,
+  maxWidth: 800,
+  maxHeight: 800,
 }

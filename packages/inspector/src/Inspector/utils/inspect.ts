@@ -1,8 +1,12 @@
 import type { Fiber, Source } from 'react-reconciler'
-
 import type {
+  TagItem,
+} from '@react-dev-inspector/web-components'
+import type {
+  InspectAgent,
   CodeInfo,
   CodeDataAttribute,
+  InspectChainItem,
 } from '../types'
 import {
   isNativeTagFiber,
@@ -11,6 +15,8 @@ import {
   getDirectParentFiber,
   getFiberName,
   getElementFiberUpward,
+  getDisplayNameForFiber,
+  getTagTextFromFiber,
 } from './fiber'
 
 
@@ -101,7 +107,7 @@ export const getCodeInfoFromFiber = (fiber?: Fiber): CodeInfo | undefined => {
 
 /**
  * give a `base` dom fiber,
- * and will try to get the human friendly react component `reference` fiber from it;
+ * and will try to get the human-friendly react component `reference` fiber from it;
  *
  * rules and examples see below:
  * *******************************************************
@@ -169,13 +175,20 @@ export const getReferenceFiber = (baseFiber?: Fiber): Fiber | undefined => {
   return originReferenceFiber
 }
 
-export const getElementCodeInfo = (element: HTMLElement): CodeInfo | undefined => {
+/**
+ * find a human-friendly named fiber with source-code upward from element
+ * return source-code info
+ */
+export const getElementCodeInfo = (element: Element): CodeInfo | undefined => {
   const fiber: Fiber | undefined = getElementFiberUpward(element)
 
   const referenceFiber = getReferenceFiber(fiber)
   return getCodeInfoFromFiber(referenceFiber)
 }
 
+/**
+ * find a fiber with both name and source-code info upward,
+ */
 export const getNamedFiber = (baseFiber?: Fiber): Fiber | undefined => {
   let fiber = baseFiber
 
@@ -209,7 +222,11 @@ export const getNamedFiber = (baseFiber?: Fiber): Fiber | undefined => {
   return originNamedFiber
 }
 
-export const getElementInspect = (element: HTMLElement): {
+/**
+ * find a human-friendly named fiber with source-code upward from element,
+ * return inspection info
+ */
+export const getElementInspect = (element: Element): {
   fiber?: Fiber;
   name: string;
   title: string;
@@ -233,5 +250,69 @@ export const getElementInspect = (element: HTMLElement): {
     fiber: referenceFiber,
     name: fiberName || nodeName,
     title,
+  }
+}
+
+export const getPathWithLineNumber = (codeInfo?: CodeInfo): string | undefined => {
+  let path = codeInfo?.relativePath ?? codeInfo?.absolutePath
+  if (codeInfo?.lineNumber) {
+    path += `:${codeInfo.lineNumber}`
+  }
+  return path
+}
+
+/**
+ * commonly use for {@link InspectAgent.getRenderChain}
+ */
+export function * genInspectChainFromFibers<Element>({
+  agent,
+  fibers,
+  isAgentElement,
+  getElementTags,
+}: {
+  agent: InspectAgent<Element>;
+  fibers: Generator<Fiber, void, void>;
+  isAgentElement: (element: unknown) => element is Element;
+  getElementTags?: (element: unknown) => TagItem[];
+}): Generator<InspectChainItem<Element>, unknown, void> {
+  let lastElement: Element | null = null
+  let fiber: Fiber | undefined
+
+  for (fiber of fibers) {
+    const displayName = getDisplayNameForFiber(fiber)
+    const tagName = getTagTextFromFiber(fiber)
+    const codeInfo = getCodeInfoFromFiber(fiber)
+    const node = isAgentElement(fiber.stateNode)
+      ? fiber.stateNode
+      : undefined
+
+    const element = node ?? lastElement
+    lastElement = node ?? lastElement
+
+    const tags: TagItem[] = getElementTags?.(node) ?? []
+    if (tagName) {
+      tags.push(tagName)
+    }
+
+    if (!displayName && !tags.length) {
+      continue
+    }
+
+    yield {
+      agent,
+      element,
+      title: displayName || '',
+      subtitle: getPathWithLineNumber(codeInfo),
+      tags,
+      codeInfo,
+    }
+  }
+
+  if (fiber) {
+    const root: any = fiber.stateNode
+    if (root && root.constructor?.name === 'FiberRootNode') {
+      return root.containerInfo
+    }
+    return root
   }
 }

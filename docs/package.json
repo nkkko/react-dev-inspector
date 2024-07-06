@@ -16,15 +16,15 @@
   "scripts": {
     "clean": "rimraf .next dist",
     "dev": "npm run clean && node server.mjs",
-    "build": "npm run clean && next build && next export -o dist"
+    "build": "npm run clean && next build"
   },
   "dependencies": {
     "clsx": "1.2.1",
     "framer-motion": "10.12.18",
     "katex": "0.16.8",
     "medium-zoom": "1.0.8",
-    "nextra": "2.12.3",
-    "nextra-theme-docs": "2.12.3",
+    "nextra": "2.13.4",
+    "nextra-theme-docs": "2.13.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-github-corner": "2.5.0"
@@ -33,18 +33,21 @@
     "@react-dev-inspector/babel-plugin": "workspace:*",
     "@react-dev-inspector/middleware": "workspace:*",
     "@svgr/webpack": "8.0.1",
-    "@types/node": "16.18.7",
+    "@swc/helpers": "0.5.11",
+    "@types/node": "20.12.10",
     "@types/react": "18.0.26",
     "@types/react-dom": "18.0.9",
-    "@zthxxx/tsconfig": "1.0.2",
+    "@zthxxx/tsconfig": "1.0.5",
     "autoprefixer": "10.4.14",
-    "next": "13.1.0",
+    "file-loader": "6.2.0",
+    "next": "13.4.19",
     "npm-run-all": "4.1.5",
     "postcss": "8.4.26",
     "postcss-load-config": "4.0.1",
     "react-dev-inspector": "workspace:*",
     "rimraf": "3.0.2",
-    "tailwindcss": "3.3.3",
+    "sharp": "0.33.4",
+    "tailwindcss": "3.4.4",
     "typescript": "5.2.2"
   }
 }

@@ -18,6 +18,7 @@ export default withNextra({
     ignoreDuringBuilds: true,
   },
   output: 'export',
+  distDir: 'dist',
   images: {
     /**
      * Error: Image Optimization using Next.js' default loader is not compatible with `next export`.
@@ -37,6 +38,19 @@ export default withNextra({
       test: allowedSvgRegex,
       use: ['@svgr/webpack'],
     })
+
+    config.module.rules.push({
+      test: /\.mp4$/,
+      use: {
+        loader: 'file-loader',
+        options: {
+          outputPath: 'static/media',
+          publicPath: '/_next/static/media',
+          name: '[name].[hash].[ext]',
+        },
+      },
+    })
+
     return config
   },
   experimental: {
@@ -45,4 +59,7 @@ export default withNextra({
   },
 })
 
+/**
+ * https://nextjs.org/docs/app/building-your-application/rendering/edge-and-nodejs-runtimes
+ */
 export const runtime = 'nodejs'

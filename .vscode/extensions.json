@@ -1,0 +1,15 @@
+{
+  "recommendations": [
+    // https://marketplace.visualstudio.com/items?itemName=styled-components.vscode-styled-components
+    "styled-components.vscode-styled-components",
+
+    // https://marketplace.visualstudio.com/items?itemName=editorconfig.editorconfig
+    "editorconfig.editorconfig",
+
+    // https://marketplace.visualstudio.com/items?itemName=yoavbls.pretty-ts-errors
+    "yoavbls.pretty-ts-errors",
+
+    // https://marketplace.visualstudio.com/items?itemName=orta.vscode-twoslash-queries
+    "orta.vscode-twoslash-queries",
+  ],
+}

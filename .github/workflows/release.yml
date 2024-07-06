@@ -27,6 +27,7 @@ jobs:
         with:
           # Number of commits to fetch. 0 indicates all history.
           fetch-depth: 1
+          lfs: true
 
       - name: Prepare for building
         uses: ./.github/actions/prepare

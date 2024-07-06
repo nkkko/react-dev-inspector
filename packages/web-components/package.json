@@ -1,0 +1,114 @@
+{
+  "name": "@react-dev-inspector/web-components",
+  "version": "2.1.0-beta.9",
+  "sideEffects": false,
+  "description": "Web UI components for react-dev-inspector, build as Web Components via solid-js.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zthxxx/react-dev-inspector.git",
+    "directory": "packages/web-components"
+  },
+  "homepage": "https://github.com/zthxxx/react-dev-inspector/tree/dev/packages/web-components",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "keywords": [
+    "react",
+    "component",
+    "inspector"
+  ],
+  "author": "zthxxx <zthxxx.me@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zthxxx/react-dev-inspector/issues"
+  },
+  "main": "dist/cjs",
+  "module": "dist/esm",
+  "types": "dist/types",
+  "files": [
+    "README.md",
+    "src",
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "solid": "./src/index.ts",
+      "types": "./dist/types/index.d.ts"
+    }
+  },
+  "imports": {
+    "#utils": "./src/utils/index.ts",
+    "#floating": "./src/floating/index.ts",
+    "#components": "./src/components/index.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "clean": "rimraf coverage dist es lib build",
+    "dev": "storybook dev -p 59678",
+    "dev:build": "DISABLE_BUILD_MINIFY=true BUILD_CSS_MINIFY=false npm run build",
+    "build:storybook": "storybook build",
+    "build:rollup": "NODE_OPTIONS=\"${NODE_OPTIONS} --import tsx\" BUILD_CSS_MINIFY=${BUILD_CSS_MINIFY:-true} rollup --config rollup.config.ts",
+    "type-check": "tsc -p tsconfig.test.json",
+    "build": "npm-run-all clean --parallel type-check build:rollup"
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "dependencies": {
+    "@floating-ui/core": "^1.6.0",
+    "@kobalte/core": "^0.13.2",
+    "@react-dev-inspector/launch-editor-endpoint": "workspace:^",
+    "rxjs": "^8.0.0-alpha.14",
+    "solid-element": "^1.8.1",
+    "solid-js": "^1.8.18",
+    "tailwind-merge": "^2.3.0"
+  },
+  "devDependencies": {
+    "@chromatic-com/storybook": "1.5.0",
+    "@rollup/plugin-alias": "5.1.0",
+    "@rollup/plugin-babel": "6.0.4",
+    "@rollup/plugin-node-resolve": "15.2.3",
+    "@storybook/addon-actions": "8.1.5",
+    "@storybook/addon-essentials": "8.1.5",
+    "@storybook/addon-interactions": "8.1.5",
+    "@storybook/addon-links": "8.1.5",
+    "@storybook/addon-storysource": "8.1.5",
+    "@storybook/addon-themes": "8.1.5",
+    "@storybook/blocks": "8.1.5",
+    "@storybook/test": "8.1.5",
+    "@types/node": "20.12.10",
+    "@zthxxx/tsconfig": "1.0.5",
+    "autoprefixer": "10.4.14",
+    "babel-preset-solid": "1.8.17",
+    "class-variance-authority": "0.6.1",
+    "clsx": "1.2.1",
+    "cssnano": "7.0.3",
+    "lucide-solid": "0.396.0",
+    "npm-run-all": "4.1.5",
+    "postcss": "8.4.26",
+    "postcss-import": "16.1.0",
+    "postcss-styled-syntax": "0.6.4",
+    "rimraf": "3.0.2",
+    "rollup": "4.17.2",
+    "rollup-plugin-dts": "6.1.1",
+    "rollup-plugin-esbuild": "6.1.1",
+    "rollup-plugin-esbuild-minify": "1.1.1",
+    "rollup-plugin-postcss": "4.0.2",
+    "solidui-cli": "0.6.6",
+    "storybook": "8.1.5",
+    "storybook-solidjs": "1.0.0-beta.2",
+    "storybook-solidjs-vite": "1.0.0-beta.2",
+    "tailwindcss": "3.4.4",
+    "tailwindcss-animate": "1.0.7",
+    "ts-node": "10.9.1",
+    "tsx": "4.16.0",
+    "typescript": "5.2.2",
+    "vite": "4.4.2",
+    "vite-plugin-solid": "2.10.2",
+    "vitest": "1.1.1"
+  }
+}

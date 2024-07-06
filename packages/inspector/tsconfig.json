@@ -2,8 +2,8 @@
   "extends": "@zthxxx/tsconfig/tsconfig.json",
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "es",
     "baseUrl": ".",
+    "outDir": "dist/esm",
 
     "types": [
       "node",
@@ -21,11 +21,13 @@
   },
   "include": [
     "src",
-    "src/.stories",
+    "src/.stories/**/*",
     ".storybook",
   ],
   // https://www.typescriptlang.org/docs/handbook/project-references.html
   "references": [
+    { "path": "../web-components" },
+    { "path": "../launch-editor-endpoint" },
     { "path": "../babel-plugin" },
     { "path": "../middleware" },
     { "path": "../vite-plugin" },

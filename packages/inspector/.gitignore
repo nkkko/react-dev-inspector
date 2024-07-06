@@ -14,10 +14,8 @@ lerna-debug.log*
 node_modules
 
 # build ouput
-es
-lib
-dist
-build
+dist/
+build/
 
 *.zip
 

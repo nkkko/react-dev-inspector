@@ -2,6 +2,8 @@
  * Simple but not robust implement of React18 experimental hook `useEffectEvent`,
  *   to keep compatible with other React versions.
  *
+ * Docs: https://react.dev/learn/separating-events-from-effects#declaring-an-effect-event
+ *
  * for some more robust implements, you can see:
  * - `useEvent` in https://github.com/scottrippey/react-use-event-hook
  * - `useMemoizedFn` in https://github.com/alibaba/hooks

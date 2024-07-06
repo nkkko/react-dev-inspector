@@ -1,17 +1,10 @@
 export type StopFunction = () => void
 
-type Keys =
-  | 'click'
-  | 'mousedown'
-  | 'mouseover'
-  | 'mouseup'
-  | 'pointerdown'
-  | 'pointerover'
-  | 'pointerup'
+type Keys = keyof GlobalEventHandlersEventMap
 
 interface ListenableElement {
-  addEventListener<K extends Keys>(type: K, listener: (ev: WindowEventMap[K]) => any, options?: EventListenerOptions): void;
-  removeEventListener<K extends Keys>(type: K, listener: (ev: WindowEventMap[K]) => any, options?: EventListenerOptions): void;
+  addEventListener<K extends Keys>(type: K, listener: (ev: GlobalEventHandlersEventMap[K]) => any, options?: EventListenerOptions): void;
+  removeEventListener<K extends Keys>(type: K, listener: (ev: GlobalEventHandlersEventMap[K]) => any, options?: EventListenerOptions): void;
 }
 
 export const setupPointerListener = (
@@ -20,6 +13,7 @@ export const setupPointerListener = (
     onPointerDown?: (params: { element: HTMLElement; pointer: PointerEvent }) => void;
     onClick?: (params: { element: HTMLElement; pointer: PointerEvent }) => void;
     target?: ListenableElement;
+    preventEvents?: (keyof GlobalEventHandlersEventMap)[];
   },
 ): StopFunction => {
   const startInspectingNative = () => {
@@ -31,11 +25,12 @@ export const setupPointerListener = (
     if (typeof element?.addEventListener === 'function') {
       element.addEventListener('click', onClick, { capture: true })
       element.addEventListener('mousedown', onPointerDown, { capture: true })
-      element.addEventListener('mouseover', onStopEvent, { capture: true })
-      element.addEventListener('mouseup', onStopEvent, { capture: true })
       element.addEventListener('pointerdown', onPointerDown, { capture: true })
       element.addEventListener('pointerover', onPointerOver, { capture: true })
-      element.addEventListener('pointerup', onStopEvent, { capture: true })
+
+      handlers.preventEvents?.forEach(event => {
+        element.addEventListener(event, onStopEvent, { capture: true })
+      })
     }
   }
 
@@ -48,11 +43,12 @@ export const setupPointerListener = (
     if (typeof element?.removeEventListener === 'function') {
       element.removeEventListener('click', onClick, { capture: true })
       element.removeEventListener('mousedown', onPointerDown, { capture: true })
-      element.removeEventListener('mouseover', onStopEvent, { capture: true })
-      element.removeEventListener('mouseup', onStopEvent, { capture: true })
       element.removeEventListener('pointerdown', onPointerDown, { capture: true })
       element.removeEventListener('pointerover', onPointerOver, { capture: true })
-      element.removeEventListener('pointerup', onStopEvent, { capture: true })
+
+      handlers.preventEvents?.forEach(event => {
+        element.removeEventListener(event, onStopEvent, { capture: true })
+      })
     }
   }
 

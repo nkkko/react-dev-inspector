@@ -13,6 +13,8 @@
     // Next.js implements its own optimized jsx transform
     "jsx": "preserve",
 
+    "moduleResolution": "Node",
+
     "paths": {
       "@components/*": ["components/*"],
       "@utils": ["utils/"],
@@ -26,11 +28,14 @@
     "**/*.ts",
     "**/*.tsx",
     "**/*.mdx",
-    ".postcss.config.ts", "pages/showcase.msx",
+    ".postcss.config.ts",
+    "pages/showcase.msx",
   ],
   // https://www.typescriptlang.org/docs/handbook/project-references.html
   "references": [
+    { "path": "../packages/launch-editor-endpoint" },
     { "path": "../packages/middleware" },
+    { "path": "../packages/web-components" },
     { "path": "../packages/babel-plugin" },
     { "path": "../packages/inspector" },
   ],

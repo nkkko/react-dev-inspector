@@ -33,6 +33,15 @@ rules:
       - polish
       - hotfix
       - release
+      # work in progress
+      - WIP
+
+  # https://commitlint.js.org/reference/rules.html#type-case
+  type-case:
+    - 2 # error
+    - always
+    - - lower-case
+      - upper-case
 
   # https://commitlint.js.org/#/reference-rules?id=scope-case
   scope-case:

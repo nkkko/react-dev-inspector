@@ -1,0 +1,28 @@
+{
+  "extends": "@zthxxx/tsconfig/tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "baseUrl": ".",
+
+    "declaration": true,
+
+    "types": [
+      "node",
+      "vitest/globals",
+    ],
+
+    // https://docs.solidjs.com/configuration/typescript
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+
+    "paths": {
+      "#utils": ["dist/types/utils/index.ts"],
+      "#floating": ["dist/types/floating/index.ts"],
+      "#components": ["dist/types/components/index.ts"],
+    },
+  },
+  "include": [
+    "src",
+    "packages/web-components/dist/types",
+  ],
+}
