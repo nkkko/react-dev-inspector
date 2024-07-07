@@ -78,11 +78,15 @@ app.prepare().then(() => {
       res.statusCode = 500
       res.end('internal server error')
     }
-  }).listen(port, (err) => {
-    if (err) throw err
-    console.debug(`\n > Ready on http://${hostname}:${port} \n`)
   })
-})
+    .once('error', (err) => {
+        console.error(err)
+        process.exit(1)
+      })
+    .listen(port, () => {
+        console.debug(`\n > Ready on http://${hostname}:${port} \n`)
+      })
+    })
 ```
 
 > That is because the `launchEditorMiddleware` can it CANNOT running in Next.js [Edge Runtime](https://github.com/vercel/next.js/discussions/34179),
