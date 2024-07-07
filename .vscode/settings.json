@@ -6,7 +6,7 @@
     "kobalte",
     "lucide",
     "iconbox",
-    "Zustand"
+    "Zustand",
   ],
   "svg.preview.background": "transparent",
 
@@ -14,12 +14,12 @@
   "prettier.enable": false,
   "editor.formatOnSave": false,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
+    "source.fixAll.eslint": "explicit",
   },
 
   "tailwindCSS.experimental.classRegex": [
     "\\b(?:class|className): *`((.|\n)*?)`",
     "\\b(?:class|className): *\"((.|\n)*?)\"",
-    "\\b(?:class|className): *'((.|\n)*?)'"
-  ]
+    "\\b(?:class|className): *'((.|\n)*?)'",
+  ],
 }

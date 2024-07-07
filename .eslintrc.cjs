@@ -1,4 +1,5 @@
 process.env.ESLINT_TSCONFIG = 'tsconfig.json'
+const jsonExtJsoncFiles = ['**/tsconfig.*.json', '.vscode/*.json']
 
 module.exports = {
   root: true,
@@ -324,6 +325,7 @@ module.exports = {
 
     // this will cause many changes when auto fix package.json
     'jsonc/sort-keys': 'off',
+    'jsonc/comma-dangle': ['error', 'always-multiline'],
   },
 
   overrides: [
@@ -332,6 +334,13 @@ module.exports = {
       rules: {
         // For more compatibility with lower Node.js versions
         'unicorn/prefer-node-protocol': 'off',
+      },
+    },
+    {
+      files: ['*.json'],
+      excludedFiles: jsonExtJsoncFiles,
+      rules: {
+        'jsonc/comma-dangle': 'off',
       },
     },
   ],
