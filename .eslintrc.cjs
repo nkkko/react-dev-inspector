@@ -321,6 +321,9 @@ module.exports = {
     'antfu/if-newline': 'off',
     // https://github.com/antfu/eslint-config/blob/v0.39.7/packages/eslint-config-basic/index.js#L398
     'antfu/top-level-function': 'off',
+
+    // this will cause many changes when auto fix package.json
+    'jsonc/sort-keys': 'off',
   },
 
   overrides: [
