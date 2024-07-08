@@ -1,5 +1,5 @@
 /**
- * https://nextjs.org/docs/advanced-features/custom-server
+ * https://nextjs.org/docs/pages/building-your-application/configuring/custom-server
  */
 import { createServer } from 'node:http'
 import next from 'next'
@@ -49,8 +49,12 @@ app.prepare().then(() => {
       res.statusCode = 500
       res.end('internal server error')
     }
-  }).listen(port, (err) => {
-    if (err) throw err
-    console.debug(`\n > Ready on http://${hostname}:${port} \n`)
   })
+    .once('error', (err) => {
+      console.error(err)
+      process.exit(1)
+    })
+    .listen(port, () => {
+      console.debug(`\n > Ready on http://${hostname}:${port} \n`)
+    })
 })
