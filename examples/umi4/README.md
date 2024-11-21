@@ -6,4 +6,6 @@ Custom config see [./.umirc.ts](https://github.com/zthxxx/react-dev-inspector/bl
 
 [
   ![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)
+
+[![Open in Codeanywhere](https://codeanywhere.com/img/open-in-codeanywhere-btn.svg)](https://app.codeanywhere.com/#https://github.com/zthxxx/react-dev-inspector)
 ](https://stackblitz.com/github/zthxxx/react-dev-inspector/tree/dev/examples/umi4)
